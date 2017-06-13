@@ -7,16 +7,6 @@ int main(void){
     int t;
     cin >> t;
     
-    for (int a = 1; a < t; a++){
-        for(int c= 1; c<=t-a; c++){
-            cout<<" ";
-        }
-        
-        for(int k=1; k < 2*a; k++){
-            cout<<"*";
-        }
-        cout<<"\n";
-    }
     
     for (int a=0; a < t; a++){
         for(int b=0; b < a; b++){
@@ -27,6 +17,18 @@ int main(void){
         }
         cout<<"\n";
     }
+    
+    for (int a = 2; a <= t; a++){
+        for(int c= 1; c<=t-a; c++){
+            cout<<" ";
+        }
+        
+        for(int k=1; k < 2*a; k++){
+            cout<<"*";
+        }
+        cout<<"\n";
+    }
+
 }
 
 
