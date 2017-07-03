@@ -1,43 +1,35 @@
 #include <iostream>
+#include <queue>
+#include <string>
 using namespace std;
+int main() {
+    int n;
+    int m;
+    
+    int num = 0;
+    
+    cin>>n;
+    cin>>m;
+    queue<int> s;
+    
+    for(int i=1; i<=n; i++){
+        s.push(i);
+    }
 
-int main(void){
-    ios::sync_with_stdio(false);
-    
-    int t;
-    cin >> t;
-    
-    
-    for (int a=0; a < t; a++){
-        
-        if(t%2 == 0){
-            for(int b=a; b < t-1; b++){
-                cout<<" ";
-            }
-            for(int c=t; c < t+2*(a)+1; c++){
-                if(c%2 == 0 ){
-                    cout<<"*";
-                }else{
-                    cout<<" ";
-                }
-            }
-            cout<<"\n";
-        }else{
+    cout<<"<";
+    while(n--){
+        for(int i=0; i<m; i++){
+        num = s.front();
+        s.pop();
             
-            for(int b=a; b< t-1; b++){
-                cout<<" ";
+            if(i<m-1){
+            s.push(num);
             }
-            for(int c=t; c< t+2*(a)+1; c++){
-                if(c%2 == 1 ){
-                    cout<<"*";
-                }else{
-                    cout<<" ";
-                }
-                
-            }
-            cout<<"\n";
+        }
+        cout<<num;
+        if(n!=0){
+            cout<<", ";
         }
     }
+    cout<<">"<<endl;
 }
-
-
