@@ -3,37 +3,35 @@
 #include <stack>
 #include <string>
 #include <algorithm>
+#include <vector>
 using namespace std;
 int main() {
     
-    int a;
-    cin>>a;
+    int a,b;
+    cin>>a>>b;
     
-    long total =1;
-    for(int i=1; i<=a; i++){
-        total=total*i;
+    int array[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+ 
+    int total=0;
+    for(int i=0; i<a-1; i++){
+        total= total+array[i];
     }
-    string word =to_string(total);
+    total=total+b;
+    int result=total%7;
     
-    cout<<total<<endl;
-    for(int i=0; i<word.size(); i++){
-
-        if(a ==0){
-            cout<<1;
-            break;
-        }
-        
-        if(word[word.size()-1]!=48){
-            cout<<0;
-            break;
-        }
-
-        total = total/10;
-        
-        if(total%10 != 0){
-            cout<<i+1<<endl;
-            break;
-        }
+    if(result == 1){
+        cout<<"MON";
+    }else if(result == 2){
+        cout<<"TUE";
+    }else if(result == 3){
+        cout<<"WED";
+    }else if(result == 4){
+        cout<<"THU";
+    }else if(result == 5){
+        cout<<"FRI";
+    }else if(result == 6){
+        cout<<"SAT";
+    }else{
+        cout<<"SUN";
     }
-    
 }
