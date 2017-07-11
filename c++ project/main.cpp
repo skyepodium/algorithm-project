@@ -5,33 +5,23 @@
 #include <algorithm>
 #include <vector>
 using namespace std;
-int main() {
+
+int main(){
+    int n;
+    cin>>n;
     
-    int a,b;
-    cin>>a>>b;
-    
-    int array[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
- 
-    int total=0;
-    for(int i=0; i<a-1; i++){
-        total= total+array[i];
+    int p[10001];
+    p[0] = 0;
+    for(int i=1; i<=n; i++){
+        cin>>p[i];
     }
-    total=total+b;
-    int result=total%7;
     
-    if(result == 1){
-        cout<<"MON";
-    }else if(result == 2){
-        cout<<"TUE";
-    }else if(result == 3){
-        cout<<"WED";
-    }else if(result == 4){
-        cout<<"THU";
-    }else if(result == 5){
-        cout<<"FRI";
-    }else if(result == 6){
-        cout<<"SAT";
-    }else{
-        cout<<"SUN";
+    int d[1001];
+    d[0] = 0;
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=i; j++){
+            d[i] = max(d[i], d[i-j]+p[j]);
+        }
     }
+    cout<<d[n]<<endl;
 }
