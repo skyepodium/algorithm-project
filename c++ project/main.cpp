@@ -6,39 +6,21 @@
 #include <vector>
 using namespace std;
 
-int gcd(int a, int b){
-    
-    if(b==0){
-        return a;
-    }else{
-        return gcd(b, a%b);
-    }
-}
+vector<int> a[1001];
+bool check[1001];
 
 int main(){
     
+    int n, m, start;
+    cin>>n>>m>>start;
     
-    int n;
-    cin>>n;
-    
-    while(n--){
-
-        int num;
-        cin>>num;
-        
-        int ar[num];
-        for(int i=0; i<num; i++){
-            cin>>ar[i];
-        }
-        
-        
-        int total = 0;
-        for(int i=0; i<num-1; i++){
-            for(int j=i+1; j<num; j++){
-                total+=gcd(ar[i], ar[j]);
-            }
-        }
-        cout<<total<<endl;
-
+    for(int i=0; i<m; i++){
+        int u, v;
+        cin>>u>>v;
+        a[u].push_back(v);
+        a[v].push_back(v);
+    }
+    for(int i=1; i<=n; i++){
+        sort(a[i].begin(), a[i].end());
     }
 }
