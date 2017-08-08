@@ -10,5 +10,5 @@ vector<int> a[1001];
 //bool check[1001];
 
 int main(){
-    
+    cout<<1/2<<endl;
 }
