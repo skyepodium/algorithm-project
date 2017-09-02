@@ -6,9 +6,18 @@
 #include <vector>
 using namespace std;
 
-vector<int> a[1001];
-//bool check[1001];
-
 int main(){
-    cout<<1/2<<endl;
+
+//    vector<int> arr = {{1,4},{3,4},{3,10}};
+//    vector<vector<int>> = {{1,4},{3,4},{3,10}};
+    int arr[3][2] = {1,4,3,4,3,10};
+/*
+    arr[0][0] = 1;
+    arr[0][1] = 4;
+    arr[1][0] = 3;
+    arr[1][1] = 4;
+    arr[2][0] = 3;
+    arr[2][1] = 10;
+ */
+    cout<<arr[0][1]<<endl;
 }
