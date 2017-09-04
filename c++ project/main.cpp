@@ -6,42 +6,38 @@
 #include <vector>
 using namespace std;
 
+char b[111];
 
-int main(){
-    vector<vector<int>> board(4, vector<int>(4,0));
-    
-    board[0][0] = 0;
-    board[0][1] = 1;
-    board[0][2] = 1;
-    board[0][3] = 1;
-    board[1][0] = 1;
-    board[1][1] = 1;
-    board[1][2] = 1;
-    board[1][3] = 1;
-    board[2][0] = 1;
-    board[2][1] = 1;
-    board[2][2] = 1;
-    board[2][3] = 1;
-    board[3][0] = 0;
-    board[3][1] = 0;
-    board[3][2] = 1;
-    board[3][3] = 0;
-
-    int max = 0;
-    for(int a=1; a<board.size(); a++){
-        for(int b=1; b<board[0].size(); b++){
-            if(board[a][b] == 1){
-                board[a][b] = min(board[a][b-1], min(board[a-1][b-1], board[a-1][b])) + 1;
+int main() {
+    int n = 20;
+    int m;
+    scanf("%d",&m);
+    int s = 0;
+    int x;
+    while (m--) {
+        scanf("%s",b);
+        if (!strcmp(b,"add")) {
+            scanf("%d",&x); x--;
+            s = (s | (1 << x));
+        } else if (!strcmp(b,"remove")) {
+            scanf("%d",&x); x--;
+            s = (s & ~(1 << x));
+        } else if (!strcmp(b,"check")) {
+            scanf("%d",&x); x--;
+            int res = (s & (1 << x));
+            if (res) {
+                puts("1");
+            } else {
+                puts("0");
             }
-            if(board[a][b] > max){
-                max = board[a][b];
-            }
+        } else if (!strcmp(b,"toggle")) {
+            scanf("%d",&x); x--;
+            s = (s ^ (1 << x));
+        } else if (!strcmp(b,"all")) {
+            s = (1<<n)-1;
+        } else if (!strcmp(b,"empty")) {
+            s=0;
         }
     }
-    if(max == 0){
-        
-    }
-    
-    cout<<max*max<<endl;
+    return 0;
 }
-
