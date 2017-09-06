@@ -6,38 +6,23 @@
 #include <vector>
 using namespace std;
 
-char b[111];
 
 int main() {
-    int n = 20;
-    int m;
-    scanf("%d",&m);
-    int s = 0;
-    int x;
-    while (m--) {
-        scanf("%s",b);
-        if (!strcmp(b,"add")) {
-            scanf("%d",&x); x--;
-            s = (s | (1 << x));
-        } else if (!strcmp(b,"remove")) {
-            scanf("%d",&x); x--;
-            s = (s & ~(1 << x));
-        } else if (!strcmp(b,"check")) {
-            scanf("%d",&x); x--;
-            int res = (s & (1 << x));
-            if (res) {
-                puts("1");
-            } else {
-                puts("0");
-            }
-        } else if (!strcmp(b,"toggle")) {
-            scanf("%d",&x); x--;
-            s = (s ^ (1 << x));
-        } else if (!strcmp(b,"all")) {
-            s = (1<<n)-1;
-        } else if (!strcmp(b,"empty")) {
-            s=0;
+    string str;
+    cin>>str;
+    
+    int n = str.size();
+    char s[n][256];
+    
+    for(int i=0; i<str.size(); i++){
+        for(int j=0; j<str.size(); j++){
+            s[i][j] = str[i];
         }
     }
-    return 0;
+    for(int i=0; i<256; i++){
+        if(s[0][i]>0){
+//            cout<<s[0][i]<<endl;
+        }
+    }
 }
+
