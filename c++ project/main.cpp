@@ -8,9 +8,10 @@ using namespace std;
 
 
 int main() {
+    int b;
     string str;
     cin>>str;
-    
+ 
     int n = str.size();
     char s[n][256];
     
