@@ -8,22 +8,37 @@ using namespace std;
 
 
 int main() {
-    int b;
-    string str;
-    cin>>str;
- 
-    int n = str.size();
-    char s[n][256];
+
+    int n;
+    cin>>n;
     
-    for(int i=0; i<str.size(); i++){
-        for(int j=0; j<str.size(); j++){
-            s[i][j] = str[i];
+    while(n--){
+        int a;
+        cin>>a;
+        int arr[a];
+ 
+        int temp;
+        float sum = 0;
+        for(int i=0; i<a; i++){
+            cin>>temp;
+            arr[i] = temp;
+            sum = sum+arr[i];
         }
-    }
-    for(int i=0; i<256; i++){
-        if(s[0][i]>0){
-//            cout<<s[0][i]<<endl;
+        
+        float average = sum/(float)a;
+        
+        float count = 0;
+        for(int i=0; i<a; i++){
+            if(arr[i]>average){
+                count = count+1;
+            }
         }
+        
+        float result;
+        result = count/a*100;
+        printf("%.3f", result);
+        cout<<"%"<<endl;
     }
+    
 }
 
