@@ -9,36 +9,33 @@ using namespace std;
 
 int main() {
 
-    int n;
-    cin>>n;
+    string str;
+    cin>>str;
     
-    while(n--){
-        int a;
-        cin>>a;
-        int arr[a];
- 
-        int temp;
-        float sum = 0;
-        for(int i=0; i<a; i++){
-            cin>>temp;
-            arr[i] = temp;
-            sum = sum+arr[i];
-        }
-        
-        float average = sum/(float)a;
-        
-        float count = 0;
-        for(int i=0; i<a; i++){
-            if(arr[i]>average){
-                count = count+1;
+    int check;
+    int cnt = 0;
+    int max=0;
+    int check2 = 0;
+    for(int i=0; i<str.size(); i++){
+        check = str[i];
+        for(int j=0; j<str.size(); j++){
+            if(str[j] == str[i]){
+                cnt = cnt+1;
             }
         }
-        
-        float result;
-        result = count/a*100;
-        printf("%.3f", result);
-        cout<<"%"<<endl;
+        if(cnt > max){
+            max = cnt;
+        }
+        if(max == cnt){
+            check2 = 1;
+        }
+        cnt = 0;
     }
     
+    if(check2 == 1){
+        cout<<"??"<<endl;
+    }else{
+        cout<<max<<endl;
+    }
 }
 
