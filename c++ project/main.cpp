@@ -33,7 +33,7 @@ int main() {
     }
     
     if(check2 == 1){
-        cout<<"??"<<endl;
+        cout<<"?"<<endl;
     }else{
         cout<<max<<endl;
     }
