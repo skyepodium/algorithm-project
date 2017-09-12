@@ -9,33 +9,34 @@ using namespace std;
 
 int main() {
 
-    string str;
-    cin>>str;
+    string day;
+    int num = 0;
     
-    int check;
-    int cnt = 0;
-    int max=0;
-    int check2 = 0;
-    for(int i=0; i<str.size(); i++){
-        check = str[i];
-        for(int j=0; j<str.size(); j++){
-            if(str[j] == str[i]){
-                cnt = cnt+1;
-            }
-        }
-        if(cnt > max){
-            max = cnt;
-        }
-        if(max == cnt){
-            check2 = 1;
-        }
-        cnt = 0;
-    }
+    cout<<"오늘은 무슨 요일 입니까?";
+    cin>>day;
     
-    if(check2 == 1){
-        cout<<"?"<<endl;
+    if(day == "sunday"){
+        num = 1;
+    }else if(day == "monday"){
+        num = 2;
+    }else if(day == "tuesday"){
+        num = 3;
+    }else if(day == "wednesday"){
+        num = 4;
+    }else if(day == "thursday"){
+        num = 5;
+    }else if(day == "friday"){
+        num = 6;
+    }else if(day == "토요일"){
+        num = 7;
     }else{
-        cout<<max<<endl;
+        num = 8;
     }
+    if(num < 8){
+        cout<<"오늘은"<<day<<"이고 순서는"<<num<<"번째 입니다."<<endl;
+    }else{
+        cout<<"요일을 잘못 입력하셨습니다."<<endl;
+    }
+    
 }
 
