@@ -7,40 +7,19 @@
 #include <cstdio>
 using namespace std;
 int main(){
-    int w[20][20];
-    int n;
-    cin>>n;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            cin>>w[i][j];
-        }
-    }
+    int a[7] = {22, 21, 24, 20, 18, 25, 23};
     
-    vector<int> d(n);
-    for(int i=0; i<n; i++){
-        d[i] = i;
-    }
-    
-    int ans=2147483647;
-    
-    do{
-        bool ok = true;
-        int sum = 0;
+    int max = a[0];
+    int index=0;
+    for(int i=1; i<7; i++){
         
-        for(int i=0; i<n-1; i++){
-            if(w[d[i]][d[i+1]] == 0){
-                ok = false;
-            }else{
-                sum = sum + w[d[i]][d[i+1]];
+        if(a[i]%2 == 1){
+            if(max<a[i]){
+                max = a[i];
+                index = i;
             }
         }
-            if(w[d[n-1]][d[0]] != 0 && ok){
-                sum = sum + w[d[n-1]][d[0]];
-                if(ans > sum){
-                    ans = sum;
-                }
-            }
-    }while(next_permutation(d.begin(), d.end()));
-    
-    cout<<ans<<endl;
+    }
+    cout<<max<<endl;
+    cout<<index<<endl;
 }
