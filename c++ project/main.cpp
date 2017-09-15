@@ -13,7 +13,7 @@ int main(){
     int index=0;
     for(int i=1; i<7; i++){
         
-        if(a[i]%2 == 1){
+        if(a[i]%2 == 0){
             if(max<a[i]){
                 max = a[i];
                 index = i;
