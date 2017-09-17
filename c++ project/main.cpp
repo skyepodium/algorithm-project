@@ -33,7 +33,7 @@ string tentotwo(int num){
 int main(){
     
     
-    int a = 28;
+    int a = 30;
    
     int b=28;
     int c=21;
