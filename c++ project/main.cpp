@@ -14,7 +14,7 @@ string tentotwo(int num){
     for(int i=1; num>0; i=i*10){
         int binary = num % 2;
         if(binary == 0){
-            result.append(" ");
+            result.append("  ");
         }else{
             result.append("#");
         }
