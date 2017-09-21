@@ -7,63 +7,28 @@
 #include <cstdio>
 #include <time.h>
 using namespace std;
+
+double FindClosesetPoint(double array[], int size, double target, double &closestPT);
+
 int main(){
-
-    int a=time(0);
-    srand(a);
-    int b = rand();
-
-    int result = b%3;
+    const int size = 5;
+    double pSameple[size] = {0.3, 0.6, 0.1, 0.4, 0.8};
     
-    string comresult;
-    if(result == 0){
-        comresult = "rock";
-//        cout<<"컴퓨터 주먹임"<<endl;
-    }else if(result == 1){
-        comresult = "scissor";
-//        cout<<"컴퓨터 가위임"<<endl;
-    }else{
-        comresult = "paper";
-//        cout<<"컴퓨터 보자기임"<<endl;
-    }
+    double target;
+    cout<<"0에서 1까지의 double형 숫자를 하나 입력해주세요: ";
+    cin>>target;
+ 
+    double diff, closesetPt;
+    diff = FindClosesetPoint(pSameple, size, target, closesetPt);
     
-    string word;
-    cout<<"가위바위보 게임"<<endl;
-    cout<<"너 뭐 낼래? 영어로 적어라, rock, scissor, paper"<<endl;
-    cin>>word;
-    
-    int aa;
-    if(word == "rock"){
-        if(comresult == "rock"){
-            aa = 0;
-        }else if(comresult == "paper"){
-            aa = -1;
-        }else{
-            aa = 1;
-        }
-    }else if(word == "paper"){
-             if(comresult == "rock"){
-                 aa = 1;
-             }else if(comresult == "paper"){
-                 aa = 0;
-             }else{
-                 aa = -1;
-             }
-    }else{
-        if(comresult == "rock"){
-            aa = -1;
-        }else if(comresult == "paper"){
-            aa = 1;
-        }else{
-            aa = 0;
-        }
-    }
-
-    if(aa == 1){
-        cout<<"너 이김"<<endl;
-    }else if(aa == 0){
-        cout<<"너 비김"<<endl;
-    }else{
-        cout<<"너 짐"<<endl;
-    }
 }
+
+double FindClosesetPoint(double array[], int size, double target, double &closestPT){
+    
+    double diff;
+    for(int i=0; i< size; i++){
+        array[i];
+    }
+    return diff;
+}
+
