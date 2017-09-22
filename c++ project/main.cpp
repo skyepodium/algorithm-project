@@ -8,27 +8,40 @@
 #include <time.h>
 using namespace std;
 
-double FindClosesetPoint(double array[], int size, double target, double &closestPT);
 
 int main(){
-    const int size = 5;
-    double pSameple[size] = {0.3, 0.6, 0.1, 0.4, 0.8};
+    int n;
+    cin>>n;
     
-    double target;
-    cout<<"0에서 1까지의 double형 숫자를 하나 입력해주세요: ";
-    cin>>target;
- 
-    double diff, closesetPt;
-    diff = FindClosesetPoint(pSameple, size, target, closesetPt);
+    int array[n][n];
     
-}
-
-double FindClosesetPoint(double array[], int size, double target, double &closestPT){
-    
-    double diff;
-    for(int i=0; i< size; i++){
-        array[i];
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            cin>>array[i][j];
+        }
     }
-    return diff;
+    
+    for(int i=0; i<n; i++){
+        for(int j=(i+1); j<n; j++){
+            
+            int temp;
+            temp = array[i][j];
+            array[i][j] = array[j][i];
+            array[j][i] = temp;
+            
+        }
+    }
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(j != n-1){
+                cout<<array[i][j]<<" ";
+            }else{
+                cout<<array[i][j];
+            }
+        }
+        cout<<endl;
+    }
+    
 }
 
