@@ -4,44 +4,24 @@
 #include <string>
 #include <algorithm>
 #include <vector>
-#include <cstdio>
 #include <time.h>
+#include <math.h>
 using namespace std;
 
-
+//double FindClosestPoint(double *pSample, int nSize, double target, double &closestPt);
+//int FindClosestPoint(int *pSample, int nSize, int  target, int &closestPt,bool bAbsDiff=true);
 int main(){
-    int n;
-    cin>>n;
+
+    int a;
+    int b;
+    cin>>a;
+    cin>>b;
     
-    int array[n][n];
+    int array[a][b];
+    cout<<array<<endl;
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            cin>>array[i][j];
-        }
-    }
-    
-    for(int i=0; i<n; i++){
-        for(int j=(i+1); j<n; j++){
-            
-            int temp;
-            temp = array[i][j];
-            array[i][j] = array[j][i];
-            array[j][i] = temp;
-            
-        }
-    }
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(j != n-1){
-                cout<<array[i][j]<<" ";
-            }else{
-                cout<<array[i][j];
-            }
-        }
-        cout<<endl;
-    }
-    
+    array[0][0] = 1;
+    cout<<array[0][0]<<endl;
 }
+
 
