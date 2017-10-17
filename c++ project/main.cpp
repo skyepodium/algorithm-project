@@ -11,14 +11,17 @@ using namespace std;
 
 class CTheater
 {
-
-
+    
+    
 private:
     string m_strName;
     int m_nTripTime;
     int m_pnShowTime[10];
     
 public:
+    CTheater();
+    ~CTheater();
+    
     void SetName(string strName);
     string GetName();
     void SetTripTime(int TripTime);
@@ -26,11 +29,14 @@ public:
     void SetShowTime(int* pnShowTime, int nSize);
     void GetShowTime(int* pnShowTime, int nSize);
     void PrintShowTime();
+    
+    CTheater(string strName, int nTripTime, int* pnShowTime, int nSize);
+    void ShowMe();
 };
 
 int main() {
     CTheater myTheater;
-
+    
     const int nSize = 10;
     int pnShowTime[nSize] = {1100, 1300, 1600, 1830};
     
@@ -40,6 +46,14 @@ int main() {
     myTheater.SetShowTime(pnShowTime, nSize);
     
     myTheater.PrintShowTime();
+    
+    CTheater yourTheater("이수 메가박스", 10, pnShowTime, nSize);
+    yourTheater.ShowMe();
+    
+    myTheater = CTheater("코엑스 메가박스", 15, pnShowTime, nSize);//재 초기화
+    myTheater.ShowMe();
+    
+    return 0;
 }
 
 void CTheater::SetName(string strName){
@@ -81,4 +95,28 @@ void CTheater::PrintShowTime()
             cout<<m_pnShowTime[nIndex] << endl;
         }
     }
+}
+CTheater::CTheater()
+{
+    
+}
+
+CTheater::~CTheater()
+{
+    
+}
+
+CTheater::CTheater(string strName, int nTripTime, int* pnShowTime, int nSize)
+{
+    m_strName = strName;
+    m_nTripTime = nTripTime;
+    SetShowTime(pnShowTime, nSize);
+    
+}
+
+void CTheater::ShowMe()
+{
+    cout<< m_strName <<endl;
+    cout<< "Trip Time is" << m_nTripTime << endl;
+    PrintShowTime();
 }
