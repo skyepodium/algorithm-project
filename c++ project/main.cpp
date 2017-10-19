@@ -17,6 +17,8 @@ private:
     string m_strName;
     int m_nTripTime;
     int m_pnShowTime[10];
+    static int m_nTheater;
+   
     
 public:
     CTheater();
@@ -29,17 +31,21 @@ public:
     void SetShowTime(int* pnShowTime, int nSize);
     void GetShowTime(int* pnShowTime, int nSize);
     void PrintShowTime();
+    static void ShowNumberOfTheater();
+    static void AnotherStaticFunction();
     
     CTheater(string strName, int nTripTime, int* pnShowTime, int nSize);
     void ShowMe();
 };
+
+int CTheater::m_nTheater = 0;
 
 int main() {
     CTheater myTheater;
     
     const int nSize = 10;
     int pnShowTime[nSize] = {1100, 1300, 1600, 1830};
-    
+    CTheater::ShowNumberOfTheater();
     
     myTheater.SetName("강남CGV");
     myTheater.SetTripTime(10);
@@ -49,10 +55,10 @@ int main() {
     
     CTheater yourTheater("이수 메가박스", 10, pnShowTime, nSize);
     yourTheater.ShowMe();
+    CTheater::ShowNumberOfTheater();
     
     myTheater = CTheater("코엑스 메가박스", 15, pnShowTime, nSize);//재 초기화
     myTheater.ShowMe();
-    
     return 0;
 }
 
@@ -96,9 +102,10 @@ void CTheater::PrintShowTime()
         }
     }
 }
+
 CTheater::CTheater()
 {
-    
+    m_nTheater = m_nTheater + 1;
 }
 
 CTheater::~CTheater()
@@ -108,6 +115,8 @@ CTheater::~CTheater()
 
 CTheater::CTheater(string strName, int nTripTime, int* pnShowTime, int nSize)
 {
+    m_nTheater = m_nTheater + 1;
+    
     m_strName = strName;
     m_nTripTime = nTripTime;
     SetShowTime(pnShowTime, nSize);
@@ -119,4 +128,18 @@ void CTheater::ShowMe()
     cout<< m_strName <<endl;
     cout<< "Trip Time is" << m_nTripTime << endl;
     PrintShowTime();
+}
+
+void CTheater::ShowNumberOfTheater(){
+    int myLocalVar = 3;
+    myLocalVar = m_nTheater + 1;
+    cout<< myLocalVar <<endl;
+    cout<<"The number of Theater is "<<m_nTheater<<endl;
+    AnotherStaticFunction();
+}
+
+void CTheater::AnotherStaticFunction(){
+    
+    cout<<" Just for Fun!" <<endl;
+    
 }
