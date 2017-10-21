@@ -8,138 +8,60 @@
 #include <math.h>
 using namespace std;
 
+int n, m;
+int map[51][51];
+const int dx[] = { -1, 0, 1, 0};
+const int dy[] = { 0, 1, 0, -1};
 
-class CTheater
-{
-    
-    
-private:
-    string m_strName;
-    int m_nTripTime;
-    int m_pnShowTime[10];
-    static int m_nTheater;
-   
-    
-public:
-    CTheater();
-    ~CTheater();
-    
-    void SetName(string strName);
-    string GetName();
-    void SetTripTime(int TripTime);
-    int GetTripTime();
-    void SetShowTime(int* pnShowTime, int nSize);
-    void GetShowTime(int* pnShowTime, int nSize);
-    void PrintShowTime();
-    static void ShowNumberOfTheater();
-    static void AnotherStaticFunction();
-    
-    CTheater(string strName, int nTripTime, int* pnShowTime, int nSize);
-    void ShowMe();
-};
+int c_x;
+int c_y;
+int c_dir;
 
-int CTheater::m_nTheater = 0;
+int cnt = 0;
 
-int main() {
-    CTheater myTheater;
-    
-    const int nSize = 10;
-    int pnShowTime[nSize] = {1100, 1300, 1600, 1830};
-    CTheater::ShowNumberOfTheater();
-    
-    myTheater.SetName("강남CGV");
-    myTheater.SetTripTime(10);
-    myTheater.SetShowTime(pnShowTime, nSize);
-    
-    myTheater.PrintShowTime();
-    
-    CTheater yourTheater("이수 메가박스", 10, pnShowTime, nSize);
-    yourTheater.ShowMe();
-    CTheater::ShowNumberOfTheater();
-    
-    myTheater = CTheater("코엑스 메가박스", 15, pnShowTime, nSize);//재 초기화
-    myTheater.ShowMe();
-    return 0;
-}
+void solve(int cx, int cy, int cdir);
 
-void CTheater::SetName(string strName){
-    m_strName = strName;
-}
-
-string CTheater::GetName(){
+int main(){
+    cin>>n>>m;
+    cin>>c_x>>c_y>>c_dir;
     
-    return string(m_strName);
-}
-
-void CTheater::SetTripTime(int TripTime){
-    m_nTripTime = TripTime;
-}
-
-int CTheater::GetTripTime(){
-    
-    return int(m_nTripTime);
-}
-
-void CTheater::SetShowTime(int* pnShowTime, int nSize){
-    
-    for(int nIndex = 0; nIndex < nSize; nIndex++){
-        m_pnShowTime[nIndex] = pnShowTime[nIndex];
-    }
-}
-
-void CTheater::GetShowTime(int* pnShowTime, int nSize){
-    
-    for(int nIndex = 0; nIndex < nSize; nIndex++){
-        pnShowTime[nIndex] = m_pnShowTime[nIndex];
-    }
-}
-
-void CTheater::PrintShowTime()
-{
-    for(int nIndex = 0; nIndex < 10; nIndex++){
-        if(m_pnShowTime[nIndex] != 0){
-            cout<<m_pnShowTime[nIndex] << endl;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            cin>>map[i][j];
         }
     }
+
+    solve(c_x, c_y, c_dir);
+    cout<<cnt<<endl;
 }
 
-CTheater::CTheater()
-{
-    m_nTheater = m_nTheater + 1;
-}
-
-CTheater::~CTheater()
-{
+void solve(int cx, int cy, int cd){
+    
+    if(map[cx][cy] == 0){
+        map[cx][cy] = 2;
+//        cout<<" c "<<cx<<" " <<cy<<" "<<cd<<endl;
+        cnt++;
+    }
+    
+    for(int i=0; i<4; i++){
+        int nd = (cd + 3) % 4;
+        int nx = cx + dx[nd];
+        int ny = cy + dy[nd];
+        if(map[nx][ny] == 0){
+            solve(nx, ny, nd);
+            return;
+        }else{
+//            cout<<" turn "<<nd<<" "<<i<<endl;
+            cd = nd;
+        }
+    }
+    
+    if(map[cx - dx[cd]][cy - dy[cd]] != 1){
+        cx = cx - dx[cd];
+        cy = cy - dy[cd];
+//        cout<<" back "<<cd<<endl;
+        solve(cx, cy, cd);
+    }
     
 }
 
-CTheater::CTheater(string strName, int nTripTime, int* pnShowTime, int nSize)
-{
-    m_nTheater = m_nTheater + 1;
-    
-    m_strName = strName;
-    m_nTripTime = nTripTime;
-    SetShowTime(pnShowTime, nSize);
-    
-}
-
-void CTheater::ShowMe()
-{
-    cout<< m_strName <<endl;
-    cout<< "Trip Time is" << m_nTripTime << endl;
-    PrintShowTime();
-}
-
-void CTheater::ShowNumberOfTheater(){
-    int myLocalVar = 3;
-    myLocalVar = m_nTheater + 1;
-    cout<< myLocalVar <<endl;
-    cout<<"The number of Theater is "<<m_nTheater<<endl;
-    AnotherStaticFunction();
-}
-
-void CTheater::AnotherStaticFunction(){
-    
-    cout<<" Just for Fun!" <<endl;
-    
-}
