@@ -8,60 +8,77 @@
 #include <math.h>
 using namespace std;
 
-int n, m;
-int map[51][51];
-const int dx[] = { -1, 0, 1, 0};
-const int dy[] = { 0, 1, 0, -1};
+class CMoney {
 
-int c_x;
-int c_y;
-int c_dir;
+    public:
+        CMoney();
+        ~CMoney();
+        int GetDollar() const;
+        int GetCent() const;
+        CMoney(int nDollar, int nCent);
+    
+    private:
+        int m_nDollar;
+        int m_nCent;
 
-int cnt = 0;
+};
 
-void solve(int cx, int cy, int cdir);
+//CMoney Add(CMoney aMoney, CMoney bMoney);
+const CMoney operator +(const CMoney &aMoney, const CMoney &bMoney);
+
+
+void ShowMoney(CMoney aMoney);
 
 int main(){
-    cin>>n>>m;
-    cin>>c_x>>c_y>>c_dir;
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cin>>map[i][j];
-        }
-    }
-
-    solve(c_x, c_y, c_dir);
-    cout<<cnt<<endl;
+    CMoney aMoney(3, 60), bMoney(9, 45), addedMoney;
+    addedMoney = aMoney + bMoney;
+//    addedMoney = Add(aMoney, bMoney);
+    ShowMoney(aMoney);
+    cout << " + ";
+    ShowMoney(bMoney);
+    cout << " + ";
+    cout << " = ";
+    ShowMoney(addedMoney);
+    cout<<endl;
 }
 
-void solve(int cx, int cy, int cd){
+//CMoney Add(CMoney aMoney, CMoney bMoney){
+const CMoney operator +(const CMoney &aMoney, const CMoney &bMoney){
+
+    int nCent = aMoney.GetCent() + bMoney.GetCent();
+    int nCarry = nCent / 100;
+    nCent = nCent % 100;
+    int nDollar = aMoney.GetDollar() + bMoney.GetDollar() + nCarry;
     
-    if(map[cx][cy] == 0){
-        map[cx][cy] = 2;
-//        cout<<" c "<<cx<<" " <<cy<<" "<<cd<<endl;
-        cnt++;
-    }
+    return CMoney(nDollar, nCent);
+}
+
+int CMoney::GetDollar() const{
     
-    for(int i=0; i<4; i++){
-        int nd = (cd + 3) % 4;
-        int nx = cx + dx[nd];
-        int ny = cy + dy[nd];
-        if(map[nx][ny] == 0){
-            solve(nx, ny, nd);
-            return;
-        }else{
-//            cout<<" turn "<<nd<<" "<<i<<endl;
-            cd = nd;
-        }
-    }
+    return m_nDollar;
+}
+
+
+int CMoney::GetCent() const{
     
-    if(map[cx - dx[cd]][cy - dy[cd]] != 1){
-        cx = cx - dx[cd];
-        cy = cy - dy[cd];
-//        cout<<" back "<<cd<<endl;
-        solve(cx, cy, cd);
-    }
+    return m_nCent;
+}
+
+CMoney::CMoney(){
     
+}
+
+CMoney::~CMoney(){
+    
+}
+
+CMoney::CMoney(int nDollar, int nCent){
+    m_nDollar = nDollar;
+    m_nCent = nCent;
+}
+
+
+void ShowMoney(CMoney aMoney){
+    cout << "$" << aMoney.GetDollar()<<"."<<aMoney.GetCent();
 }
 
