@@ -1,20 +1,24 @@
 #include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
 
 using namespace std;
 
 int main() {
 
-    int n, k, cnt = 0, result = 0;
-    cin >> n >> k;
-    
-    for(int i=1; i <= n; i++){
-        if(n%i == 0){
-            cnt++;
-            if(cnt == k){
-                result = i;
-            }
-        }
+    int n;
+    cin >> n;
+    vector<int> v;
+
+    int num;
+    for(int i=0; i<n; i++){
+        cin >> num;
+        v.push_back(num);
     }
-    cout << result <<endl;
+
+    sort(v.begin(), v.end());
+    
+    cout<<v[0]*v[v.size()-1]<<endl;
 }
 
