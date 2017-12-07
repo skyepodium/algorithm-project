@@ -3,42 +3,35 @@
 
 using namespace std;
 
+int n, k;
+
 void eratos(int a){
-  
     bool *check = new bool[a+1];
-    for(int i=1; i<=a; i++){
+    check[1] = false;
+    for(int i=2; i<=a; i++){
         check[i] = true;
     }
     
-    for(int i=2; i*i<=a; i++){
-        for(int j=i*i; j<=a; j=j+i){
-            check[j] = false;
-        }
-    }
+    int cnt = 0;
     
-    if(check[a]){
-        cout<<"It is a prime word."<<endl;
-    }else{
-        cout<<"It is not a prime word."<<endl;
+    for(int i=2; i<=a; i++){
+        for(int j=i; j<=a; j=j+i){
+            if(check[j]){
+                check[j] = false;
+                cnt++;
+                if(cnt == k){
+                    cout<< j <<endl;
+                }
+            }
+        }
     }
 }
 
-
 int main() {
     
-    string word;
-    cin >> word;
+    cin >> n >> k;
     
-    int sum =0 ;
-    
-    for(int i=0; i<word.size(); i++){
-        if((int)word[i] >= 97){
-            sum = sum + (int)word[i] - 96;
-        }else{
-            sum = sum + (int)word[i] - 38;
-        }
-    }
-    eratos(sum);
+    eratos(n);
 }
 
 
