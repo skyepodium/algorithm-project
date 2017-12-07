@@ -1,24 +1,28 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <algorithm>
 
 using namespace std;
 
+int gcd(int a, int b){
+    if(b==0){
+        return a;
+    }else{
+        return gcd(b, a%b);
+    }
+}
+
 int main() {
 
-    int n;
-    cin >> n;
-    vector<int> v;
-
-    int num;
-    for(int i=0; i<n; i++){
-        cin >> num;
-        v.push_back(num);
-    }
-
-    sort(v.begin(), v.end());
+    int a, b;
+    cin >> a >> b;
     
-    cout<<v[0]*v[v.size()-1]<<endl;
+    if(b>a){
+        int tmp;
+        tmp = a;
+        a = b;
+        b = tmp;
+    }
+    
+    cout << gcd(a, b) << endl;
+    cout << (a*b)/gcd(a, b) <<endl;
 }
 
