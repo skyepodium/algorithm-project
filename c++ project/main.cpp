@@ -1,26 +1,19 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
+
+int gcd(int a, int b){
+    if(b == 0){
+        return a;
+    }else{
+        return gcd(b, a%b);
+    }
+}
+
 
 int main() {
 
-    int n;
-    cin >> n;
-    
-    int result=1;
-    int addNum = 6;
-    int maxNum = 1;
-    while(true){
-        if(n <= maxNum){
-            break;
-        }else{
-            maxNum = maxNum+ addNum;
-            addNum = addNum + 6;
-            result++;
-        }
-    }
-    
-    cout << result <<endl;
+    cout<<gcd(124, 196) <<endl;
 }
 
 
