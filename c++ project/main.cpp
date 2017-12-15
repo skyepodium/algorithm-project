@@ -1,16 +1,13 @@
 #include <iostream>
-
+#include <fstream>
+#include <iomanip>
+#include <string>
 using namespace std;
 
-int main() {
+int main(){
     
-    int a, b;
-    cin>>a>>b;
+    cout.setf(ios::fixed | ios::showpoint);
     
-    cout<<a+b<<endl;
-    cout<<a-b<<endl;
-    cout<<a*b<<endl;
-    cout<<a/b<<endl;
-    cout<<a%b<<endl;
+    cout << "$" << setprecision(2) <<10.3 <<" " <<"$" <<20.5<<endl;
     
 }
