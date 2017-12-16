@@ -4,21 +4,25 @@
 using namespace std;
 
 int main(){
-    int a, b;
-    while(cin>>a>>b){
-        if(a==0 && b==0){
-            break;
+    int n;
+    cin >> n;
+    
+    int a;
+    int one = 0;
+    int zero = 0;
+    while(n--){
+        cin >> a;
+        if(a == 0){
+            one++;
         }else{
-
-            if(b%a == 0){
-                cout<<"factor"<<endl;
-            }else if(a%b == 0){
-                cout<<"multiple"<<endl;
-            }else{
-                cout<<"neither"<<endl;
-            }
-            
+            zero++;
         }
+    }
+    
+    if(one > zero){
+        cout<<"Junhee is not cute!"<<endl;
+    }else{
+        cout<<"Junhee is cute!"<<endl;
     }
 }
 
