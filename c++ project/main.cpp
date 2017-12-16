@@ -1,23 +1,22 @@
 #include <iostream>
+#include <vector>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 
 int main(){
-    string word;
-    cin >> word;
+    vector<int> v;
+    for(int i=0; i<3; i++){
+        int a;
+        cin >> a;
+        v.push_back(a);
+    }
+    
+    sort(v.begin(), v.end());
+    
+    for(int i=0; i<3; i++){
+        cout<<v[i]<<" ";
+    }
 
-    bool check = true;
-    int size = (int)word.size();
-    for(int i=0; i<size/2; i++){
-        if(word[i] != word[size-1-i]){
-            check = false;
-        }
-    }
-    if(check){
-        cout<<1<<endl;
-    }else{
-        cout<<0<<endl;
-    }
 }
-
