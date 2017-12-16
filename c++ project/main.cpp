@@ -4,17 +4,15 @@
 using namespace std;
 
 int main(){
-    cout<<"NFC West       W   L  T"<<endl;
-    cout<<"-----------------------"<<endl;
-    cout<<"Seattle        13  3  0"<<endl;
-    cout<<"San Francisco  12  4  0"<<endl;
-    cout<<"Arizona        10  6  0"<<endl;
-    cout<<"St. Louis      7   9  0"<<endl;
+    cout<<"    8888888888  888    88888"<<endl;
+    cout<<"   88     88   88 88   88  88"<<endl;
+    cout<<"    8888  88  88   88  88888"<<endl;
+    cout<<"       88 88 888888888 88   88"<<endl;
+    cout<<"88888888  88 88     88 88    888888"<<endl;
     cout<<endl;
-    cout<<"NFC North      W   L  T"<<endl;
-    cout<<"-----------------------"<<endl;
-    cout<<"Green Bay      8   7  1"<<endl;
-    cout<<"Chicago        8   8  0"<<endl;
-    cout<<"Detroit        7   9  0"<<endl;
-    cout<<"Minnesota      5  10  1"<<endl;
+    cout<<"88  88  88   888    88888    888888"<<endl;
+    cout<<"88  88  88  88 88   88  88  88"<<endl;
+    cout<<"88 8888 88 88   88  88888    8888"<<endl;
+    cout<<" 888  888 888888888 88  88      88"<<endl;
+    cout<<"  88  88  88     88 88   88888888"<<endl;
 }
