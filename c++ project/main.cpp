@@ -4,25 +4,21 @@
 using namespace std;
 
 int main(){
-    int n;
-    cin >> n;
+    int a, b;
+    cin >> a >> b;
     
-    int a;
-    int one = 0;
-    int zero = 0;
-    while(n--){
-        cin >> a;
-        if(a == 0){
-            one++;
-        }else{
-            zero++;
-        }
+    int time;
+    cin >> time;
+    
+    b = b+time;
+    while(b>59){
+        b = b - 60;
+        a++;
+    }
+    if(a>23){
+        a = a - 24;
     }
     
-    if(one > zero){
-        cout<<"Junhee is not cute!"<<endl;
-    }else{
-        cout<<"Junhee is cute!"<<endl;
-    }
+    cout << a <<" "<< b <<endl;
 }
 
