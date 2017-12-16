@@ -5,17 +5,14 @@ using namespace std;
 
 int main(){
 
-    string word;
-    cin >> word;
+    int n;
+    cin >> n;
     
-    int cnt = 0;
-    int size = (int)word.size();
-    for(int i=0; i<size; i++){
-        if(word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || word[i] == 'o' || word[i] == 'u'){
-            cnt++;
-        }
+    while(n--){
+        string word;
+        cin >> word;
+        
+        int size = (int)word.size();
+        cout<<word[0]<<word[size-1]<<endl;
     }
-    
-    cout << cnt << endl;
-
 }
