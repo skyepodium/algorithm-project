@@ -1,24 +1,17 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 int main(){
-    int a, b;
-    cin >> a >> b;
+    int a;
+    cin >> a;
     
-    int time;
-    cin >> time;
-    
-    b = b+time;
-    while(b>59){
-        b = b - 60;
-        a++;
+    if(a%4 == 0 && a%100 != 0){
+        cout<<1<<endl;
+    }else if(a%400 == 0){
+        cout<<1<<endl;
+    }else{
+        cout<<0<<endl;
     }
-    if(a>23){
-        a = a - 24;
-    }
-    
-    cout << a <<" "<< b <<endl;
 }
 
