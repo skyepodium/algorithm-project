@@ -6,13 +6,19 @@ using namespace std;
 int main(){
 
     string word;
-    cin >> word;
-    
-    int cnt = 0;
-    for(int i=0; i<word.size(); i++){
-        if(word[i] == ','){
-            cnt++;
+
+    while(getline(cin, word)){
+        
+        if(word != "END"){
+        int size = (int)word.size();
+
+        for(int i=size-1; i>=0; i--){
+            cout<<word[i];
         }
+        cout<<endl;
+        }else{
+            break;
+        }
+
     }
-    cout<<cnt+1<<endl;
 }
