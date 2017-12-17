@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -8,16 +9,25 @@ int main(){
     cin >> n;
     
     while(n--){
-        int a;
-        cin >> a;
+        int t;
+        cin >> t;
         
-        int sum = 0 ;
-        for(int i=0; i<a; i++){
-            int b;
-            cin >> b;
-            sum = sum + b;
+        int price;
+        string name;
+        int max_price = 0;
+        string max_name;
+        while(t--){
+            cin>>price>>name;
+            if(max_price == 0){
+                max_price = price;
+                max_name = name;
+            }else{
+                if(max_price < price){
+                    max_price = price;
+                    max_name = name;
+                }
+            }
         }
-        cout << sum << endl;
+        cout<<max_name<<endl;
     }
-
 }
