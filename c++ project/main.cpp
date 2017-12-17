@@ -1,36 +1,23 @@
 #include <iostream>
-#include <vector>
+#include <string>
 
 using namespace std;
 
+char first[8][4] = {"", "1", "10", "11", "100", "101", "110", "111"};
+char other[8][4] = {"000", "001", "010", "011", "100", "101", "110", "111"};
+
 int main(){
+    string number;
+    cin >> number;
     
-    int n;
-    cin >> n;
+    cout << first[number[0] - 48];
     
-    vector<int> v;
-    while(n--){
-        int a;
-        cin >> a;
-        v.push_back(a);
+    for(int i=1; i < number.size(); i++){
+        cout << other[number[i] - 48];
     }
     
-    int size = (int)v.size();
-    int sum = 0;
+    if(number =="0"){
+        cout<<0<<endl;
+    }
     
-    if(v[0] == 1){
-        sum = sum + 1;
-    }
-    for(int i=1; i<size; i++){
-        
-        if(v[i] > 0 && v[i-1] > 0){
-            v[i] = v[i-1] + 1;
-        }
-
-        if(v[i] > 0){
-            sum = sum + v[i];
-        }
-
-    }
-    cout << sum << endl;
 }
