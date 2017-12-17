@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -9,25 +9,23 @@ int main(){
     cin >> n;
     
     while(n--){
-        int t;
-        cin >> t;
+        int a;
+        cin >> a;
         
-        int price;
-        string name;
-        int max_price = 0;
-        string max_name;
-        while(t--){
-            cin>>price>>name;
-            if(max_price == 0){
-                max_price = price;
-                max_name = name;
-            }else{
-                if(max_price < price){
-                    max_price = price;
-                    max_name = name;
-                }
+        vector<int> v;
+        
+        while(a>0){
+            v.push_back(a%2);
+            a = a/2;
+        }
+        
+        int size = (int)v.size();
+        
+        for(int i=0; i<size; i++){
+            if(v[i] == 1){
+                cout<<i<<" ";
             }
         }
-        cout<<max_name<<endl;
+
     }
 }
