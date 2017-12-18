@@ -2,32 +2,27 @@
 
 using namespace std;
 
-bool check[42];
-
 int main(){
-    
-    for(int i=0; i<42; i++){
-        check[i] = false;
-    }
 
-    int num;
-    int mod;
-    for(int i=0; i<10; i++){
-        cin >> num;
-        mod = num%42;
-        if(!check[mod]){
-            check[mod] = true;
-        }
-    }
+    int t;
+    cin >> t;
     
-    int cnt = 0;
-    for(int i=0; i<42; i++){
-        if(check[i]){
-            cnt++;
+    while(t--){
+        
+        int base;
+        cin >> base;
+        
+        int n;
+        cin >> n;
+        
+        int num, price;
+        for(int i=0; i<n; i++){
+            cin >> num >> price;
+            base = base + num * price;
         }
+        
+        cout << base <<endl;
     }
-    
-    cout<<cnt<<endl;
     
 }
 
