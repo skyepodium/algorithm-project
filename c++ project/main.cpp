@@ -1,42 +1,37 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 int main(){
-    
-    string num1, num2;
-    char op;
-    
-    cin >> num1 >> op >> num2;
 
-    int num1_size = (int)num1.size();
-    int num2_size = (int)num2.size();
+    int t;
+    cin >> t;
     
-    
-    if(op == '*'){
-  
-        num1.append(num2.begin()+1, num2.end());
-        cout << num1 <<endl;
+    while(t--){
         
-    }else{
-
-        if(num1_size == num2_size){
-            
-            num1[0] = '2';
-            cout<<num1<<endl;
-            
-        }else if(num1_size < num2_size){
-
-            num2[num2_size - num1_size] = '1';
-            cout << num2 <<endl;
-
-        }else{
-
-            num1[num1_size - num2_size] = '1';
-            cout << num1 <<endl;
-
+        int people_num, chair_num;
+        cin >> people_num >> chair_num ;
+        
+        bool *check;
+        check = new bool[chair_num];
+        
+        for(int i=0; i<chair_num; i++){
+            check[i] = true;
         }
+        
+        int cnt = 0;
+        for(int i=0; i<people_num; i++){
+            int a;
+            cin >> a;
+            if(check[a-1]){
+                check[a-1] = false;
+            }else{
+                cnt++;
+            }
+        }
+        cout << cnt <<endl;
+        
     }
+
 }
 
