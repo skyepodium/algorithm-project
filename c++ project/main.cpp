@@ -2,17 +2,32 @@
 
 using namespace std;
 
-int main(){
-        
-    int t;
-    cin >> t;
+bool check[42];
 
+int main(){
     
-    int a, b;
-    while(t--){
-        cin >> a >> b;
-        
-        printf("You get %d piece(s) and your dad gets %d piece(s).\n", a/b, a%b );
+    for(int i=0; i<42; i++){
+        check[i] = false;
     }
+
+    int num;
+    int mod;
+    for(int i=0; i<10; i++){
+        cin >> num;
+        mod = num%42;
+        if(!check[mod]){
+            check[mod] = true;
+        }
+    }
+    
+    int cnt = 0;
+    for(int i=0; i<42; i++){
+        if(check[i]){
+            cnt++;
+        }
+    }
+    
+    cout<<cnt<<endl;
+    
 }
 
