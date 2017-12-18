@@ -1,37 +1,31 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
 int main(){
 
-    int t;
-    cin >> t;
+    vector<pair<int, int> > v;
+    int num;
     
-    while(t--){
-        
-        int people_num, chair_num;
-        cin >> people_num >> chair_num ;
-        
-        bool *check;
-        check = new bool[chair_num];
-        
-        for(int i=0; i<chair_num; i++){
-            check[i] = true;
-        }
-        
-        int cnt = 0;
-        for(int i=0; i<people_num; i++){
-            int a;
-            cin >> a;
-            if(check[a-1]){
-                check[a-1] = false;
-            }else{
-                cnt++;
-            }
-        }
-        cout << cnt <<endl;
-        
+    for(int i=0; i<8; i++){
+        cin >> num;
+        v.push_back(pair<int, int>(num, i+1));
     }
+    sort(v.begin(), v.end());
+    
+    int sum = 0;
+    vector<int> result;
+    for(int i=3; i<8; i++){
+        sum = sum + v[i].first;
+        result.push_back(v[i].second);
+    }
+    cout << sum <<endl;
 
+    sort(result.begin(), result.end());
+    for(int i=0; i<result.size(); i++){
+        cout << result[i] <<" ";
+    }
 }
 
