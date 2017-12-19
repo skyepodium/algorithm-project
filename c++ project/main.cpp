@@ -1,35 +1,29 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 int main() {
-    
-    int t;
-    cin >> t;
-    
-    int n;
-    char problem_kind;
-    while(t--){
 
-        cin >> n >> problem_kind;
-        
-        if(problem_kind == 'C'){
-            
-            char ch;
-            for(int i=0; i<n; i++){
-                cin >> ch;
-                printf("%d ", ch-64);
+    string base, word;
+    cin >> base >> word;
+    
+    int cnt = 0;
+    for(int i=0; i<base.size(); i++){
+        if(base[i] == word[0]){
+            bool check = true;
+            for(int j=0; j<word.size(); j++){
+                if(base[i+j] != word[j]){
+                    check = false;
+                    break;
+                }
             }
-            
-        }else{
-            
-            int num;
-            for(int i=0; i<n; i++){
-                cin >> num;
-                printf("%c ", num+64);
+            if(check){
+                cnt++;
             }
-            
         }
-        cout<<endl;
     }
+    
+    cout << cnt <<endl;
+    
 }
