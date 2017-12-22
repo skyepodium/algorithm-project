@@ -3,22 +3,24 @@
 
 using namespace std;
 
+char ar[11][11];
+
 int main() {
     
-    int t;
-    cin >> t;
-    int b;
-    cin >> b;
+    int a,b;
+    cin >> a >> b;
     
-    string word;
-    while(t--){
-        cin>>word;
-        int size = (int)word.size();
-        
-        for(int i=size-1; i>=0; i--){
-            cout<<word[i];
+    for(int i=0; i<a; i++){
+        for(int j=0; j<b; j++){
+            cin >> ar[i][j];
         }
-        cout<<endl;
+    }
+
+    for(int i=0; i<a; i++){
+        for(int j=b-1; j>=0; j--){
+            cout<< ar[i][j];
+        }
+        cout << endl;
     }
 
 }
