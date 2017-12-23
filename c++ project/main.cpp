@@ -1,23 +1,32 @@
 #include <iostream>
-
+#include <string>
+#include <vector>
+#include <algorithm>
 using namespace std;
-
-int Rev(int num){
-    
-    int result = 0;
-    while(num > 0){
-        result = result * 10;
-        result = result + num%10;
-        num = num/10;
-    }
-    
-    return result;
-}
 
 int main() {
     
-    int X, Y;
-    cin >> X >> Y;
+    int t;
+    cin >> t;
     
-    cout << Rev(Rev(X) + Rev(Y)) << endl;
+    string name;
+    int day, month, year;
+    
+    vector<pair<int, string>> v;
+    
+    while(t--){
+        cin >> name >> day >> month >> year;
+        
+        int day_sum = day + month*31 + year*12*31;
+        
+        v.push_back(pair<int, string>(day_sum, name));
+        
+    }
+    
+    sort(v.begin(), v.end());
+    
+    int size = (int)v.size();
+    
+    cout << v[size - 1].second << endl;
+    cout << v[0].second << endl;
 }
