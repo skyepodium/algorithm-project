@@ -1,18 +1,18 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 int main() {
     
-    int t, num;
-    cin >> t;
+    string word;
+    cin >> word;
     
-    while(t--){
-        
-        cin >> num;
-        
-        for(int i=0; i<num; i++){
-            cout<<'=';
+    for(int i=0; i<word.size(); i++){
+        if(word[i] >= 68){
+            printf("%c", word[i] - 3);
+        }else{
+            printf("%c",  word[i] + 23);
         }
-        cout<<endl;
     }
+    cout<<endl;
 }
