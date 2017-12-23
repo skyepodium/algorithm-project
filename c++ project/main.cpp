@@ -4,15 +4,31 @@ using namespace std;
 
 int main() {
     
-    string word;
-    cin >> word;
+    int t;
+    string word1, word2;
+    cin >> t;
     
-    for(int i=0; i<word.size(); i++){
-        if(word[i] >= 68){
-            printf("%c", word[i] - 3);
-        }else{
-            printf("%c",  word[i] + 23);
+    while(t--){
+        cin >> word1 >> word2;
+        
+        cout <<"Distances: ";
+        for(int i=0; i < word1.size(); i++){
+
+            if(word1[i] < word2[i]){
+                
+                printf("%d ", word2[i] - word1[i]);
+                
+            }else if(word1[i] > word2[i]){
+                
+                printf("%d ", (word2[i] + 26) - word1[i]);
+                
+            }else{
+                printf("%d ", word2[i] - word1[i]);
+                
+            }
+            
         }
+        cout<<endl;
+        
     }
-    cout<<endl;
 }
