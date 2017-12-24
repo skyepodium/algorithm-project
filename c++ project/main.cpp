@@ -1,34 +1,20 @@
 #include <iostream>
-#include <string>
 using namespace std;
 
 int main() {
-    
+
     int t;
-    string word1, word2;
     cin >> t;
     
-    while(t--){
-        cin >> word1 >> word2;
+    for(int i=0; i<t; i++){
         
-        cout <<"Distances: ";
-        for(int i=0; i < word1.size(); i++){
-
-            if(word1[i] < word2[i]){
-                
-                printf("%d ", word2[i] - word1[i]);
-                
-            }else if(word1[i] > word2[i]){
-                
-                printf("%d ", (word2[i] + 26) - word1[i]);
-                
-            }else{
-                printf("%d ", word2[i] - word1[i]);
-                
-            }
-            
+        for(int k=0; k<i; k++){
+            cout<<' ';
+        }
+        
+        for(int j=i; j<2*t-1-i; j++){
+            cout<<'*';
         }
         cout<<endl;
-        
     }
 }
