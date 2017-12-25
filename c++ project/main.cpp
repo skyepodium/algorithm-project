@@ -1,27 +1,31 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int d[1001];
+
+int go(int n){
     
-    int a, b, c;
-    cin >> a >> b >> c;
-    
-    if(a+b == c){
-        cout<<a<<'+'<<b<<'='<<c<<endl;
-    }else if(a-b == c){
-        cout<<a<<'-'<<b<<'='<<c<<endl;
-    }else if(a*b == c){
-        cout<<a<<'*'<<b<<'='<<c<<endl;
-    }else if(a/b == c){
-        cout<<a<<'/'<<b<<'='<<c<<endl;
-    }else if(a == b+c){
-        cout<<a<<'='<<b<<'+'<<c<<endl;
-    }else if(a == b-c){
-        cout<<a<<'='<<b<<'-'<<c<<endl;
-    }else if(a == b*c){
-        cout<<a<<'='<<b<<'*'<<c<<endl;
-    }else{
-        cout<<a<<'='<<b<<'/'<<c<<endl;
+    if(n <= 1){
+        return 1;
     }
+    
+    if(d[n] > 0){
+        return d[n];
+    }
+    
+    d[n] = (go(n-1) + 2*go(n-2))%10007;
+    
+    return d[n];
 }
+
+
+int main(){
+
+    int n;
+    cin >> n;
+
+    cout << go(n) <<endl;
+}
+
+
 
