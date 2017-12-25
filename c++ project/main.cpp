@@ -2,14 +2,28 @@
 using namespace std;
 
 int main() {
-    int num;
-    cin >> num;
-    for (int i = 1; i <= num; i++)
-    {
-        for (int j = 1; j <= num; j++)
-        {
-            cout << "*";
+    
+    int n;
+    cin >> n;
+    
+    for(int i=0; i<n; i++){
+        
+        for(int k=0; k<n-(i+1); k++){
+            cout<<' ';
         }
-        cout << "\n";
+        
+        
+        for(int j=0; j<2*(i+1)-1; j++){
+
+            if(j == 0 || j == i*2){
+                cout<<'*';
+            }else{
+                cout<<' ';
+            }
+            
+        }
+        
+        cout<<endl;
     }
+    
 }
