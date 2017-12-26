@@ -2,29 +2,27 @@
 using namespace std;
 
 int d[1001];
-
-int go(int n){
-    
-    if(n <= 1){
-        return 1;
-    }
-    
-    if(d[n] > 0){
-        return d[n];
-    }
-    
-    d[n] = (go(n-1) + 2*go(n-2))%10007;
-    
-    return d[n];
-}
-
+int p[10001];
 
 int main(){
 
     int n;
     cin >> n;
 
-    cout << go(n) <<endl;
+    for(int i=1; i<=n; i++){
+        cin >> p[i];
+    }
+
+    for(int i=1; i<=n; i++){
+        d[i] = p[i];
+        for(int j=1; j<i ; j++){
+            if(d[i] < d[i-j] + p[j]){
+                d[i] = d[i-j] + p[j];
+            }
+        }
+    }
+
+    cout << d[n] <<endl;
 }
 
 
