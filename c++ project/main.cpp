@@ -1,29 +1,42 @@
 #include <iostream>
+
 using namespace std;
 
-int d[1001];
-int p[10001];
+int d[1001] = {0};
+int a[1001] = {0};
 
-int main(){
+int go(int n){
 
-    int n;
-    cin >> n;
-
-    for(int i=1; i<=n; i++){
-        cin >> p[i];
+    if(d[n] > 0){
+        return d[n];
     }
-
-    for(int i=1; i<=n; i++){
-        d[i] = p[i];
-        for(int j=1; j<i ; j++){
-            if(d[i] < d[i-j] + p[j]){
-                d[i] = d[i-j] + p[j];
-            }
+    
+    int base = 0;
+    for(int i=1; i<n; i++){
+        if(a[i] < a[n] && go(i) > base){
+            base = go(i);
         }
     }
-
-    cout << d[n] <<endl;
+    d[n] = base + 1;
+    
+    return d[n];
 }
 
 
+int main(){
+    int n;
+    cin >> n;
+    
+    for(int i=1; i<=n; i++){
+        cin >> a[i];
+    }
 
+    int max = 0;
+    for(int i=1; i<=n; i++){
+        if(max<go(i)){
+            max = go(i);
+        }
+    }
+    
+    cout << max << endl;
+}
