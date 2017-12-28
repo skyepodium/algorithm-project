@@ -1,42 +1,22 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-int d[1001] = {0};
-int a[1001] = {0};
-
-int go(int n){
-
-    if(d[n] > 0){
-        return d[n];
-    }
-    
-    int base = 0;
-    for(int i=1; i<n; i++){
-        if(a[i] < a[n] && go(i) > base){
-            base = go(i);
-        }
-    }
-    d[n] = base + 1;
-    
-    return d[n];
-}
-
+int d[100001] = {0};
+int a[100001] = {0};
 
 int main(){
+
     int n;
     cin >> n;
     
+    int result = -1001;
     for(int i=1; i<=n; i++){
         cin >> a[i];
-    }
-
-    int max = 0;
-    for(int i=1; i<=n; i++){
-        if(max<go(i)){
-            max = go(i);
-        }
+        d[i] = max(d[i-1] + a[i], a[i]);
+        result = max(result, d[i]);
     }
     
-    cout << max << endl;
+    cout << result << endl;
 }
