@@ -1,45 +1,65 @@
 #include <iostream>
-#include <algorithm>
+#include <string>
+#include <math.h>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 동적 계획법 Bottom up
-//사용한 자료구조: 배열
+double grade_array[13] = {4.3, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.7, 0.0};
 
-int d[100000][3];
-int a[100000][3];
+double cal_result(double num, string grade){
+    
+    double sum = 0;
+    
+    if(grade == "A+"){
+        sum = num*grade_array[0];
+    }else if(grade == "A0"){
+        sum = num*grade_array[1];
+    }else if(grade == "A-"){
+        sum = num*grade_array[2];
+    }else if(grade == "B+"){
+        sum = num*grade_array[3];
+    }else if(grade == "B0"){
+        sum = num*grade_array[4];
+    }else if(grade == "B-"){
+        sum = num*grade_array[5];
+    }else if(grade == "C+"){
+        sum = num*grade_array[6];
+    }else if(grade == "C0"){
+        sum = num*grade_array[7];
+    }else if(grade == "C-"){
+        sum = num*grade_array[8];
+    }else if(grade == "D+"){
+        sum = num*grade_array[9];
+    }else if(grade == "D0"){
+        sum = num*grade_array[10];
+    }else if(grade == "D-"){
+        sum = num*grade_array[11];
+    }else{
+        sum = num*grade_array[12];
+    }
+    
+    
+    return sum;
+}
+
 
 int main(){
     
-    int t, n;
-    cin >> t;
+    string name, grade;
+    int n;
+    double num;
+    
+    cin >> n;
 
-    while(t--){
-        cin >> n;
+    double result = 0;
+    double sum_num = 0;
 
-        for(int i=1; i<=2; i++){
-            for(int j=1; j<=n; j++){
-                cin >> a[j][i];
-            }
-        }
-
-        d[1][0] = 0;
-        d[1][1] = a[1][1];
-        d[1][2] = a[1][2];
+    while(n--){
         
-        for(int j=2; j<=n; j++){
-
-            d[j][0] = max(d[j-1][0], max(d[j-1][1], d[j-1][2]));
-            d[j][1] = max(d[j-1][0], d[j-1][2]) + a[j][1];
-            d[j][2] = max(d[j-1][0], d[j-1][1]) + a[j][2];
-                
-        }
-
-        int result = 0;
-        result = max(d[n][0], max(d[n][1], d[n][2]));
-        cout << result << endl;
+        cin >> name >> num >> grade;
+        result = result + cal_result(num, grade);
+        sum_num += num;
     }
     
+    printf("%.2f\n", round((result/sum_num)*100)/100);
 }
