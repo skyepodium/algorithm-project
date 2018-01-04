@@ -1,70 +1,40 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 없음
-//사용한 자료구조: string class, 1차원 배열
+int a[101];
 
-int stack[10000];
-
-string check(string word){
+int gcd(int a, int b){
     
-    int size = 0;
-    for(int i=0; i<word.size(); i++){
-        
-        stack[size] = word[i];
-        
-        if(word[i] == 40 || word[i] == 91 || word[i] == 123){
-            size++;
-        }else{
-            
-            if(size!=0){
-                if(word[i] > 41){
-                    if(word[i] != stack[size-1]+2){
-                        return "NO";
-                    }else{
-                        stack[size-1] = 0;
-                        size--;
-                    }
-                }else{
-                    if(word[i] != stack[size-1]+1){
-                        return "NO";
-                    }else{
-                        stack[size-1] = 0;
-                        size--;
-                    }
-                }
-            }else{
-                return "NO";
-            }
-            
-        }
-        
-    }
-
-    if(size == 0){
-        return "YES";
+    if(b==0){
+        return a;
     }else{
-        return "NO";
+        return gcd(b, a%b);
     }
+    
 }
 
-
 int main(){
-    
-    int t;
+ 
+    int t, n;
     cin >> t;
     
     while(t--){
+
+        cin >> n;
         
-        string word;
-        cin >> word;
+        for(int i=0; i<n; i++){
+            cin >> a[i];
+        }
         
-        cout << check(word) << endl;
+        long long int result = 0;
+        for(int i=0; i<n-1; i++){
+            for(int j=i+1; j<n; j++){
+                result += gcd(a[i],a[j]);
+            }
+        }
         
+        cout << result << endl;
     }
     
 }
