@@ -11,22 +11,31 @@ int main(){
     int n;
     cin >> n;
     
+    int is_continue = false;
+    int result = 0;
+    
+    d[0] = 0;
+    a[0] = 1001;
+
     for(int i=1; i<=n; i++){
+
         cin >> a[i];
-        d[i] = a[i];
-    }
-    
-    for(int i=1; i<=n; i++){
-        int max_val = 0;
-        for(int j=1; j<i; j++){
-            if(a[j] < a[i]){
-                max_val = max(max_val, d[j]);
+        
+        if(a[i] > a[i-1]){
+            d[i] = a[i] - a[i-1];
+
+            if(is_continue){
+                d[i] += d[i-1];
             }
+
+            result = max(d[i], result);
+            is_continue = true;
+            
+        }else{
+            is_continue = false;
         }
-        d[i] = max_val + a[i];
+        
     }
     
-    cout << *max_element(d+1, d+n+1) << endl;
+    cout << result << endl;
 }
-
-
