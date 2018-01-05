@@ -1,27 +1,26 @@
 #include <iostream>
+#include <string>
 #include <algorithm>
 
 using namespace std;
 
 int main(){
     
-    int n;
-    cin >> n;
-    
-    int before = 1001;
-    int current = 0;
-    int diff = 0;
-    int result = 0;
-    
-    for(int i=1; i<=n; i++){
+    string word;
+    while(cin >> word){
         
-        cin >> current;
-        
-        diff = before < current ? diff + current - before : 0;
-        
-        result = max(result, diff);
-        before = current;
+        if(word!="0"){
+            
+            while(word.size()>1){
+                int sum = 0;
+                for(int i=0; i<word.size(); i++){
+                    sum += word[i] - 48;
+                }
+                word = to_string(sum);
+            }
+            cout << word << endl;
+        }else{
+            break;
+        }
     }
-    
-    cout << result << endl;
 }
