@@ -2,43 +2,48 @@
 
 using namespace std;
 
-//시간 복잡도: O(n√n)
+//시간 복잡도: O(n)
 //공간 복잡도: O(n)
 //사용한 알고리즘: 동적 계획법 Top Down
 //사용한 자료구조: 1차원 배열
 
-int d[100001];
+long long int d[101];
 
-int go(int n){
-
-    if(n < 2){
-        return n;
-    }
-
-    if(d[n] < n){
+long long int go(int n){
+    
+    if(n < 5){
         return d[n];
     }
     
-    for(int j=1; j*j<=n; j++){
-        if(d[n] > go(n-j*j) + 1){
-            d[n] = go(n-j*j) + 1;
-        }
+    if(d[n] > 0){
+        return d[n];
     }
+    
+    d[n] = go(n-1) + go(n-5);
     
     return d[n];
 }
 
 
-int main(){
 
-    int n;
-    cin >> n;
+int main(){
     
-    for(int i=0; i<=n; i++){
-        d[i] = i;
+    int t;
+    cin >> t;
+    
+    d[0] = 0;
+    d[1] = 1;
+    d[2] = 1;
+    d[3] = 1;
+    d[4] = 2;
+
+    go(100);
+    
+    while(t--){
+        int a;
+        cin >> a;
+        cout << d[a] << endl;
     }
     
-    cout << go(n) << endl;
-
 }
 
