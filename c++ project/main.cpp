@@ -3,32 +3,38 @@
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 동적 계획법 Bottom up
-//사용한 자료구조: 2차원 배열
-
-long long int d[301][3];
-long long int a[301];
+int d1[100001];
+int d2[100001];
+int a[100001];
 
 int main(){
     
     int n;
     cin >> n;
     
+    int result = -1001;
+    
     for(int i=1; i<=n; i++){
         cin >> a[i];
+        d1[i] = a[i];
+        d2[i] = a[i];
+    }
+    for(int i=1; i<=n; i++){
+        d1[i] = max(d1[i-1] + a[i], a[i]);
     }
     
-    d[1][1] = a[1];
-    d[1][2] = 0;
-    d[2][1] = a[2];
-    d[2][2] = a[1] + a[2];
-    
-    for(int i=3; i<=n; i++){
-        d[i][1] = max(d[i-2][1], d[i-2][2]) + a[i];
-        d[i][2] = d[i-1][1] + a[i];
+    for(int i=n; i>=1; i--){
+        d2[i] = max(d2[i+1] + a[i], a[i]);
     }
     
-    cout << max(d[n][1], d[n][2]) << endl;
+    for(int i=1; i<=n; i++){
+        if(d1[i] < d1[i-1] + d2[i+1]){
+            result = max(d1[i-1] + d2[i+1], result);
+        }else{
+            result = max(d1[i], result);
+        }
+    }
+    
+    
+    cout << result << endl;
 }
