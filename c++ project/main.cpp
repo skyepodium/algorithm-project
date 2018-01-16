@@ -1,49 +1,44 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
 
-int arr[101];
+//시간 복잡도: O(ESM)
+//공간 복잡도: 0
+//사용한 알고리즘: Brute Force Search
+//사용한 자료구조: 없음
 
-long long int result = 0;
-
-void pick(int n, vector<int>& picked, int to_pick){
+int main() {
     
-    if(to_pick == 0){
-        result = 0;
-        for(int i=0; i<7; i++){
-            result = result + arr[picked[i]];
-        }
-        if(result == 100){
-            for(int i=0; i<7; i++){
-                cout << arr[picked[i]]<<endl;
-            }
+    int E, S, M;
+    cin >> E >> S >> M;
+    
+    int e=1, s=1, m=1;
+    
+    for(int i=1; ; i++){
+        
+        if(e == E && s == S && m == M){
+            cout << i <<endl;
+            break;
         }
         
-        return;
+        e++;
+        s++;
+        m++;
+        
+        if(e == 16){
+            e = 1;
+        }
+        
+        if(s == 29){
+            s = 1;
+        }
+        
+        if(m == 20){
+            m = 1;
+        }
+        
     }
-    
-    int smallest = picked.empty() ? 0 : picked.back() + 1;
-    
-    for(int next = smallest; next < n; ++next){
-        picked.push_back(next);
-        pick(n, picked, to_pick - 1);
-        picked.pop_back();
-    }
-    
 }
 
 
-int main(){
-    
-    for(int i=0; i<9; i++){
-        cin >> arr[i];
-    }
-        
-    sort(arr, arr+9);
-        
-    vector<int> picked;
-        
-    pick(9, picked, 7);
-}
+
