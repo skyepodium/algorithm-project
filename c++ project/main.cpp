@@ -6,18 +6,22 @@ using namespace std;
 
 int main() {
     int n;
-    scanf("%d", &n);
+    cin >> n;
 
     vector<int> v(n);
     for(int i=0; i<n; i++){
-        v[i] = i+1;
+        cin >> v[i];
     }
-    
+
+    sort(v.begin(), v.end());
+    int result = -101;
     do{
-        for(int i=0; i<n; i++){
-            printf("%d ", v[i]);
+        int sum = 0;
+        for(int i=0; i<n-1; i++){
+            sum = sum + abs(v[i]-v[i+1]);
         }
-        printf("\n");
-        
+        result = max(result, sum);
     }while(next_permutation(v.begin(), v.end()));
+    
+    cout << result << endl;
 }
