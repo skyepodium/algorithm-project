@@ -6,20 +6,18 @@ using namespace std;
 
 int main() {
     int n;
-    cin >> n;
-    
+    scanf("%d", &n);
+
     vector<int> v(n);
     for(int i=0; i<n; i++){
-        cin >> v[i];
+        v[i] = i+1;
     }
     
-    if(next_permutation(v.begin(), v.end())){
+    do{
         for(int i=0; i<n; i++){
-            cout << v[i] <<" ";
+            printf("%d ", v[i]);
         }
-    }else{
-        cout << -1;
-    }
-    
-    cout << endl;
+        printf("\n");
+        
+    }while(next_permutation(v.begin(), v.end()));
 }
