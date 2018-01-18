@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-
+    
     while(true){
         int n;
         cin >> n;
@@ -13,22 +13,20 @@ int main() {
         if(n == 0){
             break;
         }
-    
+        
         vector<int> v(n);
         for(int i=0; i<n; i++){
             cin >> v[i];
         }
-    
+        
         vector<int> d;
-        for(int i=0; i<n-6; i++){
-            d.push_back(0);
-        }
         for(int i=0; i<6; i++){
             d.push_back(1);
         }
-    
-        sort(d.begin(), d.end(), greater<int>());
-    
+        for(int i=0; i<n-6; i++){
+            d.push_back(0);
+        }
+        
         do{
             for(int i=0; i<n; i++){
                 if(d[i] == 1){
