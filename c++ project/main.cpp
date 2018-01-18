@@ -1,27 +1,42 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
 int main() {
-    int n;
-    cin >> n;
 
-    vector<int> v(n);
-    for(int i=0; i<n; i++){
-        cin >> v[i];
-    }
-
-    sort(v.begin(), v.end());
-    int result = -101;
-    do{
-        int sum = 0;
-        for(int i=0; i<n-1; i++){
-            sum = sum + abs(v[i]-v[i+1]);
+    while(true){
+        int n;
+        cin >> n;
+        
+        if(n == 0){
+            break;
         }
-        result = max(result, sum);
-    }while(next_permutation(v.begin(), v.end()));
     
-    cout << result << endl;
+        vector<int> v(n);
+        for(int i=0; i<n; i++){
+            cin >> v[i];
+        }
+    
+        vector<int> d;
+        for(int i=0; i<n-6; i++){
+            d.push_back(0);
+        }
+        for(int i=0; i<6; i++){
+            d.push_back(1);
+        }
+    
+        sort(d.begin(), d.end(), greater<int>());
+    
+        do{
+            for(int i=0; i<n; i++){
+                if(d[i] == 1){
+                    cout << v[i] <<" ";
+                }
+            }
+            cout << endl;
+        }while(prev_permutation(d.begin(), d.end()));
+        cout << endl;
+    }
 }
