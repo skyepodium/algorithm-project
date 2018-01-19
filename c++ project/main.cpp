@@ -4,15 +4,16 @@ using namespace std;
 
 int main(){
     
-    long long int s;
-    cin >> s;
+    int a, b;
     
-    long long int cnt = 0;
-    while(s>cnt){
-        cnt++;
-        s = s-cnt;
+    while(true){
+        cin >> a >> b;
+        if(a==0 && b==0){
+            break;
+        }
+        
+        cout << a/b <<" "<< a%b <<" / "<<b<<endl;
     }
-    cout << cnt << endl;
 }
 
 
