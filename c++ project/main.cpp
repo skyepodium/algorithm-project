@@ -1,17 +1,23 @@
-#include<cstdio>
-#define mod (int)(1e9+7)
-const int MAX_N = 4e6;
-int n, k, fac[MAX_N + 1];
-typedef long long ll;
-int f(int x, int y) {
-    if (!y) return 1;
-    int t = f(x, y / 2);
-    return (ll)t*t%mod*(y & 1 ? x : 1) % mod;
-}
-int main() {
-    scanf("%d %d", &n, &k);
-    fac[0] = 1;
-    for (int i = 1; i <= n; i++) fac[i] = (ll)fac[i - 1] * i%mod;
-    printf("%lld", (ll)fac[n] * f(fac[n - k], mod - 2) % mod*f(fac[k], mod - 2) % mod);
-    return 0;
+#include <iostream>
+
+using namespace std;
+
+long long d[201][201];
+long long int mod = 1000000000;
+
+int main(){
+    
+    int n, k;
+    cin >> n >> k;
+    
+    d[0][0] = 1;
+    for(int i=0; i<=k; i++){
+        for(int j=0; j<=n; j++){
+            for(int l=0; l<=j; l++){
+                d[i][j] += d[i-1][j-l];
+                d[i][j] %= mod;
+            }
+        }
+    }
+    cout << d[k][n] << endl;
 }
