@@ -1,23 +1,30 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
+
+//시간 복잡도: O(n)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 완전탐색, next_permutation
+//사용한 자료구조: 1차원 벡터
 
 using namespace std;
 
-long long d[201][201];
-long long int mod = 1000000000;
-
-int main(){
+int main() {
+    int n;
+    cin >> n;
     
-    int n, k;
-    cin >> n >> k;
-    
-    d[0][0] = 1;
-    for(int i=0; i<=k; i++){
-        for(int j=0; j<=n; j++){
-            for(int l=0; l<=j; l++){
-                d[i][j] += d[i-1][j-l];
-                d[i][j] %= mod;
-            }
-        }
+    vector<int> v(n);
+    for(int i=0; i<n; i++){
+        cin >> v[i];
     }
-    cout << d[k][n] << endl;
+    
+    if(next_permutation(v.begin(), v.end())){
+        for(int i=0; i<n; i++){
+            cout << v[i] <<" ";
+        }
+    }else{
+        cout << -1;
+    }
+    
+    cout << endl;
 }
