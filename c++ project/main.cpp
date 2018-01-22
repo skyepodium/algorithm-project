@@ -1,41 +1,23 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
 
 using namespace std;
 
-
 int main(){
-
-    while(true){
+    
+    int max_people = 0;
+    int people = 0;
+    
+    int in_people;
+    int out_people;
+    
+    for(int i=0; i<4; i++){
+        cin >> out_people;
+        cin >> in_people;
         
-        vector<int> v(3);
-        for(int i=0; i<3; i++){
-            cin >> v[i];
-        }
-        
-        if(v[0] == 0 || v[1] == 0 || v[2] == 0){
-            break;
-        }
-        
-        sort(v.begin(), v.end());
-        
-        if(v[2] >= v[0] + v[1]){
-            
-            cout << "Invalid" << endl;
-            
-        }else{
-
-            if(v[0] == v[1] && v[1] == v[2]){
-                cout << "Equilateral" << endl;
-            }else if(v[0] != v[1] && v[1] != v[2] && v[0] != v[2]){
-                cout << "Scalene" << endl;
-            }else{
-                cout << "Isosceles" << endl;
-            }
-            
-        }
+        people = people + in_people - out_people;
+        max_people = max(people, max_people);
     }
     
-    
+    cout << max_people << endl;
 }
