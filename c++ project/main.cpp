@@ -1,23 +1,34 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
+int d[15][15];
+
 int main(){
     
-    int max_people = 0;
-    int people = 0;
-    
-    int in_people;
-    int out_people;
-    
-    for(int i=0; i<4; i++){
-        cin >> out_people;
-        cin >> in_people;
-        
-        people = people + in_people - out_people;
-        max_people = max(people, max_people);
+    for(int i=1; i<=14; i++){
+        d[0][i] = i;
+        d[i][1] = 1;
     }
     
-    cout << max_people << endl;
+    for(int i=1; i<=14; i++){
+        for(int j=2; j<=14; j++){
+            
+            for(int k=1; k<=j; k++){
+                d[i][j] = d[i][j] + d[i-1][k];
+            }
+            
+        }
+    }
+    
+    int t, a, b;
+    cin >> t;
+    
+    while(t--){
+        cin >> a >> b;
+        cout << d[a][b] << endl;
+    }
+    
 }
+
+
