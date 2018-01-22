@@ -1,23 +1,32 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
 //시간 복잡도: O(E) - 간선의 갯수
 //공간 복잡도: O(E) - 간선의 갯수
-//사용한 알고리즘: DFS
-//사용한 자료구조: 1차원 벡터, 1차원 배열
+//사용한 알고리즘: BFS
+//사용한 자료구조: 2차원 벡터, 1차원 배열, 큐
 
 vector<int> a[1001];
 bool check[1001];
 
-void dfs(int node){
-    check[node] = true;
-    
-    for(int i=0; i<a[node].size(); i++){
-        int next = a[node][i];
-        if(check[next] == false){
-            dfs(next);
+void bfs(int start){
+    queue<int> q;
+    check[start] = false;
+    q.push(start);
+
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        
+        for(int i=0; i<a[node].size(); i++){
+            int next = a[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                q.push(next);
+            }
         }
     }
 }
@@ -38,7 +47,7 @@ int main(){
     int cnt = 0;
     for(int i=1; i<=n; i++){
         if(check[i] == false){
-            dfs(i);
+            bfs(i);
             cnt++;
         }
     }
