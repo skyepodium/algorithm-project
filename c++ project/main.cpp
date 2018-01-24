@@ -1,55 +1,54 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-vector<int> a[1001];
-int check[1001];
 
-void dfs(int node){
+//시간 복잡도: O(nm)
+//공간 복잡도: O(nm)
+//사용한 알고리즘: 동적 계획법, Bottom up
+//사용한 자료구조: 2차원 배열
+
+int a[101][101];
+long long int d[101][101];
+
+long long int go(int i, int j){
     
-    check[node] = true;
+    if(i==1 && j==1){
+        return 1;
+    }
     
-    for(int i=0; i<a[node].size(); i++){
-        int next = a[node][i];
-        if(check[next] == false){
-            dfs(next);
+    if(d[i][j] > 0){
+        return d[i][j];
+    }
+    
+    for(int k=1; k<j; k++){
+        if (k+a[i][k] == j) {
+            d[i][j] += go(i, k);
         }
     }
+    
+    for (int k=1; k<i; k++) {
+        if (k+a[k][j] == i) {
+            d[i][j] += go(k, j);
+        }
+    }
+    
+    return d[i][j];
 }
 
 int main(){
     
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
     
-    while(t--){
-        
-        int n;
-        cin >> n;
-        
-        for(int i=0; i<=n; i++){
-            a[i].clear();
-            check[i] = 0;
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            cin >> a[i][j];
         }
-        
-        for(int i=1; i<=n; i++){
-            int v;
-            cin >> v;
-            a[i].push_back(v);
-            a[v].push_back(i);
-        }
-
-        int cnt = 0;
-        for(int i=1; i<=n; i++){
-            if(check[i] == false){
-                dfs(i);
-                cnt++;
-            }
-        }
-        
-        cout << cnt << endl;
     }
     
-    
+    cout << go(n, n) << endl;
 }
+
+
