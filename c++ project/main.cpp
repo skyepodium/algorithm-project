@@ -1,54 +1,29 @@
 #include <iostream>
-#include <vector>
-#include <queue>
 
 using namespace std;
 
-//시간 복잡도: O(E)
-//공간 복잡도: O(E)
-//사용한 알고리즘: BFS
-//사용한 자료구조: 2차원 벡터, 1차원 배열
-
-vector<int> a[1001];
-bool check[1001];
-
-void bfs(int start){
-    queue<int> q;
-    check[start] = true;
-    q.push(start);
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        
-        for(int i=0; i<a[node].size(); i++){
-            int next= a[node][i];
-            if(check[next] == false){
-                check[next] = true;
-                q.push(next);
-            }
-        }
-    }
-}
+int d[6] = {500, 100, 50, 10, 5, 1};
 
 int main(){
     
-    int n, m;
-    cin >> n >> m;
+    int n;
+    cin >> n;
     
-    for(int i=0; i<m; i++){
-        int u, v;
-        cin >> u >> v;
-        a[u].push_back(v);
-        a[v].push_back(u);
-    }
+    int money = 1000-n;
     
     int cnt = 0;
-    for(int i=1; i<=n; i++){
-        if(check[i] == false){
-            bfs(i);
-            cnt++;
+    int i=0;
+    while(money>0){
+
+        if(money >= d[i]){
+            money = money - d[i];
+            cnt++ ;
+        }else{
+            i++;
         }
+
     }
+    
     cout << cnt << endl;
+    
 }
