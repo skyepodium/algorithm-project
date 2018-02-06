@@ -1,32 +1,20 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
-#include <queue>
-#include <stack>
 
 using namespace std;
 
-long long int a, b, c;
-
-
-long long int calc (long long int m, long long int n){
-    
-    if(n == 0){
-        return 1%c;
-    }else if(n == 1){
-        return m%c;
-    }else if(n%2 == 0){
-        long long int temp = calc(m, n/2)%c;
-        return (temp * temp)%c;
-    }else{
-        return (m * calc(m, n-1))%c;
-    }
-}
+long long int d[81];
 
 int main(){
     
-    cin >> a >> b >> c;
+    int n;
+    cin >> n;
     
-    cout << calc(a, b)%c << endl;
-
+    d[1] = 4;
+    d[2] = 6;
+    for(int i=3; i<=n; i++){
+        d[i] = d[i-1] + d[i-2];
+    }
+    
+    cout << d[n] << endl;
+    
 }
