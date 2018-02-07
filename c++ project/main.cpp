@@ -1,20 +1,29 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
 
 using namespace std;
 
-long long int d[81];
+vector<int> v(10);
 
 int main(){
+
+    int n, k, cnt = 0;
+    cin >> n >> k;
     
-    int n;
-    cin >> n;
+    for(int i=0; i<n; i++){
+        cin >> v[i];
+    }
+    sort(v.begin(), v.end(), greater<int>());
     
-    d[1] = 4;
-    d[2] = 6;
-    for(int i=3; i<=n; i++){
-        d[i] = d[i-1] + d[i-2];
+    for(int i=0; i<v.size(); i++){
+        while(k>=v[i]){
+            k = k-v[i];
+            cnt++;
+        }
     }
     
-    cout << d[n] << endl;
+    cout << cnt << endl;
     
 }
