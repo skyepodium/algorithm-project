@@ -11,51 +11,56 @@ using namespace std;
 //사용한 알고리즘: BFS
 //사용한 자료구조: 2차원 배열, queue
 
-vector<int> a[5001];
-int n, m;
-bool check[101];
-
+vector<int> a[10001];
 int cnt = 0;
-void bfs(int start){
-    check[start] = true;
-    queue<int> q;
-    q.push(start);
-    cnt++;
+bool check[10001];
+
+void dfs(int node){
+    check[node] = true;
     
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        
-        for(int i=0; i<a[node].size(); i++){
-            int next = a[node][i];
-            if(check[next] == false){
-                check[next] = true;
-                q.push(next);
-                cnt++;
-            }
+    for(int i=0; i<a[node].size(); i++){
+        int next = a[node][i];
+        if(check[next] == false){
+            cnt++;
+            dfs(next);
         }
     }
+    
 }
 
-
 int main(){
-
+    
+    int n, m;
     cin >> n >> m;
-
+    
     for(int i=0; i<m; i++){
-        int u, v;
-        cin >> u >> v;
+        int v, u;
+        cin >> v >> u;
         a[u].push_back(v);
-        a[v].push_back(u);
     }
     
+    vector<pair<int, int>> result;
     for(int i=1; i<=n; i++){
+        cnt = 0;
         memset(check, false, sizeof(check));
-        if(check[i] == false){
-            cnt = 0;
-            bfs(i);
-            cout << cnt << endl;
+        dfs(i);
+        result.push_back(make_pair(cnt, i));
+    }
+    
+    sort(result.begin(), result.end());
+    
+    vector<int> final;
+    final.push_back(result[result.size()-1].second);
+    int max = result[result.size()-1].first;
+    for(int i=result.size()-2; i>=0; i--){
+        if(max != result[i].first){
+            break;
+        }else{
+            final.push_back(result[i].second);
         }
+    }
+    for(int i=final.size()-1; i>=0; i--){
+        cout << final[i] <<" ";
     }
     
 }
