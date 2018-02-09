@@ -1,5 +1,8 @@
 #include <iostream>
 #include <queue>
+#include <vector>
+#include <algorithm>
+#include <cstring>
 
 using namespace std;
 
@@ -8,50 +11,51 @@ using namespace std;
 //사용한 알고리즘: BFS
 //사용한 자료구조: 2차원 배열, queue
 
+vector<int> a[5001];
 int n, m;
-int a[100][100];
-bool check[100][100];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {1, -1, 0, 0};
+bool check[101];
 
-void bfs(int x, int y){
-    check[x][y] = true;
-    
-    queue<pair<int, int>> q;
-    q.push(make_pair(x, y));
+int cnt = 0;
+void bfs(int start){
+    check[start] = true;
+    queue<int> q;
+    q.push(start);
+    cnt++;
     
     while(!q.empty()){
-        x = q.front().first;
-        y = q.front().second;
+        int node = q.front();
         q.pop();
         
-        for(int i=0; i<4; i++){
-            int nx = x+dx[i];
-            int ny = y+dy[i];
-            if(0<=nx && nx<m && 0<=ny && ny<n){
-                if(a[nx][ny] == 1 && check[nx][ny] == false){
-                    check[nx][ny] = true;
-                    q.push(make_pair(nx, ny));
-                    a[nx][ny] = a[x][y]+1;
-
-                }
+        for(int i=0; i<a[node].size(); i++){
+            int next = a[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                q.push(next);
+                cnt++;
             }
         }
-
     }
 }
 
+
 int main(){
-    
+
     cin >> n >> m;
+
+    for(int i=0; i<m; i++){
+        int u, v;
+        cin >> u >> v;
+        a[u].push_back(v);
+        a[v].push_back(u);
+    }
     
-    for(int j=0; j<n; j++){
-        for(int i=0; i<m; i++){
-            scanf("%1d", &a[i][j]);
+    for(int i=1; i<=n; i++){
+        memset(check, false, sizeof(check));
+        if(check[i] == false){
+            cnt = 0;
+            bfs(i);
+            cout << cnt << endl;
         }
     }
-        
-    bfs(0, 0);
-
-    cout << a[m-1][n-1] << endl;
+    
 }
