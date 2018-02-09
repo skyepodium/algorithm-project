@@ -1,66 +1,39 @@
 #include <iostream>
-#include <queue>
-#include <vector>
 #include <algorithm>
-#include <cstring>
+#include <vector>
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: BFS
-//사용한 자료구조: 2차원 배열, queue
-
-vector<int> a[10001];
-int cnt = 0;
-bool check[10001];
-
-void dfs(int node){
-    check[node] = true;
-    
-    for(int i=0; i<a[node].size(); i++){
-        int next = a[node][i];
-        if(check[next] == false){
-            cnt++;
-            dfs(next);
-        }
-    }
-    
-}
+//시간 복잡도: O(t)
+//공간 복잡도: O(t)
+//사용한 알고리즘: 정렬
+//사용한 자료구조: 1차원 벡터
 
 int main(){
     
-    int n, m;
-    cin >> n >> m;
+    int t;
+    cin >> t;
+
+    for(int k=1; k<=3; k++){
     
-    for(int i=0; i<m; i++){
-        int v, u;
-        cin >> v >> u;
-        a[u].push_back(v);
-    }
-    
-    vector<pair<int, int>> result;
-    for(int i=1; i<=n; i++){
-        cnt = 0;
-        memset(check, false, sizeof(check));
-        dfs(i);
-        result.push_back(make_pair(cnt, i));
-    }
-    
-    sort(result.begin(), result.end());
-    
-    vector<int> final;
-    final.push_back(result[result.size()-1].second);
-    int max = result[result.size()-1].first;
-    for(int i=result.size()-2; i>=0; i--){
-        if(max != result[i].first){
-            break;
+        vector<int> v(3);
+        for(int i=0; i<3; i++){
+            cin >> v[i];
+        }
+        
+        sort(v.begin(), v.end());
+        
+        int result = 0;
+        for(int i=1; i<3; i++){
+            if(v[1] != v[i]){
+                result = v[i];
+            }
+        }
+        
+        if(result == 0){
+            cout << '#'<<k<<" "<<v[0] << endl;;
         }else{
-            final.push_back(result[i].second);
+            cout << '#'<<k<<" "<<result << endl;
         }
     }
-    for(int i=final.size()-1; i>=0; i--){
-        cout << final[i] <<" ";
-    }
-    
 }
