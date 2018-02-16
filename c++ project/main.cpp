@@ -8,24 +8,22 @@ using namespace std;
 //사용한 알고리즘: 동적 계획법 Top-Down
 //사용한 자료구조: 2차원 배열
 
-int d[10001][3];
+int d[10001];
 int a[10001];
 
-int go(int n, int i){
+int go(int n){
     
-    if(n < 2){
-        return d[n][i];
+    if(n<3){
+        return d[n];
     }
     
-    if(d[n][i] > 0){
-        return d[n][i];
+    if(d[n] > 0){
+        return d[n];
     }
     
-    if(i==0) d[n][0] = max(go(n-1, 0), max(go(n-1, 1), go(n-1, 2)));
-    else if(i==1) d[n][1] = go(n-1, 0) + a[n];
-    else d[n][2] = go(n-1, 1) + a[n];
+    d[n] = max(go(n-1), max(go(n-2) + a[n], go(n-3) + a[n-1] + a[n]));
     
-    return d[n][i];
+    return d[n];
 }
 
 
@@ -38,8 +36,8 @@ int main(){
         cin >> a[i];
     }
     
-    d[1][0] = 0;
-    d[1][1] = a[1];
-    
-    cout << max(go(n, 0), max(go(n, 1), go(n, 2))) << endl;
+    d[1] = a[1];
+    d[2] = d[1] + a[2];
+
+    cout << go(n) << endl;
 }
