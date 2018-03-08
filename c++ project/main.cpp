@@ -1,47 +1,25 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <cstring>
-#include <algorithm>
 
 using namespace std;
 
-vector<int> a[1001];
-bool check[1001];
+vector<int> a[20001];
+bool check[20001];
+int color[20001];
+bool result = true;
 
 void dfs(int node){
-
     check[node] = true;
-    cout << node <<" ";
     
     for(int i=0; i<a[node].size(); i++){
         int next = a[node][i];
-        
-        if(check[next] == false){
-            check[next] = true;
-            dfs(next);
+        if(color[next] == color[node]){
+            result = false;
+            break;
         }
-    }
-}
-
-void bfs(int start){
-    memset(check, false, sizeof(check));
-    check[start] = true;
-    queue<int> q;
-    q.push(start);
-    
-    while(!q.empty()){
-        int node = q.front();
-        cout << node <<" ";
-        q.pop();
-        
-        for(int i=0; i<a[node].size(); i++){
-            int next = a[node][i];
-            
-            if(check[next] == false){
-                check[next] = true;
-                q.push(next);
-            }
+        if(check[next] == false){
+            dfs(next);
         }
     }
 }
@@ -49,22 +27,50 @@ void bfs(int start){
 
 int main(){
     
-    int n, m, start;
-    cin >> n >> m >> start;
+    int t;
+    cin >> t;
     
-    int u, v;
-    for(int i=0; i<m; i++){
-        cin >> u >> v;
-        a[u].push_back(v);
-        a[v].push_back(u);
+    while(t--){
+        
+        int n, m;
+        cin >> n >> m;
+
+        for(int i=1; i<=n; i++){
+            a[i].clear();
+            check[i] = 2;
+        }
+        result = true;
+        
+        
+        for(int i=0; i<m; i++){
+            int u, v;
+            cin >> u >> v;
+            a[u].push_back(v);
+            a[v].push_back(u);
+        }
+
+        for(int i=1; i<=n; i++){
+            color[i] = i%2;
+        }
+        
+        for(int i=1; i<=n; i++){
+            if(check[i] == 0){
+                dfs(i);
+            }
+        }
+        
+        
+        for(int i=0; i<n; i++){
+            cout << color[i] << endl;
+        }
+        
+        if(result){
+            cout << "YES" << endl;
+        }else{
+            cout << "NO" << endl;
+        }
+        
+        
     }
     
-    for(int i=0; i<n; i++){
-        sort(a[i].begin(), a[i].end());
-    }
-    
-    dfs(start);
-    cout << endl;
-    bfs(start);
-    cout << endl;
 }
