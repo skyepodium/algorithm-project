@@ -1,67 +1,67 @@
 #include <iostream>
-#include <queue>
+
 using namespace std;
 
-//시간 복잡도: O(E)
-//공간 복잡도: O(V)
-//사용한 알고리즘: BFS
-//사용한 자료구조: 2차원 벡터, 1차원 배열
+int d[51][51];
+bool check[51][51];
 
-bool check[100001];
-int dist[100001];
-int from[100001];
+int dx[] = {0, 0, 1, -1, -1, -1, 1, 1};
+int dy[] = {-1, 1, 0, 0, -1, 1, 1, -1};
 
-void print_way(int start, int end){
+int w, h;
+void dfs(int x, int y){
+    check[x][y] = true;
     
-    if(start != end){
-        print_way(start, from[end]);
-    }
-    
-    cout << end << " ";
-    
-}
-
-void bfs(int start){
-    check[start] = true;
-    queue<int> q;
-    q.push(start);
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
+    for(int i=0; i<8; i++){
+        int nx = x+dx[i];
+        int ny = y+dy[i];
         
-        if(node-1 >= 0 && check[node-1] == 0){
-            check[node-1] = true;
-            dist[node-1] = dist[node] + 1;
-            from[node-1] = node;
-            q.push(node-1);
+        if(nx>=0 && nx<w && ny>=0 && ny<h){
+            if(check[nx][ny] == false && d[nx][ny] == 1){
+                dfs(nx, ny);
+            }
         }
-        
-        if(node+1 <= 100000 && check[node+1] == 0){
-            check[node+1] = true;
-            dist[node+1] = dist[node] + 1;
-            from[node+1] = node;
-            q.push(node+1);
-        }
-        
-        if(node*2 <= 100000 && check[node*2] == 0){
-            check[node*2] = true;
-            dist[node*2] = dist[node] + 1;
-            from[node*2] = node;
-            q.push(node*2);
-        }
-        
     }
 }
+
 
 int main(){
     
-    int start, end;
-    cin >> start >> end;
+    while(1){
+        cin >> w >> h;
+        if(w==0 && h==0){
+            break;
+        }
+        
+        for(int i=0; i<51; i++){
+            for(int j=0; j<51; j++){
+                d[i][j] = 0;
+                check[i][j] = false;
+            }
+        }
+        
+        
+        for(int j=0; j<h; j++){
+            for(int i=0; i<w; i++){
+                cin >> d[i][j];
+            }
+        }
+        
+        int cnt = 0;
+        for(int j=0; j<h; j++){
+            for(int i=0; i<w; i++){
+                if(check[i][j] == false && d[i][j] == 1){
+                    dfs(i, j);
+                    cnt++;
+                }
+            }
+        }
+        
+        cout << cnt << endl;
+        
+        
+    }
     
-    bfs(start);
-    cout << dist[end] << endl;
-    print_way(start, end);
-    cout << endl;
+    
+    
 }
-
