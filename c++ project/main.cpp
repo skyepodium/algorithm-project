@@ -1,6 +1,5 @@
 #include <iostream>
 #include <queue>
-
 using namespace std;
 
 //시간 복잡도: O(E)
@@ -10,6 +9,17 @@ using namespace std;
 
 bool check[100001];
 int dist[100001];
+int from[100001];
+
+void print_way(int start, int end){
+    
+    if(start != end){
+        print_way(start, from[end]);
+    }
+    
+    cout << end << " ";
+    
+}
 
 void bfs(int start){
     check[start] = true;
@@ -23,18 +33,21 @@ void bfs(int start){
         if(node-1 >= 0 && check[node-1] == 0){
             check[node-1] = true;
             dist[node-1] = dist[node] + 1;
+            from[node-1] = node;
             q.push(node-1);
         }
         
         if(node+1 <= 100000 && check[node+1] == 0){
             check[node+1] = true;
             dist[node+1] = dist[node] + 1;
+            from[node+1] = node;
             q.push(node+1);
         }
         
         if(node*2 <= 100000 && check[node*2] == 0){
             check[node*2] = true;
             dist[node*2] = dist[node] + 1;
+            from[node*2] = node;
             q.push(node*2);
         }
         
@@ -48,6 +61,7 @@ int main(){
     
     bfs(start);
     cout << dist[end] << endl;
-    
+    print_way(start, end);
+    cout << endl;
 }
 
