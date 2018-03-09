@@ -1,76 +1,52 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <queue>
+#include <cstring>
 
 using namespace std;
 
-vector<int> a[20001];
-bool check[20001];
-int color[20001];
-bool result = true;
+vector<int> a[1001];
+bool check[1001];
 
-void dfs(int node){
-    check[node] = true;
+void bfs(int start){
+    check[start] = true;
+    queue<int> q;
+    q.push(start);
     
-    for(int i=0; i<a[node].size(); i++){
-        int next = a[node][i];
-        if(color[next] == color[node]){
-            result = false;
-            break;
-        }
-        if(check[next] == false){
-            dfs(next);
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        
+        for(int i=0; i<a[node].size(); i++){
+            int next = a[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                q.push(next);
+            }
         }
     }
 }
 
-
 int main(){
     
-    int t;
-    cin >> t;
+    int n, m;
+    cin >> n >> m;
     
-    while(t--){
-        
-        int n, m;
-        cin >> n >> m;
+    for(int i=0; i<m; i++){
+        int u, v;
+        cin >> u >> v;
+        a[u].push_back(v);
+        a[v].push_back(u);
+    }
 
-        for(int i=1; i<=n; i++){
-            a[i].clear();
-            check[i] = 2;
+    int cnt = 0;
+    for(int i=1; i<=n; i++){
+        if(check[i] == false){
+            bfs(i);
+            cnt++;
         }
-        result = true;
-        
-        
-        for(int i=0; i<m; i++){
-            int u, v;
-            cin >> u >> v;
-            a[u].push_back(v);
-            a[v].push_back(u);
-        }
-
-        for(int i=1; i<=n; i++){
-            color[i] = i%2;
-        }
-        
-        for(int i=1; i<=n; i++){
-            if(check[i] == 0){
-                dfs(i);
-            }
-        }
-        
-        
-        for(int i=0; i<n; i++){
-            cout << color[i] << endl;
-        }
-        
-        if(result){
-            cout << "YES" << endl;
-        }else{
-            cout << "NO" << endl;
-        }
-        
-        
     }
     
+    cout << cnt << endl;
 }
