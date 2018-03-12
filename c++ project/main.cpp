@@ -1,32 +1,40 @@
 #include <iostream>
 #include <queue>
-#include <cstring>
 
 using namespace std;
 
-//시간 복잡도: O(n^3)
+//시간 복잡도: O(n^2)
 //공간 복잡도: O(n^2)
 //사용한 알고리즘: BFS
-//사용한 자료구조: 2차원 배열, 인접행렬
+//사용한 자료구조: 2차원 배열, queue
 
 int d[101][101];
-bool check[101];
-int result[101][101];
-int n;
+bool check[101][101];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+int n, m;
 
-void bfs(int start){
-    
-    queue<int> q;
-    q.push(start);
+
+void bfs(int x, int y){
+    check[x][y] = true;
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
     
     while(!q.empty()){
-        int node = q.front();
+        x = q.front().first;
+        y = q.front().second;
         q.pop();
-        for(int i=0; i<n; i++){
-            int next = i;
-            if(d[node][next] == 1 && check[next] == false){
-                check[next] = true;
-                q.push(next);
+        
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx >=0 && nx<n && ny >=0 && ny <m){
+                if(check[nx][ny] == false && d[nx][ny] == 1){
+                    d[nx][ny] = d[x][y] + 1;
+                    check[nx][ny] = true;
+                    q.push(make_pair(nx, ny));
+                }
             }
         }
     }
@@ -34,26 +42,15 @@ void bfs(int start){
 
 
 int main(){
-    
-    cin >> n;
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            cin >> d[i][j];
-        }
-    }
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            bfs(i);
-            if(check[j] == true){
-                result[i][j] = 1;
-            }
-            memset(check, false, sizeof(check));
-            cout << result[i][j] <<" ";
-        }
-        cout << endl;
-    }
-    
-}
 
+    cin >> n >> m;
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            scanf("%1d", &d[i][j]);
+        }
+    }
+    
+    bfs(0, 0);
+    cout << d[n-1][m-1] << endl;
+}
