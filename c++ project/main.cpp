@@ -1,12 +1,13 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
 //시간 복잡도: O(n^2)
 //공간 복잡도: O(n^2)
-//사용한 알고리즘: BFS, 플러드 필
+//사용한 알고리즘: BFS
 //사용한 자료구조: 2차원 배열
 
 bool check[101][101];
@@ -15,23 +16,31 @@ int dy[] = {-1, 1, 0, 0};
 int m, n, k;
 int cnt = 0;
 
-void dfs(int x, int y){
+void bfs(int x, int y){
     check[x][y] = true;
-    cnt++;
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
     
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-     
-        if(nx>=0 && nx<m && ny>=0 && ny<n){
-            if(check[nx][ny] == false){
-                dfs(nx, ny);
+    while(!q.empty()){
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
+        cnt++;
+        
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx>=0 && nx<m && ny>=0 && ny<n){
+                if(check[nx][ny] == false){
+                    check[nx][ny] = true;
+                    q.push(make_pair(nx, ny));
+                }
             }
         }
     }
-    
-    
 }
+
 
 int main(){
     cin >> m >> n >> k;
@@ -54,7 +63,7 @@ int main(){
     for(int i=0; i<m; i++){
         for(int j=0; j<n; j++){
             if(check[i][j] == false){
-                dfs(i, j);
+                bfs(i, j);
                 cnt_array.push_back(cnt);
                 cnt = 0;
             }
