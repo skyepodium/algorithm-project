@@ -1,14 +1,13 @@
 #include <iostream>
-#include <vector>
 #include <queue>
 #include <string>
 
 using namespace std;
 
-//시간 복잡도: O(E)
-//공간 복잡도: O(E)
+//시간 복잡도: O(n^4)
+//공간 복잡도: O(n^2)
 //사용한 알고리즘: BFS
-//사용한 자료구조: 2차원 벡터, 1차원 배열
+//사용한 자료구조: 2차원 배열
 
 int d[51][51];
 int check[51][51];
