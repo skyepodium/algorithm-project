@@ -1,53 +1,74 @@
 #include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 동적 계획법, Top-down
-//사용한 자료구조: 2차원 배열
-
-int a[501][501];
-int d[501][501];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+vector<int> a[101];
+int check[101];
 int n, m;
 
-int go(int x, int y){
+void bfs(int start){
+    check[start] = 0;
+    queue<int> q;
+    q.push(start);
     
-    if(x == 0 && y ==0){
-        return 1;
-    }
-    
-    if(d[x][y] > -1){
-        return d[x][y];
-    }
-    
-    d[x][y] = 0;
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if(nx>=0 && nx<n && ny>=0 && ny<m){
-            if(a[nx][ny] > a[x][y]){
-                d[x][y] = d[x][y] + go(nx, ny);
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        
+        for(int i=0; i<a[node].size(); i++){
+            int next = a[node][i];
+            
+            if(check[next] == 0){
+                check[next] = check[node] + 1;
+                q.push(next);
             }
+            
         }
     }
+}
+
+int check_dist(int num){
     
-    return d[x][y];
+    int total_dist = 0;
+    for(int i=1; i<=n; i++){
+        if(i == num){
+            continue;
+        }
+        total_dist += check[i];
+    }
+    
+    return total_dist;
+}
+
+void clear_check(){
+    for(int i=0; i<101; i++){
+        check[i] = 0;
+    }
 }
 
 int main(){
-    
+
     cin >> n >> m;
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cin >> a[i][j];
-            d[i][j] = -1;
-        }
+    for(int i=0; i<m; i++){
+        int u, v;
+        cin >> u >> v;
+        
+        a[u].push_back(v);
+        a[v].push_back(u);
     }
 
-    cout << go(n-1, m-1) << endl;
+    vector<pair<int, int>> result;
+    for(int i=1; i<=n; i++){
+        bfs(i);
+        result.push_back(make_pair(check_dist(i), i));
+        clear_check();
+    }
+
+    sort(result.begin(), result.end());
     
+    cout << result[0].second << endl;
 }
