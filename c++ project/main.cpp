@@ -1,25 +1,38 @@
 #include <iostream>
-#include <algorithm>
+#include <cmath>
+#include <vector>
 
 using namespace std;
 
-double d[10001];
-double a[10001];
+bool check[101];
 
 int main(){
 
-    int n;
-    cin >> n;
-    
-    for(int i=0; i<n; i++){
-        cin >> a[i];
+    for(int i=2; i<101; i++){
+        for(int j=i; j<101; j=j+i){
+            if(check[j] == false){
+                check[j] = true;
+            }else{
+                check[j] = false;
+            }
+            
+        }
     }
 
-    d[0] = a[0];
-    for(int i=1; i<n; i++){
-        d[i] = max(d[i-1]*a[i], a[i]);
-    }
+    int t;
+    cin >> t;
     
-    printf("%.3f\n", *max_element(d , d+n));
+    while(t--){
+        int n;
+        cin >> n;
+        int cnt = 0;
+        for(int i=1; i<=n; i++){
+            if(check[i] == false){
+                cnt++;
+            }
+        }
+        cout << cnt << endl;
+
+    }
 }
 
