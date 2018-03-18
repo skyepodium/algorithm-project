@@ -92,6 +92,7 @@ int main(){
         cout << two2 << endl;
         cout << three2 << endl;
         
+        
         if(pow(result2[0], 2) + pow(result2[1], 2) == pow(result2[2], 2)){
             for(int i=0; i<result.size(); i++){
                 cout << result[i].first <<" "<<result[i].second<<endl;
