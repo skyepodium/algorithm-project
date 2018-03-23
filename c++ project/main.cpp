@@ -1,51 +1,80 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include<iostream>
+#include<stack>
 
 using namespace std;
 
-int main(){
-    
-    int n;
-    cin >> n;
-    
-    vector<int> v(n);
-    for(int i=0; i<n; i++){
-        cin >> v[i];
-    }
+int d[51][51];
+int n, m;
+int dx[] = {-1, 0, 1, 0};
+int dy[] = {0, 1, 0, -1};
+int cnt = 0;
 
-    vector<int> d;
-    for(int i=0; i<4; i++){
-        int cnt;
-        cin >> cnt;
-        for(int j=0; j<cnt; j++){
-            d.push_back(i);
+struct position{
+    int x;
+    int y;
+    int dir;
+};
+
+void dfs(int x, int y, int dir){
+
+    stack<position> s;
+    s.push( { x, y, dir });
+    
+    while(!s.empty()){
+        x = s.top().x;
+        y = s.top().y;
+        dir = s.top().dir;
+        
+        if(d[x][y] == 0){
+            d[x][y] = 2;
+            cnt++;
         }
-    }
-    
-    long long int max_result = -1000000001;
-    long long int min_result = 1000000000;
+        s.pop();
+        
+        for(int i=0; i<4; i++){
+            int n_dir = (dir+3)%4;
+            int nx = x + dx[n_dir];
+            int ny = y + dy[n_dir];
+            dir = n_dir;
 
-    do{
-        long long int result = v[0];
-        for(int i=1; i<v.size(); i++){
-            if(d[i-1] == 0){
-                result = result + v[i];
-            }else if(d[i-1] == 1){
-                result = result - v[i];
-            }else if(d[i-1] == 2){
-                result = result * v[i];
-            }else{
-                result = result / v[i];
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(d[nx][ny] == 0){
+                    s.push( {nx, ny, n_dir });
+                }
             }
         }
-        max_result = max(result, max_result);
-        min_result = min(result, min_result);
+
         
-    }while(next_permutation(d.begin(), d.end()));
+        int n_dir = (dir+2)%4;
+        int nx = x + dx[n_dir];
+        int ny = y + dy[n_dir];
+        if(d[nx][ny] != 1){
+            s.push( {nx, ny, dir });
+        }
+        
+    }
+
     
-    cout << max_result << endl;
-    cout << min_result << endl;
+    
     
 }
 
+int main(){
+    
+    cin >> n >> m;
+    
+    int c_x, c_y, c_dir;
+    cin >> c_x >> c_y >> c_dir;
+    
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            cin >> d[i][j];
+        }
+    }
+    
+    dfs(c_x, c_y, c_dir);
+    
+    cout << cnt << endl;
+    
+}
