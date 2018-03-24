@@ -1,38 +1,51 @@
 #include <iostream>
-#include <vector>
 
-int v[1000001];
+int a[501][501];
+int d[501][501][2];
+
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+int main(){
     
-    cin>>T;
+    int m, n;
+    cin >> m >> n;
     
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        int n;
-        cin >> n;
-        for(int i=0; i<n; i++){
-            cin >> v[i];
+    for(int i=1; i<=m; i++){
+        for(int j=1; j<=n; j++){
+            cin >> a[i][j];
         }
-        
-        int current = v[n-1];
-        long long int result = 0;
-        for(int j=n-1; j>=0; j--){
-            if(current > v[j]){
-                result = result + (current - v[j]);
-            }else{
-                current = v[j];
-            }
-        }
-        
-        cout <<"#"<<test_case<<" "<<result<<endl;
-        
-        
     }
-    return 0;
+
+
+    d[1][1][0] = 1;
+    d[1][1][1] = 1;
+    
+    for(int i=1; i<=m; i++){
+        for(int j=1; j<=n; j++){
+            
+            if(i==1 && j==1){
+                continue;
+            }
+            
+            else if(a[i][j] == 0){
+                d[i][j][0] = d[i-1][j][0] + d[i][j-1][1];
+                d[i][j][1] = d[i][j-1][1] + d[i-1][j][0];
+            }
+            
+            else if(a[i][j] == 1){
+                d[i][j][0] = 0;
+                d[i][j][1] = 0;
+            }
+            
+            else{
+                d[i][j][0] = d[i-1][j][0];
+                d[i][j][1] = d[i][j-1][1];
+            }
+            
+        }
+    }
+    
+    
+    
 }
