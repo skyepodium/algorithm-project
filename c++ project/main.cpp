@@ -1,71 +1,32 @@
-#include<iostream>
-#include<stack>
+#include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-int d[51][51];
+int d[101][101];
+bool check[101][101];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 int n, m;
-int dx[] = {-1, 0, 1, 0};
-int dy[] = {0, 1, 0, -1};
 int cnt = 0;
-
-struct position{
-    int x;
-    int y;
-    int dir;
-};
-
-void dfs(int x, int y, int dir){
-
-    stack<position> s;
-    s.push( { x, y, dir });
+void dfs(int x, int y, int color){
+    check[x][y] = true;
+    cnt++;
     
-    while(!s.empty()){
-        x = s.top().x;
-        y = s.top().y;
-        dir = s.top().dir;
-        
-        if(d[x][y] == 0){
-            d[x][y] = 2;
-            cnt++;
-        }
-        s.pop();
-        
-        for(int i=0; i<4; i++){
-            int n_dir = (dir+3)%4;
-            int nx = x + dx[n_dir];
-            int ny = y + dy[n_dir];
-            dir = n_dir;
-
-            if(nx>=0 && nx<n && ny>=0 && ny<m){
-                if(d[nx][ny] == 0){
-                    s.push( {nx, ny, n_dir });
-                }
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(nx >= 0  && nx<n && ny>=0 && ny<m){
+            if(check[nx][ny] == false && d[nx][ny] == color && d[nx][ny] != 0){
+                dfs(nx, ny, d[nx][ny]);
             }
         }
-
-        
-        int n_dir = (dir+2)%4;
-        int nx = x + dx[n_dir];
-        int ny = y + dy[n_dir];
-        if(d[nx][ny] != 1){
-            s.push( {nx, ny, dir });
-        }
-        
     }
-
-    
-    
     
 }
 
 int main(){
-    
     cin >> n >> m;
-    
-    int c_x, c_y, c_dir;
-    cin >> c_x >> c_y >> c_dir;
-    
     
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
@@ -73,8 +34,20 @@ int main(){
         }
     }
     
-    dfs(c_x, c_y, c_dir);
+    int total_cnt = 0;
+    int max_cnt = 0;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            if(check[i][j] == false && d[i][j] != 0){
+                dfs(i, j, d[i][j]);
+                total_cnt++;
+                max_cnt = max(max_cnt, cnt);
+                cnt = 0;
+            }
+        }
+    }
+
+    cout << total_cnt <<" "<< max_cnt << endl;
     
-    cout << cnt << endl;
     
 }
