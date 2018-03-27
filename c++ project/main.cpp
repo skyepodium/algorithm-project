@@ -1,34 +1,49 @@
 #include <iostream>
-#include <stack>
-#include <vector>
+#include <queue>
 
 using namespace std;
 
-int main(){
-    
-    int n;
-    cin >> n;
-    
-    stack<int> s;
-    while(n>0){
-        s.push(n%2);
-        n = n/2;
-    }
+int d[10];
 
-    vector<int> d;
-    while(!s.empty()){
-        d.push_back(s.top());
-        s.pop();
-    }
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
     
+    cin>>T;
     
-    do{
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
         
-        for(int i=0; i<d.size(); i++){
-            cout << d[i] << " ";
+        queue<int> q;
+        
+        int n;
+        cin >> n;
+        for(int i=0; i<n; i++){
+            char word;
+            int num;
+            cin >> word >> num;
+            
+            for(int i=0; i<num; i++){
+                q.push(word);
+            }
+            
+        }
+        
+        cout << "#" <<test_case<<" "<<endl;
+        int i=0;
+        while(!q.empty()){
+            if(i == 10){
+                cout << endl;
+                i=0;
+            }
+            printf("%c", q.front());
+            q.pop();
+            i++;
         }
         cout << endl;
         
         
-    }while(next_permutation(d.begin(), d.end()));
+    }
+    return 0;
 }
