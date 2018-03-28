@@ -3,40 +3,32 @@
 
 using namespace std;
 
-int d[3][2001][2001];
-int a[1001];
+long long int d[101];
 
-int main(){
+long long int go(int i){
     
-    int t, w;
-    cin >> t >> w;
-    
-    for(int i=1; i<=t; i++){
-        cin >> a[i];
+    if( i <= 6){
+        d[i] = i;
+        return d[i];
     }
     
-    int result = 0;
-    for(int i=1; i<=t; i++){
-        for(int j=0; j<=w; j++){
-            if(a[i] == 1){
-                
-                d[1][i][j] = max(d[1][i-1][j], d[2][i-1][j-1]) + 1;
-                d[2][i][j] = max(d[1][i-1][j-1], d[2][i-1][j]);
-                
-
-            }else{
-
-                d[1][i][j] = max(d[1][i-1][j], d[2][i-1][j-1]);
-                d[2][i][j] = max(d[1][i-1][j-1], d[2][i-1][j]) + 1;
-                
-            }
-            result = max(result, d[1][i][j]);
-            result = max(result, d[2][i][j]);
-
-        }
+    if( d[i] > 0){
+        return d[i];
     }
     
-    cout << result << endl;
-
+    for(int j=3; j<=i-1; j++){
+        d[i] = max(d[i], go(i-j) * (j-1));
+    }
+    
+    return d[i];
 }
 
+
+int main() {
+    
+    int n;
+    cin >> n;
+    
+    cout << go(n) << endl;
+    
+}
