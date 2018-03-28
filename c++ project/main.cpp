@@ -3,36 +3,40 @@
 
 using namespace std;
 
-//시간 복잡도: O(nm)
-//공간 복잡도: O(nm)
-//사용한 알고리즘: 동적 계획법 Bottom Up
-//사용한 자료구조: 2차원 배열
-
-
-int d[1001][1001];
+int d[3][2001][2001];
+int a[1001];
 
 int main(){
     
-    int n, m;
-    cin >> n >> m;
+    int t, w;
+    cin >> t >> w;
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            scanf("%1d", &d[i][j]);
-        }
+    for(int i=1; i<=t; i++){
+        cin >> a[i];
     }
     
     int result = 0;
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            if(d[i][j] == 1){
-                d[i][j] = min(d[i-1][j], min(d[i-1][j-1], d[i][j-1])) + 1;
-                result = max(result, d[i][j]);
+    for(int i=1; i<=t; i++){
+        for(int j=0; j<=w; j++){
+            if(a[i] == 1){
+                
+                d[1][i][j] = max(d[1][i-1][j], d[2][i-1][j-1]) + 1;
+                d[2][i][j] = max(d[1][i-1][j-1], d[2][i-1][j]);
+                
+
+            }else{
+
+                d[1][i][j] = max(d[1][i-1][j], d[2][i-1][j-1]);
+                d[2][i][j] = max(d[1][i-1][j-1], d[2][i-1][j]) + 1;
+                
             }
+            result = max(result, d[1][i][j]);
+            result = max(result, d[2][i][j]);
+
         }
     }
     
-    cout << result * result << endl;
-    
+    cout << result << endl;
+
 }
 
