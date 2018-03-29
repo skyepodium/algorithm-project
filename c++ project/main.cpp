@@ -1,27 +1,38 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-long long int gcd(long long int a, long long int b){
-    
-    if(b==0){
-        return a;
-    }else{
-        return gcd(b, a%b);
-    }
-}
+long long int a[1000001];
 
-
-int main() {
+int main(){
     
-    int t;
-    cin >> t;
+    int n;
+    cin >> n;
     
-    while(t--){
-        long long int a, b;
-        cin >> a >> b;
-    
-        cout << (a*b)/gcd(a, b) <<endl;
+    for(int i=0; i<n; i++){
+        cin >> a[i];
     }
+    
+    sort(a, a+n);
+    
+    long long int current_cnt = 1;
+    long long int max_cnt = 1;
+    long long int result = a[0];
+    
+    for(int i=1; i<n; i++){
+        if(a[i] == a[i-1]){
+            current_cnt++;
+        }else{
+            current_cnt = 1;
+        }
+        
+        if(max_cnt < current_cnt){
+            max_cnt = current_cnt;
+            result = a[i];
+        }
+    }
+    
+    cout << result << endl;
+    
 }
