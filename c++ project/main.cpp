@@ -1,38 +1,19 @@
 #include <iostream>
 #include <algorithm>
-
+#include <string>
+#include <set>
 using namespace std;
 
 long long int a[1000001];
 
 int main(){
+
+    set<int> s;
     
-    int n;
-    cin >> n;
+    s.insert(20);
+    s.insert(30);
+    s.insert(10);
     
-    for(int i=0; i<n; i++){
-        cin >> a[i];
-    }
-    
-    sort(a, a+n);
-    
-    long long int current_cnt = 1;
-    long long int max_cnt = 1;
-    long long int result = a[0];
-    
-    for(int i=1; i<n; i++){
-        if(a[i] == a[i-1]){
-            current_cnt++;
-        }else{
-            current_cnt = 1;
-        }
-        
-        if(max_cnt < current_cnt){
-            max_cnt = current_cnt;
-            result = a[i];
-        }
-    }
-    
-    cout << result << endl;
-    
+    int a = s.find(22);
+    cout << a <<endl;
 }
