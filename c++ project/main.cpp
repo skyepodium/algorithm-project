@@ -6,10 +6,10 @@
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
+//시간 복잡도: O(nlogn)
 //공간 복잡도: O(n)
-//사용한 알고리즘: dfs
-//사용한 자료구조: 1차원 배열, 2차원 벡터(링크드 리스트)
+//사용한 알고리즘: stl sort
+//사용한 자료구조: 구조체, 1차원 벡터
 
 double start_x, start_y;
 
@@ -31,7 +31,7 @@ bool cmp(const s &a, const s &b){
         
         if(a.cnt == b.cnt){
             
-            return a.name > b.name;
+            return a.name < b.name;
             
         }else{
             return a.cnt > b.cnt;
@@ -44,7 +44,6 @@ bool cmp(const s &a, const s &b){
 }
 
 int calc_dist(double x, double y){
-    
     
     double dist_x = (abs(x-start_x)/100)*100;
     double dist_y = (abs(y-start_y)/100)*100;
@@ -81,7 +80,7 @@ int main(int argc, const char *argv[]) {
     
     for(int i=0; i<v.size(); i++){
         
-        cout << v[i].dist <<" "<<v[i].x <<" " << v[i].y <<" "<<v[i].name << " "<<v[i].cnt << endl;
+        cout << v[i].x <<" " << v[i].y <<" "<<v[i].name << " "<<v[i].cnt << endl;
         
     }
     
