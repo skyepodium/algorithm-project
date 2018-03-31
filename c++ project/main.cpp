@@ -1,42 +1,46 @@
 #include <iostream>
-#include <vector>
 #include <string>
 
 using namespace std;
 
-int main(){
+//시간 복잡도: O(n)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 리니어 서치
+//사용한 자료구조: 스트링
 
-    int n, m;
-    cin >> n >> m;
+int main(int argc, const char *argv[]) {
+    int T;
+    cin >> T;
     
-    vector<string> word_first(n);
-    vector<string> word_second(n);
-    
-    for(int i=0; i<n; i++){
-        cin >> word_first[i];
-    }
-
-    for(int i=0; i<n; i++){
-        cin >> word_second[i];
-    }
-
-    
-    bool is_result = true;
-    for(int i=0; i<n; i++){
-        int origin_index = 0;
-        for(int j=0; j<2*m; j++){
-            if(word_first[i][origin_index] != word_second[i][j]){
-                is_result = false;
-                break;
+    while(T--){
+        string word;
+        cin >> word;
+        
+        char current_c = word[0];
+        int cnt = 1;
+        
+        for(int i=1; i<word.size(); i++){
+            if(word[i] != word[i-1]){
+                cout << cnt;
+                printf("%c", current_c);
+                current_c = word[i];
+                cnt = 1;
+            }else{
+                cnt++;
             }
             
-            if(j%2 == 1){
-                origin_index++;
+            if(i == (word.size()-1)){
+                cout << cnt;
+                printf("%c", current_c);
             }
+            
         }
+        
+        
+        cout << endl;
     }
     
-    if(is_result) cout << "Eyfa" << endl;
-    else cout << "Not Eyfa" << endl;
     
+    return 0;
 }
+
