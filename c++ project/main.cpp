@@ -1,46 +1,92 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <algorithm>
+#include <math.h>
 
 using namespace std;
 
-//시간 복잡도: O(n)
+//시간 복잡도: O(n^2)
 //공간 복잡도: O(n)
-//사용한 알고리즘: 리니어 서치
-//사용한 자료구조: 스트링
+//사용한 알고리즘: dfs
+//사용한 자료구조: 1차원 배열, 2차원 벡터(링크드 리스트)
 
-int main(int argc, const char *argv[]) {
-    int T;
-    cin >> T;
+double start_x, start_y;
+
+struct s{
+    int dist;
+    int cnt;
+    string name;
+    double x;
+    double y;
+};
+
+
+bool cmp(const s &a, const s &b){
     
-    while(T--){
-        string word;
-        cin >> word;
+    if(a.dist > b.dist){
+        return false;
         
-        char current_c = word[0];
-        int cnt = 1;
+    }else if(a.dist == b.dist){
         
-        for(int i=1; i<word.size(); i++){
-            if(word[i] != word[i-1]){
-                cout << cnt;
-                printf("%c", current_c);
-                current_c = word[i];
-                cnt = 1;
-            }else{
-                cnt++;
-            }
+        if(a.cnt == b.cnt){
             
-            if(i == (word.size()-1)){
-                cout << cnt;
-                printf("%c", current_c);
-            }
+            return a.name > b.name;
             
+        }else{
+            return a.cnt > b.cnt;
         }
         
+    }else{
         
-        cout << endl;
+        return true;
+    }
+}
+
+int calc_dist(double x, double y){
+    
+    
+    double dist_x = (abs(x-start_x)/100)*100;
+    double dist_y = (abs(y-start_y)/100)*100;
+    
+    double dist = sqrt(dist_x*dist_x + dist_y*dist_y);
+    
+    int result = ((int)dist/100) * 100;
+    
+    return result;
+}
+
+
+int main(int argc, const char *argv[]) {
+    
+    
+    int n;
+    cin >> start_x >> start_y >> n;
+    
+    vector<s> v;
+    
+    for(int i=0; i<n; i++){
+        
+        double target_x, target_y;
+        string name;
+        int coupon_cnt;
+        cin >> target_x >> target_y >> name >> coupon_cnt;
+        
+        int dist = calc_dist(target_x, target_y);
+        
+        v.push_back( {dist, coupon_cnt, name, target_x, target_y });
+    }
+    
+    sort(v.begin(), v.end(), cmp);
+    
+    for(int i=0; i<v.size(); i++){
+        
+        cout << v[i].dist <<" "<<v[i].x <<" " << v[i].y <<" "<<v[i].name << " "<<v[i].cnt << endl;
+        
     }
     
     
     return 0;
 }
+
 
