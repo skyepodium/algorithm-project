@@ -1,89 +1,58 @@
 #include <iostream>
-#include <string>
 #include <vector>
-#include <algorithm>
-#include <math.h>
-
 using namespace std;
 
-//시간 복잡도: O(nlogn)
+//시간 복잡도: O(n^2)
 //공간 복잡도: O(n)
-//사용한 알고리즘: stl sort
-//사용한 자료구조: 구조체, 1차원 벡터
-
-double start_x, start_y;
-
-struct s{
-    int dist;
-    int cnt;
-    string name;
-    double x;
-    double y;
-};
+//사용한 알고리즘: dfs
+//사용한 자료구조: 1차원 배열, 2차원 벡터(링크드 리스트)
 
 
-bool cmp(const s &a, const s &b){
+vector<int> a[100001];
+bool check[100001];
+bool node_list[100001];
+
+void dfs(int node){
+    check[node] = true;
     
-    if(a.dist > b.dist){
-        return false;
+    for(int i=0; i<a[node].size(); i++){
         
-    }else if(a.dist == b.dist){
-        
-        if(a.cnt == b.cnt){
-            
-            return a.name < b.name;
-            
-        }else{
-            return a.cnt > b.cnt;
+        int next = a[node][i];
+        if(check[next] == false){
+            dfs(next);
         }
         
-    }else{
-        
-        return true;
     }
 }
-
-int calc_dist(double x, double y){
-    
-    double dist_x = (abs(x-start_x)/100)*100;
-    double dist_y = (abs(y-start_y)/100)*100;
-    
-    double dist = sqrt(dist_x*dist_x + dist_y*dist_y);
-    
-    int result = ((int)dist/100) * 100;
-    
-    return result;
-}
-
 
 int main(int argc, const char *argv[]) {
+    int N;
+    cin >> N;
     
     
-    int n;
-    cin >> start_x >> start_y >> n;
     
-    vector<s> v;
-    
-    for(int i=0; i<n; i++){
+    for (int i = 0; i < N; ++i) {
+        int x, y;
+        cin >> x >> y;
+        a[x].push_back(y);
+        a[y].push_back(x);
         
-        double target_x, target_y;
-        string name;
-        int coupon_cnt;
-        cin >> target_x >> target_y >> name >> coupon_cnt;
-        
-        int dist = calc_dist(target_x, target_y);
-        
-        v.push_back( {dist, coupon_cnt, name, target_x, target_y });
-    }
-    
-    sort(v.begin(), v.end(), cmp);
-    
-    for(int i=0; i<v.size(); i++){
-        
-        cout << v[i].x <<" " << v[i].y <<" "<<v[i].name << " "<<v[i].cnt << endl;
+        node_list[x] = true;
+        node_list[y] = true;
         
     }
     
+    int group_cnt = 0;
+    
+    
+    for(int i=0; i<=100001; i++){
+        if(node_list[i] == true && check[i] == false){
+            dfs(i);
+            group_cnt++;
+        }
+    }
+    
+    cout << group_cnt << endl;
     
     return 0;
 }
