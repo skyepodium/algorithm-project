@@ -1,46 +1,39 @@
 #include <iostream>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(n)
+//시간 복잡도: O(n^2)
 //공간 복잡도: O(n)
-//사용한 알고리즘: 리니어 서치
-//사용한 자료구조: 스트링
+//사용한 알고리즘: 동적 계획법 Top Down
+//사용한 자료구조: 1차원 배열
 
-int main(int argc, const char *argv[]) {
-    int T;
-    cin >> T;
+long long int d[101];
+
+long long int go(int i){
     
-    while(T--){
-        string word;
-        cin >> word;
-        
-        char current_c = word[0];
-        int cnt = 1;
-        
-        for(int i=1; i<word.size(); i++){
-            if(word[i] != word[i-1]){
-                cout << cnt;
-                printf("%c", current_c);
-                current_c = word[i];
-                cnt = 1;
-            }else{
-                cnt++;
-            }
-            
-            if(i == (word.size()-1)){
-                cout << cnt;
-                printf("%c", current_c);
-            }
-            
-        }
-        
-        
-        cout << endl;
+    if( i <= 6){
+        d[i] = i;
+        return d[i];
     }
     
+    if( d[i] > 0){
+        return d[i];
+    }
     
-    return 0;
+    for(int j=3; j<=i-3; j++){
+        d[i] = max(d[i], go(i-j) * (j-1));
+    }
+    
+    return d[i];
 }
 
+
+int main() {
+    
+    int n;
+    cin >> n;
+    
+    cout << go(n) << endl;
+    
+}
