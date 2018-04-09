@@ -1,66 +1,62 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int a[101][101];
-long long d[101][101];
-
-//시간 복잡도: O(n^3)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 동적 계획법, Bottom up
-//사용한 자료구조: 2차원 배열
-
-int n;
-
-void clear_array(){
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            d[i][j] = 0;
-        }
-    }
+    cin>>T;
     
-}
-
-int main(){
-    
-    int t;
-    cin >> t;
-    
-    while(t--){
-        
-        
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        int n;
         cin >> n;
         
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                cin >> a[i][j];
+        vector<int> cal;
+        for(int i=0; i<4; i++){
+            int a;
+            cin >> a;
+            for(int j=0; j<a; j++){
+                cal.push_back(i);
             }
         }
         
-        d[1][1] = 1;
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                
-                if(i==1 && j ==1) continue;
-                
-                for(int k=1; k<j; k++){
-                    if(k+a[i][k] == j) d[i][j] += d[i][k];
-                }
-                
-                for(int k=1; k<i; k++){
-                    if(k+a[k][j] == i) d[i][j] += d[k][j];
-                }
-                
-            }
+        vector<int> num(n);
+        for(int i=0; i<n; i++){
+            cin >> num[i];
         }
         
-        if(d[n][n] > 0) cout << "YES" << endl;
-        else cout << "NO" << endl;
         
-        clear_array();
-    }
-    
-    
-}
+        int min_result = 100000000;
+        int max_result = -100000000;
+        
+        do{
 
+            int cal_result = num[0];
+            for(int i=1; i<n; i++){
+                if(cal[i-1] == 0){
+                    cal_result = cal_result + num[i];
+                }else if(cal[i-1] == 1){
+                    cal_result = cal_result - num[i];
+                }else if(cal[i-1] == 2){
+                    cal_result = cal_result * num[i];
+                }else{
+                    cal_result = cal_result / num[i];
+                }
+            }
+            
+            min_result = min(min_result, cal_result);
+            max_result = max(max_result, cal_result);
+
+        }while(next_permutation(cal.begin(), cal.end()));
+        
+        cout << "#" << test_case << " " << max_result - min_result << endl;
+        
+        
+    }
+    return 0;
+}
