@@ -1,38 +1,67 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int n, s;
-int a[21];
-int cnt = 0, current_sum = 0;
+int l, c;
 
-void dfs(int current){
-    
-    if(current == n) return;
-    
-    if(current_sum + a[current] == s) cnt++;
-    
-    //이번 것 포함시키지 않고 진행
-    dfs(current+1);
-    
-    //이번 것 포함시키고 진행
-    current_sum += a[current];
-    dfs(current+1);
-    
-    current_sum -= a[current];
-    
-}
+char word[15];
 
 int main(){
     
-    cin >> n >> s;
+    cin >> l >> c;
     
-    for(int i=0; i<n; i++){
-        cin >> a[i];
+    for(int i=0; i<c; i++){
+        cin >> word[i];
     }
     
-    dfs(0);
-    cout << cnt << endl;
+    sort(word, word+c);
     
-}
+    vector<int> v;
+    for(int i=0; i<l; i++){
+        v.push_back(1);
+    }
 
+    for(int i=0; i<c-l; i++){
+        v.push_back(0);
+    }
+    
+    do{
+        
+        int mo_cnt = 0;
+        int ja_cnt = 0;
+        int current_val = 0;
+        bool is_increase = true;
+        
+        for(int i=0; i<c; i++){
+            
+            if(v[i] == 1){
+                if(word[i]==97 || word[i]==101 || word[i]==105 || word[i]==111 || word[i]==117){
+                    mo_cnt++;
+                }else{
+                    ja_cnt++;
+                }
+                
+                if(current_val<word[i]){
+                    current_val = word[i];
+                }else{
+                    is_increase = false;
+                    break;
+                }
+            }
+        }
+        
+        if(mo_cnt >= 1 && ja_cnt >= 2 && is_increase == true){
+            for(int i=0; i<c; i++){
+                if(v[i] == 1){
+                    cout << word[i];
+                }
+            }
+            cout << endl;
+        }
+        
+        
+    }while(prev_permutation(v.begin(), v.end()));
+
+}
