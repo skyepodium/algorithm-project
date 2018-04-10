@@ -1,67 +1,98 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-int l, c;
+int n, k;
+int result = 0;
+int max_height = 0;
 
-char word[15];
+int d[10][10];
+bool check[10][10];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-int main(){
-    
-    cin >> l >> c;
-    
-    for(int i=0; i<c; i++){
-        cin >> word[i];
-    }
-    
-    sort(word, word+c);
-    
-    vector<int> v;
-    for(int i=0; i<l; i++){
-        v.push_back(1);
-    }
+struct position{
+    int x;
+    int y;
+    int height;
+    bool used;
+    int dist;
+};
 
-    for(int i=0; i<c-l; i++){
-        v.push_back(0);
-    }
+void dfs(position current){
+    result = max(result, current.dist);
     
-    do{
+    for(int i=0; i<4; i++){
+        position next = current;
+        next.x += dx[i];
+        next.y += dy[i];
+        next.height = d[next.x][next.y];
         
-        int mo_cnt = 0;
-        int ja_cnt = 0;
-        int current_val = 0;
-        bool is_increase = true;
-        
-        for(int i=0; i<c; i++){
-            
-            if(v[i] == 1){
-                if(word[i]==97 || word[i]==101 || word[i]==105 || word[i]==111 || word[i]==117){
-                    mo_cnt++;
-                }else{
-                    ja_cnt++;
+        if(next.x>=0 && next.x<n && next.y>=0 && next.y < n){
+            if(check[next.x][next.y] == false){
+                
+                // 다음 장소가 현재 높이보다 작을 경우
+                if(next.height < current.height){
+                    check[next.x][next.y] = true;
+                    next.dist++;
+                    dfs(next);
+                    check[next.x][next.y] = false;
                 }
                 
-                if(current_val<word[i]){
-                    current_val = word[i];
-                }else{
-                    is_increase = false;
-                    break;
+                else{
+                    if(current.used == false && next.height - k < current.height){
+                        check[next.x][next.y] = true;
+                        next.dist++;
+                        next.used = true;
+                        next.height = current.height - 1;
+                        dfs(next);
+                        check[next.x][next.y] = false;
+                    }
                 }
+                
             }
         }
         
-        if(mo_cnt >= 1 && ja_cnt >= 2 && is_increase == true){
-            for(int i=0; i<c; i++){
-                if(v[i] == 1){
-                    cout << word[i];
-                }
-            }
-            cout << endl;
-        }
         
-        
-    }while(prev_permutation(v.begin(), v.end()));
+    }
+    
+}
 
+
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    
+    cin>>T;
+    
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        cin >> n >> k;
+        result = max_height = 0;
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                cin >> d[i][j];
+                max_height = max(max_height, d[i][j]);
+            }
+        }
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(d[i][j] == max_height){
+                    check[i][j] = true;
+                    position cur = {i, j, max_height, false, 1};
+                    dfs(cur);
+                    check[i][j] = false;
+                }
+            }
+        }
+        
+        cout << "#" << test_case << " " << result << endl;
+
+        
+    }
+    return 0;
 }
