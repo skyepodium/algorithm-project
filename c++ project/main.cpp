@@ -3,6 +3,11 @@
 
 using namespace std;
 
+//시간 복잡도: O(nm)
+//공간 복잡도: O(nm)
+//사용한 알고리즘: dfs backtracking
+//사용한 자료구조: 2차원 배열
+
 int n, m;
 int d[501][501];
 bool check[501][501];
