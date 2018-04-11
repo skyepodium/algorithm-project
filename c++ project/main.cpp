@@ -1,36 +1,42 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <cmath>
 
 using namespace std;
 
 
 int n;
-int t[100];
-int p[100];
+int a[21];
+int d[21];
+
 int result = 0;
 
-void go(int day, int sum){
+void go(int num, int happy, int health){
     
-    if(day >= n){
+    if(num == n){
         
-        if(day == n) result = max(result, sum);
+        if(health > 0) result = max(result, happy);
         return;
     }
     
-    go(day+t[day], sum+p[day]);
+    go(num+1, happy+d[num], health - a[num]);
     
-    go(day+1, sum);
+    go(num+1, happy, health);
+    
 }
 
 int main(){
-
+    
     cin >> n;
+    
     for(int i=0; i<n; i++){
-        cin >> t[i] >> p[i];
+        cin >> a[i];
     }
+    
+    for(int i=0; i<n; i++){
+        cin >> d[i];
+    }
+    
+    go(0, 0, 100);
 
-    go(0, 0);
     cout << result << endl;
 }
