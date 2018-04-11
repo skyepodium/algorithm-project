@@ -1,131 +1,72 @@
 #include <iostream>
-#include <queue>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
+//시간 복잡도: O(n^6)
+//공간 복잡도: O(n^2)
+//사용한 알고리즘: 순열, 2중 for문
+//사용한 자료구조: 2차원 배열
 
-int n, m, r, c, l;
-int d[51][51];
-bool check[51][51];
-int time_table[51][51];
+int d[21][21];
 
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
-//왼쪽 오른쪽 아래 위
 
-void bfs(int x, int y, int time){
+int main(){
     
-    check[x][y] = true;
-    time_table[x][y] = time;
-    queue<pair<int, int>> q;
-    q.push(make_pair(x, y));
+    int n;
+    cin >> n;
     
-    while(!q.empty()){
-        x = q.front().first;
-        y = q.front().second;
-        q.pop();
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            cin >> d[i][j];
+        }
+    }
+    
+    vector<int> v;
+    for(int i=0; i<n/2; i++){
+        v.push_back(0);
+    }
+    for(int i=0; i<n/2; i++){
+        v.push_back(1);
+    }
+    
+    
+    int result = 4500;
+    //10C2 = 45 한팀에 최대로 나올 수 있는 힘의 합은 4500, 최소는 0, 따라서 최대 차이는 4500으로 하면 맞는다.
+    //자신없을때는 정수 최대 값 넣어도 좋고, 자기가 알고 있는 최대 크기 넣어라
+    
+    do{
         
-        for(int i=0; i<4; i++){
-            //0 왼쪽, 1 오른쪽, 2 아래, 3위
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-
-            int cur= d[x][y];
-            int next = d[nx][ny];
-            if(nx>=0 && nx<n && ny>=0 && ny<m){
-                if(check[nx][ny] == false && next > 0 && time_table[x][y]+1 <= l){
-                    
-                    if(cur == 1){
-                        if(i==0 && (next==2 || next==6 || next==7)) continue;
-                        if(i==1 && (next==2 || next==4 || next==5)) continue;
-                        if(i==2 && (next==3 || next==5 || next==6)) continue;
-                        if(i==3 && (next==3 || next==4 || next==7)) continue;
-                    }
-                    
-                    if(cur == 2){
-                        if(i==0 || i==1) continue;
-                        if(i==2 && (next==3 || next==5 || next==6)) continue;
-                        if(i==3 && (next==3 || next==4 || next==7)) continue;
-                    }
-                   
-                    if(cur == 3){
-                        if(i==2 || i==3) continue;
-                        if(i==0 && (next==2 || next==6 || next==7)) continue;
-                        if(i==1 && (next==2 || next==4 || next==5)) continue;
-                    }
-                    
-                    if(cur == 4){
-                        if(i==0 || i==2) continue;
-                        if(i==1 && (next==2 || next==4 || next==5)) continue;
-                        if(i==3 && (next==3 || next==4 || next==7)) continue;
-                    }
-                    
-                    if(cur == 5){
-                        if(i==0 || i==3) continue;
-                        if(i==1 && (next==2 || next==4 || next==5)) continue;
-                        if(i==2 && (next==3 || next==5 || next==6)) continue;
-                    }
-                    
-                    if(cur == 6){
-                        if(i==1 || i==3) continue;
-                        if(i==0 && (next==2 || next==6 || next==7)) continue;
-                        if(i==2 && (next==3 || next==5 || next==6)) continue;
-                    }
-                    
-                    if(cur == 7){
-                        if(i==1 || i==2) continue;
-                        if(i==0 && (next==2 || next==6 || next==7)) continue;
-                        if(i==3 && (next==3 || next==4 || next==7)) continue;
-                    }
-                    
-                    check[nx][ny] = true;
-                    time_table[nx][ny] = time_table[x][y] + 1;
-                    q.push(make_pair(nx, ny));
-                    
-                }
-            }
-        }
-    }
-    
-}
-
-int find_result(){
-    
-    int cnt = 0;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            if(check[i][j] == true && time_table[i][j] <=l){
-                cnt++;
-            }
-            check[i][j] = false;
-            time_table[i][j] = 0;
-        }
-    }
-    
-    return cnt;
-}
-
-
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
-    
-    cin>>T;
-    
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        cin >> n >> m >> r >> c >> l;
+        vector<int> right;
+        vector<int> left;
         
         for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                cin >> d[i][j];
+            if(v[i] == 1){
+                right.push_back(i+1);
+            }else{
+                left.push_back(i+1);
             }
         }
-        bfs(r, c, 1);
         
-        cout << "#" << test_case << " " <<find_result() << endl;
+        int right_sum = 0;
+        for(int i=0; i<right.size(); i++){
+            for(int j=i+1; j<right.size(); j++){
+                right_sum = right_sum + d[right[i]][right[j]] + d[right[j]][right[i]];
+            }
+        }
         
-    }
-    return 0;
+        int left_sum = 0;
+        for(int i=0; i<left.size(); i++){
+            for(int j=i+1; j<left.size(); j++){
+                left_sum = left_sum + d[left[i]][left[j]] + d[left[j]][left[i]];
+            }
+        }
+        
+        result = min(abs(right_sum - left_sum), result);
+        
+    }while(next_permutation(v.begin(), v.end()));
+    
+    cout << result << endl;
+    
 }
