@@ -1,81 +1,131 @@
 #include <iostream>
-#include <algorithm>
+#include <queue>
 
 using namespace std;
 
-//시간 복잡도: O(nm)
-//공간 복잡도: O(nm)
-//사용한 알고리즘: dfs backtracking
-//사용한 자료구조: 2차원 배열
 
-int n, m;
-int d[501][501];
-bool check[501][501];
+int n, m, r, c, l;
+int d[51][51];
+bool check[51][51];
+int time_table[51][51];
 
 int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
+//왼쪽 오른쪽 아래 위
 
-int result = 0;
+void bfs(int x, int y, int time){
+    
+    check[x][y] = true;
+    time_table[x][y] = time;
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
+    
+    while(!q.empty()){
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
+        
+        for(int i=0; i<4; i++){
+            //0 왼쪽, 1 오른쪽, 2 아래, 3위
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-void dfs(int x, int y, int sum_val, int cnt){
-    
-    result = max(result, sum_val);
-    
-    if(cnt == 4){
-        return;
-    }
-    
-    for(int i=0; i<4; i++){
-        int nx = x+dx[i];
-        int ny = y+dy[i];
-        if(nx>=0 && nx<n && ny>=0 && ny<m){
-            if(check[nx][ny] == false){
-                check[nx][ny] = true;
-                dfs(nx, ny, sum_val + d[nx][ny], cnt+1);
-                check[nx][ny] = false;
+            int cur= d[x][y];
+            int next = d[nx][ny];
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(check[nx][ny] == false && next > 0 && time_table[x][y]+1 <= l){
+                    
+                    if(cur == 1){
+                        if(i==0 && (next==2 || next==6 || next==7)) continue;
+                        if(i==1 && (next==2 || next==4 || next==5)) continue;
+                        if(i==2 && (next==3 || next==5 || next==6)) continue;
+                        if(i==3 && (next==3 || next==4 || next==7)) continue;
+                    }
+                    
+                    if(cur == 2){
+                        if(i==0 || i==1) continue;
+                        if(i==2 && (next==3 || next==5 || next==6)) continue;
+                        if(i==3 && (next==3 || next==4 || next==7)) continue;
+                    }
+                   
+                    if(cur == 3){
+                        if(i==2 || i==3) continue;
+                        if(i==0 && (next==2 || next==6 || next==7)) continue;
+                        if(i==1 && (next==2 || next==4 || next==5)) continue;
+                    }
+                    
+                    if(cur == 4){
+                        if(i==0 || i==2) continue;
+                        if(i==1 && (next==2 || next==4 || next==5)) continue;
+                        if(i==3 && (next==3 || next==4 || next==7)) continue;
+                    }
+                    
+                    if(cur == 5){
+                        if(i==0 || i==3) continue;
+                        if(i==1 && (next==2 || next==4 || next==5)) continue;
+                        if(i==2 && (next==3 || next==5 || next==6)) continue;
+                    }
+                    
+                    if(cur == 6){
+                        if(i==1 || i==3) continue;
+                        if(i==0 && (next==2 || next==6 || next==7)) continue;
+                        if(i==2 && (next==3 || next==5 || next==6)) continue;
+                    }
+                    
+                    if(cur == 7){
+                        if(i==1 || i==2) continue;
+                        if(i==0 && (next==2 || next==6 || next==7)) continue;
+                        if(i==3 && (next==3 || next==4 || next==7)) continue;
+                    }
+                    
+                    check[nx][ny] = true;
+                    time_table[nx][ny] = time_table[x][y] + 1;
+                    q.push(make_pair(nx, ny));
+                    
+                }
             }
         }
     }
+    
 }
 
-void exshape(int x, int y){
+int find_result(){
     
-    //4가지 도형 모두 왼쪽 상단 (x, y)가 기준
-    //ㅗ
-    if(x-1>=0 && x<n && y>=0 && y+2<m)
-        result = max(result, d[x][y]+d[x][y+1]+d[x][y+2]+d[x-1][y+1]);
-    //ㅜ
-    if(x>=0 && x+1<n && y>=0 && y+2<m)
-        result = max(result, d[x][y]+d[x][y+1]+d[x][y+2]+d[x+1][y+1]);
-
-    //ㅏ
-    if(x>=0 && x+2<n && y>=0 && y+1<m)
-        result = max(result, d[x][y]+d[x+1][y]+d[x+2][y]+d[x+1][y+1]);
-
-    //ㅓ
-    if(x-1>=0 && x+1<n && y>=0 && y+1<m)
-        result = max(result, d[x][y]+d[x][y+1]+d[x-1][y+1]+d[x+1][y+1]);
-}
-
-
-int main(){
-    
-    cin >> n >> m;
-    
+    int cnt = 0;
     for(int i=0; i<n; i++){
         for(int j=0; j<m; j++){
-            cin >> d[i][j];
-        }
-    }
-
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            check[i][j] = true;
-            dfs(i, j, d[i][j], 1);
-            exshape(i, j);
+            if(check[i][j] == true && time_table[i][j] <=l){
+                cnt++;
+            }
             check[i][j] = false;
+            time_table[i][j] = 0;
         }
     }
+    
+    return cnt;
+}
 
-    cout << result << endl;
+
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    
+    cin>>T;
+    
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        cin >> n >> m >> r >> c >> l;
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                cin >> d[i][j];
+            }
+        }
+        bfs(r, c, 1);
+        
+        cout << "#" << test_case << " " <<find_result() << endl;
+        
+    }
+    return 0;
 }
