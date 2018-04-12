@@ -1,57 +1,74 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(2^c)
-//공간 복잡도: O(c)
-//사용한 알고리즘: 재귀 함수
-//사용한 자료구조: 1차원 배열
+//시간 복잡도: O(nm)
+//공간 복잡도: O(nm)
+//사용한 알고리즘: 반복문
+//사용한 자료구조: 2차원 배열
 
-int l, c;
-char word[15];
-bool is_vowel[26];
+int n, m;
+int d[50][50];
 
-void go(int index, vector<char> &pick, int vowel_cnt, int consonant_cnt){
+int dx[] = {-1, 0, 1, 0};
+int dy[] = {0, 1, 0, -1};
+
+int cnt = 0;
+
+void robot_move(int x, int y, int c_dir){
     
-    if(index == c){
+    while(true){
         
-        if(pick.size() == l){
-            if(vowel_cnt >= 1 && consonant_cnt >=2){
-                for(int i=0; i<pick.size(); i++){
-                    cout << pick[i];
-                }
-                cout << endl;
+        if(d[x][y] == 0){
+            d[x][y] = 2;
+            cnt++;
+        }
+        
+        //네 방향에 청소할 구역이 없을때
+        if(d[x+1][y] != 0 && d[x-1][y] != 0 && d[x][y+1] != 0 && d[x][y-1] != 0){
+            
+            // 벽이 아니면
+            if(d[x-dx[c_dir]][y-dy[c_dir]] != 1){
+                x = x - dx[c_dir];
+                y = y - dy[c_dir];
+                
+            // 벽이면
+            }else{
+                break;
+            }
+            
+        }else{
+            //왼쪽 방향에 청소할 부분이 없으면 방향 바꾸고 이동
+            
+            c_dir = (c_dir + 3)%4;
+            if(d[x+dx[c_dir]][y+dy[c_dir]] == 0){
+                x = x + dx[c_dir];
+                y = y + dy[c_dir];
             }
         }
         
-        return;
+        
+        
     }
     
-    //이번 인덱스 글자 포함
-    pick.push_back(word[index]);
-    go(index+1, pick, vowel_cnt + is_vowel[word[index]-97], consonant_cnt + !is_vowel[word[index]-97]);
-    pick.pop_back();
-    
-    
-    //이번 인덱스 글자 포함 안함
-    go(index+1, pick, vowel_cnt, consonant_cnt);
     
 }
 
 int main(){
     
-    cin >> l >> c;
+    cin >> n >> m;
     
-    for(int i=0; i<c; i++){
-        cin >> word[i];
+    int start_x, start_y, c_dir;
+    cin >> start_x >> start_y >> c_dir;
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            cin >> d[i][j];
+        }
     }
     
-    sort(word, word+c);
+    robot_move(start_x, start_y, c_dir);
     
-    is_vowel[0] = is_vowel[4] = is_vowel[8] = is_vowel[14] = is_vowel[20] = true;
+    cout << cnt << endl;
     
-    vector<char> pick;
-    go(0, pick, 0, 0);
 }
