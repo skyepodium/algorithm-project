@@ -4,87 +4,54 @@
 
 using namespace std;
 
-//시간 복잡도: O(2^n)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 재귀함수
-//사용한 자료구조: 2차원 배열
+//시간 복잡도: O(2^c)
+//공간 복잡도: O(c)
+//사용한 알고리즘: 재귀 함수
+//사용한 자료구조: 1차원 배열
 
-int n;
-int d[20][20];
-int result = 1000000;
+int l, c;
+char word[15];
+bool is_vowel[26];
 
-
-//힘 차이 계산
-void cal_power_diff(vector<int> &left, vector<int> &right){
+void go(int index, vector<char> &pick, int vowel_cnt, int consonant_cnt){
     
-    int left_power = 0;
-    int right_power = 0;
-    for(int i=0; i<n/2; i++){
-        for(int j=i+1; j<n/2; j++){
-            left_power = left_power + d[left[i]][left[j]] + d[left[j]][left[i]];
-            right_power = right_power + d[right[i]][right[j]] + d[right[j]][right[i]];
-        }
-    }
-    
-    result = min(result, abs(left_power - right_power));
-}
-
-//call by reference를 써서 시간 아끼자
-//조합을 구한다.
-void go(int index, vector<int> &left, vector<int> &right){
-    
-    if(index == n){
+    if(index == c){
         
-        if(left.size() == n/2 && right.size() == n/2){
-            
-            cal_power_diff(left, right);
-            
+        if(pick.size() == l){
+            if(vowel_cnt >= 1 && consonant_cnt >=2){
+                for(int i=0; i<pick.size(); i++){
+                    cout << pick[i];
+                }
+                cout << endl;
+            }
         }
         
         return;
     }
     
+    //이번 인덱스 글자 포함
+    pick.push_back(word[index]);
+    go(index+1, pick, vowel_cnt + is_vowel[word[index]-97], consonant_cnt + !is_vowel[word[index]-97]);
+    pick.pop_back();
     
-    //이번 원소 왼쪽에 포함
-    left.push_back(index);
-    go(index+1, left, right);
-    left.pop_back();
     
-    //이번 원소 오른쪽에 포함
-    right.push_back(index);
-    go(index+1, left, right);
-    right.pop_back();
+    //이번 인덱스 글자 포함 안함
+    go(index+1, pick, vowel_cnt, consonant_cnt);
     
 }
 
-
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+int main(){
     
-    cin>>T;
+    cin >> l >> c;
     
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        result = 1000000;
-        cin >> n;
-        
-        //문제는 1~n인데 나는 0~n을 넣었다.
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                cin >> d[i][j];
-            }
-        }
-        
-        vector<int> left, right;
-        
-        go(0, left, right);
-        
-        cout << "#" << test_case << " " << result << endl;
-        
-        
-        
+    for(int i=0; i<c; i++){
+        cin >> word[i];
     }
-    return 0;
+    
+    sort(word, word+c);
+    
+    is_vowel[0] = is_vowel[4] = is_vowel[8] = is_vowel[14] = is_vowel[20] = true;
+    
+    vector<char> pick;
+    go(0, pick, 0, 0);
 }
