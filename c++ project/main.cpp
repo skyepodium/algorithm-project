@@ -1,186 +1,57 @@
 #include <iostream>
 #include <vector>
-#include <cstring>
+#include <algorithm>
 
 using namespace std;
 
-int n, m, k;
+//시간 복잡도: O(2^c)
+//공간 복잡도: O(c)
+//사용한 알고리즘: 재귀 함수, 정렬
+//사용한 자료구조: 1차원 배열, 1차원 벡터
 
-int dx[] = {-1, 0, 1, 0};
-int dy[] = {0, 1, 0, -1};
+int l, c;
+char word[15];
+bool is_vowel[26];
 
-//x좌표, y좌표, 시간
-//total_mi 는 해당 좌표, 해당 시간의 총 미생물 수 합
-//max_mi 는 해당 좌표, 해당 시간의 미생물 최대 크기
-
-int total_mi[101][101][1000];
-int max_mi[101][101][1000];
-
-struct mi{
-    int x;
-    int y;
-    int num;
-    int dir;
-};
-
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+void go(int index, vector<char> &pick, int vowel_cnt, int consonant_cnt){
     
-    cin>>T;
-    
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        cin >> n >> m >> k;
+    if(index == c){
         
-        vector<mi> v;
-        
-        for(int i=0; i<k; i++){
-            int x, y, num, dir;
-            cin >> x >> y >> num >> dir;
-            
-            //방향 정보 수정 dx[],dy[] 사용하기 위함
-            if(dir == 1) dir = 0;
-            else if(dir == 4) dir = 1;
-            else if(dir == 2) dir = 2;
-            else dir = 3;
-            
-            //미생물 총, 최대 갱신
-            total_mi[x][y][0] = num;
-            max_mi[x][y][0] = num;
-            
-            v.push_back( {x, y, num, dir });
-        }
-    
-        //격리 시간 for문 수행 시작
-        for(int time_index = 1; time_index <= m; time_index++){
-
-            //미생물들을 벡터에서 하나씩 조사 시작
-            for(int i=0; i<v.size(); i++){
-                
-                //최대값이 내 것이랑 같으면
-                if(max_mi[v[i].x][v[i].y][time_index-1] == v[i].num){
-                    v[i].num = total_mi[v[i].x][v[i].y][time_index-1];
-                }else{
-                    v[i].num = 0;
-                    continue;
+        if(pick.size() == l){
+            if(vowel_cnt >= 1 && consonant_cnt >=2){
+                for(int i=0; i<pick.size(); i++){
+                    cout << pick[i];
                 }
-                
-                //다른 미생물과 만나서 합체당했으면 건너뛴다.
-                if(v[i].num  == 0) continue;
-                
-                //현재 방향에서 한칸 이동
-                int nx = v[i].x + dx[v[i].dir];
-                int ny = v[i].y + dy[v[i].dir];
-                
-                //일단 먼저 이동 이동시킨다. 이동 후 검사한다.
-                v[i].x = nx;
-                v[i].y = ny;
-
-                
-                //만약 이동한 구역이 빨간 구역이라면
-                if(nx == 0 || nx == n-1 || ny == 0 || ny == n-1){
-
-                    //반대 방향으로 갱신
-                    v[i].dir = (v[i].dir + 2)%4;
-                    
-                    //미생물 절반 죽임
-                    if(v[i].num == 1) v[i].num = 0;
-                    else v[i].num = v[i].num/2;
-                    
-                    //만약 이동한 빨간 구역에 미생물이 존재한다면.
-                    if(total_mi[nx][ny][time_index] > 0){
-                        
-                        //이동한 빨간 구역의 최대 미생물이 내꺼보다 크다면
-                        if(max_mi[nx][ny][time_index] > v[i].num){
-                            
-                            //전체 미생물 갱신해주고
-                            total_mi[nx][ny][time_index] += v[i].num;
-                            
-                            //내 미생물 없앤다.
-                            v[i].num = 0;
-//                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-
-                            
-                        //이동한 빨간 구역의 미생물이 내꺼보다 작다면
-                        }else{
-                            //전체 미생물 갱신해주고
-                            total_mi[nx][ny][time_index] += v[i].num;
-                            
-                            //내 미생물의 수는 전체 미생물 수이다.
-                            //v[i].num = total_mi[nx][ny][time_index];
-                            max_mi[nx][ny][time_index] = v[i].num;
-                            
-//                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-
-                        }
-                    }else{
-                    
-                        //빨간 구역 미생물 없을때
-                        total_mi[nx][ny][time_index] = v[i].num;
-                        max_mi[nx][ny][time_index] = v[i].num;
-//                        cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-                    }
-                }
-                //빨간 구역 수행 종료
-                
-                
-                // 빨간 구역이 아니라면
-                else{
-                    
-                    //만약 이동한 구역에 미생물이 존재한다면.
-                    if(total_mi[nx][ny][time_index] > 0){
-                        
-                        //이동한 구역의 최대 미생물이 내꺼보다 크다면
-                        if(max_mi[nx][ny][time_index] > v[i].num){
-                            
-                            //전체 미생물 갱신해주고
-                            total_mi[nx][ny][time_index] += v[i].num;
-                            
-                            //내 미생물 없앤다.
-                            v[i].num = 0;
-                        
-//                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-                            
-                        //이동한 구역의 미생물이 내꺼보다 작다면
-                        }else{
-                            //전체 미생물 갱신해주고
-                            total_mi[nx][ny][time_index] += v[i].num;
-                            
-                            //내 미생물의 수는 전체 미생물 수이다.
-//                            v[i].num = total_mi[nx][ny][time_index];
-                            max_mi[nx][ny][time_index] = v[i].num;
-//                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-                        }
-                    }else{
-                    
-                        //빨간구역 아닌거 미생물 없을때
-                        total_mi[nx][ny][time_index] = v[i].num;
-                        max_mi[nx][ny][time_index] = v[i].num;
-//                        cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
-                    }
-                }
-                // 빨간 구역 아닌거 수행 종료
-                
-            }
-            //미생물들을 벡터에서 하나씩 조사 종료
-            
-        }
-        //격리 시간 for문 수행 종료
-
-        //미생물 수 출력
-        int result = 0;
-        for(int i=0; i<v.size(); i++){
-            if(v[i].num > 0){
-                result = result + v[i].num;
+                cout << endl;
             }
         }
-        cout << "#" << test_case << " "<< result << endl;
         
-        v.clear();
-        memset(total_mi, 0, sizeof(total_mi));
-        memset(max_mi, 0, sizeof(max_mi));
+        return;
     }
-    return 0;
+    
+    //이번 인덱스 글자 포함
+    pick.push_back(word[index]);
+    go(index+1, pick, vowel_cnt + is_vowel[word[index]-97], consonant_cnt + !is_vowel[word[index]-97]);
+    pick.pop_back();
+    
+    
+    //이번 인덱스 글자 포함 안함
+    go(index+1, pick, vowel_cnt, consonant_cnt);
+    
+}
+
+int main(){
+    
+    cin >> l >> c;
+    
+    for(int i=0; i<c; i++){
+        cin >> word[i];
+    }
+    
+    sort(word, word+c);
+    
+    is_vowel[0] = is_vowel[4] = is_vowel[8] = is_vowel[14] = is_vowel[20] = true;
+    
+    vector<char> pick;
+    go(0, pick, 0, 0);
 }
