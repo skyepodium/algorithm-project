@@ -1,79 +1,109 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(nm)
-//공간 복잡도: O(nm)
-//사용한 알고리즘: 재귀 함수
-//사용한 자료구조: 2차원 배열
-
-int n, m;
-int d[50][50];
+int d[101][101];
+bool check[101][101];
 
 int dx[] = {-1, 0, 1, 0};
 int dy[] = {0, 1, 0, -1};
 
-int cnt = 0;
+int a[101][101][1000];
 
-void dfs(int x, int y, int c_dir){
-    
-    //청소하지 않았으면 청소
-    //0은 청소안함, 1 벽, 2 청소함
-    if(d[x][y] == 0){
-        d[x][y] = 2;
-        cnt++;
+struct mi{
+  
+    int x;
+    int y;
+    int num;
+    int dir;
+    bool is_alive;
+};
+
+bool cmp(const mi &a, const mi &b){
+
+    if(a.num < b.num){
+        return false;
+    }else{
+        return true;
     }
-    
-    //왼쪽 검사 후 이동
-    for(int i=0; i<4; i++){
-        
-        int n_dir = (c_dir + 3)%4;
-        int nx = x + dx[n_dir];
-        int ny = y + dy[n_dir];
-        
-        if(nx>=0 && nx<n && ny>=0 && ny<m){
-            
-            if(d[nx][ny] == 0){
-                dfs(nx, ny, n_dir);
-                
-                //재귀함수 종료조건을 적어야한다. DFS가 아니다
-                //종료시키지 않으면 for문 더 돈다.
-                return;
-            }
-        }
-        
-        //바꿔준다. 4방향 다 없으면 초기 상태에서 시계방향으로 한칸 회전한것과 같다.
-        c_dir = n_dir;
-    }
-    
-    //후진
-    int nx = x - dx[c_dir];
-    int ny = y - dy[c_dir];
-    
-    //뒤가 벽이 아니면 후진
-    if(d[nx][ny] != 1){
-        dfs(nx, ny, c_dir);
-    }
-    
-    
-    
 }
 
-int main(){
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    int n, m, k;
     
-    cin >> n >> m;
+    cin>>T;
     
-    int start_x, start_y, c_dir;
-    cin >> start_x >> start_y >> c_dir;
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cin >> d[i][j];
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        
+        cin >> n >> m >> k;
+        
+        vector<mi> v;
+        
+        for(int i=0; i<k; i++){
+            int x, y, num, dir;
+            cin >> x >> y >> num >> dir;
+            if(dir == 1) dir = 0;
+            else if(dir == 4) dir = 1;
+            else if(dir == 2) dir = 2;
+            else dir = 3;
+            a[x][y][0] = num;
+            v.push_back( {x, y, num, dir, true });
         }
+        
+        
+        for(int time_index = 1; time_index<=m; time_index++){
+        
+            //미생물 수가 작은 것부터 오름차순 정렬
+//            sort(v.begin(), v.end(), cmp);
+            
+            
+            for(int i=0; i<v.size(); i++){
+                
+                if(v[i].is_alive == true){
+                
+                    //이동 시킴
+                    v[i].num = a[v[i].x][v[i].y][time_index-1];
+                    a[v[i].x][v[i].y][time_index-1] = 0;
+                    v[i].x = v[i].x + dx[v[i].dir];
+                    v[i].y = v[i].y + dy[v[i].dir];
+
+                    //빨간 영역 들어감
+                    if(v[i].x == 0 || v[i].x == n-1 || v[i].y == 0 || v[i].y == n-1){
+                        //절반 죽음
+                        v[i].num /= 2;
+                    
+                        //방향 반대로 바뀜
+                        v[i].dir = (v[i].dir + 2)%4;
+                    }
+                    
+                    // 이동하려는 자리에 미생물이 존재한다.
+                    if(a[v[i].x][v[i].y][time_index] > 0){
+                    
+                        //이동하려는 자리의 미생물이 나보다 많다.
+                        if(a[v[i].x][v[i].y][time_index] > v[i].num){
+                            a[v[i].x][v[i].y][time_index] += v[i].num;
+                            v[i].is_alive = false;
+                            v[i].num = 0;
+                        }
+                    }else{
+                        a[v[i].x][v[i].y][time_index] = v[i].num;
+                    }
+                }
+            }
+        }
+        int result = 0;
+        for(int i=0; i<v.size(); i++){
+            if(v[i].is_alive == true){
+                result = result + v[i].num;
+            }
+        }
+        cout << "#" << test_case <<" "<<result << endl;
     }
-    
-    dfs(start_x, start_y, c_dir);
-    
-    cout << cnt << endl;
-    
+    return 0;
 }
