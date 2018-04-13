@@ -46,7 +46,7 @@ int main(int argc, char** argv)
             else if(dir == 2) dir = 2;
             else dir = 3;
             
-            //미생물 총, 최대, 방향 갱신
+            //미생물 총, 최대 갱신
             total_mi[x][y][0] = num;
             max_mi[x][y][0] = num;
             
@@ -59,19 +59,16 @@ int main(int argc, char** argv)
             //미생물들을 벡터에서 하나씩 조사 시작
             for(int i=0; i<v.size(); i++){
                 
-                //다른 미생물과 만나서 합체했으면 건너뛴다.
-                if(v[i].num  == 0) continue;
-                
-                //먼저 있었는데 합쳐진 경우
-                if(max_mi[v[i].x][v[i].y][time_index-1] != v[i].num){
+                //최대값이 내 것이랑 같으면
+                if(max_mi[v[i].x][v[i].y][time_index-1] == v[i].num){
+                    v[i].num = total_mi[v[i].x][v[i].y][time_index-1];
+                }else{
                     v[i].num = 0;
                     continue;
-                    
-                //나중에 들어갔는데 나보다 큰 미생물때문에 총합이 변경된 경우
-                }else{
-                    v[i].num = total_mi[v[i].x][v[i].y][time_index-1];
                 }
                 
+                //다른 미생물과 만나서 합체당했으면 건너뛴다.
+                if(v[i].num  == 0) continue;
                 
                 //현재 방향에서 한칸 이동
                 int nx = v[i].x + dx[v[i].dir];
@@ -83,14 +80,14 @@ int main(int argc, char** argv)
 
                 
                 //만약 이동한 구역이 빨간 구역이라면
-                if(nx == 0 || ny == n-1 || ny == 0 || ny == n-1){
+                if(nx == 0 || nx == n-1 || ny == 0 || ny == n-1){
 
                     //반대 방향으로 갱신
                     v[i].dir = (v[i].dir + 2)%4;
                     
                     //미생물 절반 죽임
-                    v[i].num = v[i].num/2;
                     if(v[i].num == 1) v[i].num = 0;
+                    else v[i].num = v[i].num/2;
                     
                     //만약 이동한 빨간 구역에 미생물이 존재한다면.
                     if(total_mi[nx][ny][time_index] > 0){
@@ -103,7 +100,7 @@ int main(int argc, char** argv)
                             
                             //내 미생물 없앤다.
                             v[i].num = 0;
-                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
+//                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
 
                             
                         //이동한 빨간 구역의 미생물이 내꺼보다 작다면
@@ -112,7 +109,7 @@ int main(int argc, char** argv)
                             total_mi[nx][ny][time_index] += v[i].num;
                             
                             //내 미생물의 수는 전체 미생물 수이다.
-                            v[i].num = total_mi[nx][ny][time_index];
+                            //v[i].num = total_mi[nx][ny][time_index];
                             max_mi[nx][ny][time_index] = v[i].num;
                             
 //                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
@@ -152,7 +149,7 @@ int main(int argc, char** argv)
                             total_mi[nx][ny][time_index] += v[i].num;
                             
                             //내 미생물의 수는 전체 미생물 수이다.
-                            v[i].num = total_mi[nx][ny][time_index];
+//                            v[i].num = total_mi[nx][ny][time_index];
                             max_mi[nx][ny][time_index] = v[i].num;
 //                            cout << "time_index " <<time_index<<" mi_index "<< i<<"  "<<v[i].x << " " << v[i].y << " " << v[i].num << endl;
                         }
