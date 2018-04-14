@@ -1,178 +1,114 @@
 #include <iostream>
-#include <cstring>
-#include <cmath>
+#include <algorithm>
+#include <queue>
+#include <vector>
 
 using namespace std;
 
-int d[101][101];
-bool check[101][101];
-int n, l;
-int cnt = 0;
+//시간 복잡도: O(n^5)
+//공간 복잡도: O(n^2)
+//사용한 알고리즘: 3중 for문, BFS
+//사용한 자료구조: 2차원 배열
+
+
+int n,m;
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+int d[8][8];
+bool check[8][8];
+int result = 0;
 
 int main(){
     
-    int t;
-    cin >> t;
-    
-    for(int test_case = 1; test_case <=t; test_case++){
-    cin >> n >> l;
-        cnt = 0;
+    cin >> n >> m;
+
+    vector<pair<int, int>> virus;
+    vector<pair<int, int>> wall;
     
     for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
+        for(int j=0; j<m; j++){
             cin >> d[i][j];
+            
+            // 바이러스 벡터
+            if(d[i][j] == 2){
+                virus.push_back(make_pair(i, j));
+            }
+            
+            // 빈공간 벡터
+            if(d[i][j] == 0){
+                wall.push_back(make_pair(i, j));
+            }
+
         }
     }
     
+    for(int i=0; i<wall.size(); i++){
+        for(int j=i+1; j<wall.size(); j++){
+            for(int k=j+1; k<wall.size(); k++){
+                
+                //3중 for문으로 벽세우기
+                d[wall[i].first][wall[i].second] = 1;
+                d[wall[j].first][wall[j].second] = 1;
+                d[wall[k].first][wall[k].second] = 1;
+
+                // BFS를 상용해서 바이러스 전파하기 위해 q벡터 생성
+                queue<pair<int, int>> q;
+                for(int i=0; i<virus.size(); i++){
+                    q.push(make_pair(virus[i].first, virus[i].second));
+                }
+                
+                //바이러스 전파 with BFS
+                while(!q.empty()){
+                    int x = q.front().first;
+                    int y = q.front().second;
+                    check[x][y] = true;
+                    q.pop();
+                    
+                    for(int i=0; i<4; i++){
+                        int nx = x + dx[i];
+                        int ny = y + dy[i];
+                        
+                        if(nx>=0 && nx<n && ny>=0 && ny< m){
+                            if(check[nx][ny] == false && d[nx][ny] == 0){
+                                check[nx][ny] = true;
+                                q.push(make_pair(nx, ny));
+                            }
+                        }
+                    }
+                }
+                
+                // 안정영역의 갯수 검사
+                int cnt = 0;
+                for(int i=0; i<n; i++){
+                    for(int j=0; j<m; j++){
+                        if(d[i][j] == 0 && check[i][j] == false){
+                            cnt++;
+                        }
+                    }
+                }
+                
+                // 최대값 갱신
+                result = max(result, cnt);
+                
+                // 체크 배열 초기화
+                for(int i=0; i<n; i++){
+                    for(int j=0; j<m; j++){
+                        check[i][j] = false;
+                    }
+                }
+                
+                // 벽정보 초기화
+                d[wall[i].first][wall[i].second] = 0;
+                d[wall[j].first][wall[j].second] = 0;
+                d[wall[k].first][wall[k].second] = 0;
+
+            }
+        }
+    }
     
-    // 가로 검사
-    for(int i=0; i<n; i++){
-        int current_height = d[i][0];
-        int start_index = 0;
-        int change_index = 0;
-        int is_possible = true;
-        for(int j=1; j<n; j++){
-            
-            // 높이 차이가 1인지 검사
-            if(d[i][j] != current_height){
-                int diff = abs(d[i][j] - current_height);
-                if(diff != 1){
-                    is_possible = false;
-                    break;
-                }
-            }
-            
-            // 올라가자
-            if(current_height < d[i][j]){
-                change_index = j;
-                
-                //길이 계산
-                if(change_index - start_index < l){
-                    is_possible = false;
-                    break;
-                }
-                
-                //활주로 건설되어 있는지 검사
-                for(int k=0; k<l; k++){
-                    if(check[i][change_index-1-k] != false){
-                        is_possible = false;
-                        break;
-                    }else{
-                        check[i][change_index-1-k] = true;
-                    }
-
-                }
-                
-                start_index = j;
-                current_height = d[i][j];
-            }
-            
-            //내려가자
-            else if( current_height > d[i][j]){
-                change_index = j;
-                for(int k=0; k<l; k++){
-
-                    if(check[i][change_index+k] != false){
-                        is_possible = false;
-                        break;
-                    }else{
-                        check[i][change_index+k] = true;
-                    }
-                    
-                    if(d[i][change_index] != d[i][change_index+k]){
-                        is_possible = false;
-                        break;
-                    }
-                }
-                start_index = j;
-                current_height = d[i][j];
-            }
-            
-            
-            if(j==n-1){
-                if(is_possible == true){
-//                    cout << "가로 검사 " << i << endl;
-                    cnt++;
-                }
-            }
-        }
-    }
-
-    memset(check, false, sizeof(check));
-    //세로 검사
-    for(int j=0; j<n; j++){
-        int current_height = d[0][j];
-        int start_index = 0;
-        int change_index = 0;
-        int is_possible = true;
-        for(int i=1; i<n; i++){
-            
-            // 높이 차이가 1인지 검사
-            if(d[i][j] != current_height){
-                int diff = abs(d[i][j] - current_height);
-                if(diff != 1){
-                    is_possible = false;
-                    break;
-                }
-            }
-            
-            // 올라가자
-            if(current_height < d[i][j]){
-                change_index = i;
-                
-                //길이 계산
-                if(change_index - start_index < l){
-                    is_possible = false;
-                    break;
-                }
-                
-                //활주로 건설되어 있는지 검사
-                for(int k=0; k<l; k++){
-                    if(check[change_index-1-k][j] != false){
-                        is_possible = false;
-                        break;
-                    }else{
-                        check[change_index-1-k][j] = true;
-                    }
-                    
-                }
-                
-                start_index = i;
-                current_height = d[i][j];
-            }
-            
-            //내려가자
-            else if( current_height > d[i][j]){
-                change_index = i;
-                for(int k=0; k<l; k++){
-                    
-                    if(check[change_index+k][j] != false){
-                        is_possible = false;
-                        break;
-                    }else{
-                        check[change_index+k][j] = true;
-                    }
-                    
-                    if(d[change_index][j] != d[change_index+k][j]){
-                        is_possible = false;
-                        break;
-                    }
-                }
-                start_index = i;
-                current_height = d[i][j];
-            }
-            
-            
-            if(i==n-1){
-                if(is_possible == true){
-//                    cout << "세로 검사 " << j << endl;
-                    cnt++;
-                }
-            }
-        }
-    }
-        
-        cout << "#" << test_case << " " << cnt << endl;
-        memset(check, false, sizeof(check));
-    }
+    cout << result << endl;
+    
+    
+    
 }
+
