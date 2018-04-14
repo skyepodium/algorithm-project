@@ -10,8 +10,13 @@ int n, l;
 int cnt = 0;
 
 int main(){
-
+    
+    int t;
+    cin >> t;
+    
+    for(int test_case = 1; test_case <=t; test_case++){
     cin >> n >> l;
+        cnt = 0;
     
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
@@ -166,7 +171,8 @@ int main(){
             }
         }
     }
-
-    cout << cnt << endl;
-    
+        
+        cout << "#" << test_case << " " << cnt << endl;
+        memset(check, false, sizeof(check));
+    }
 }
