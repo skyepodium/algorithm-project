@@ -1,56 +1,102 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-int n, k;
-int d[8][8];
-bool check[8][8];
+int n, m, k;
+int d[20][20];
 
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+int result;
 
-struct position{
-    int x;
-    int y;
-    bool used;
-    int height;
-    int dist;
-};
-
-int result = 0;
-
-void dfs(position cur){
-    result = max(result, cur.dist);
-    check[cur.x][cur.y] = true;
+void do_test(vector<int> &pick, vector<int> &ab){
     
-    for(int i=0; i<4; i++){
+    //테스트를 위한 정보를 가져옴
+    int test[20][20];
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            test[i][j] = d[i][j];
+        }
+    }
+
+    //셀의 내용 변경
+    for(int i=0; i<pick.size(); i++){
+        for(int j=0; j<m; j++){
+            test[pick[i]][j] = ab[i];
+        }
+    }
+    
+    //테스트 확인
+    int for_test = 0;
+    for(int j=0; j<m; j++){
+        bool is_success = false;
         
-        position next = cur;
-        next.x = next.x + dx[i];
-        next.y = next.y + dy[i];
-        next.height = d[next.x][next.y];
-        
-        if(next.x>=0 && next.x<n && next.y>=0 && next.y<n){
-            if(check[next.x][next.y] == false){
-                
-                if(next.height < cur.height){
-                    next.dist++;
-                    dfs(next);
-                }else{
-                
-                    if(cur.used == false && next.height - k <cur.height){
-                        next.height = cur.height - 1;
-                        next.used = true;
-                        next.dist++;
-                        dfs(next);
-                    }
+        int cnt = 1;
+        int current = test[0][j];
+        for(int i=1; i<n; i++){
+            if(test[i][j] == current){
+                cnt++;
+            }else{
+                current = test[i][j];
+                cnt = 1;
+            }
+            
+            if(cnt == k){
+                is_success = true;
+            }
+            
+            if(i == n-1){
+                if(is_success == true){
+                    for_test++;
                 }
             }
         }
     }
     
-    check[cur.x][cur.y] = false;
+    if(for_test == m){
+        result = min(result, (int)pick.size());
+    }
+    
+}
+
+void pick_ab(int index, vector<int> &pick, vector<int> &ab){
+    
+    if(index == pick.size()){
+        if(ab.size() == pick.size()){
+            do_test(pick, ab);
+        }
+        return;
+    }
+    
+    //A를 넣음
+    ab.push_back(0);
+    pick_ab(index+1, pick, ab);
+    ab.pop_back();
+    
+    //B를 넣음
+    ab.push_back(1);
+    pick_ab(index+1, pick, ab);
+    ab.pop_back();
+    
+}
+
+void go(int index, vector<int> &pick){
+    
+    if(index == n){
+        
+        vector<int> ab;
+        pick_ab(0, pick, ab);
+        
+        return;
+    }
+    
+    // 이번 셀 선택함
+    pick.push_back(index);
+    go(index+1, pick);
+    pick.pop_back();
+    
+    // 선택하지 않음
+    go(index+1, pick);
 }
 
 int main(int argc, char** argv)
@@ -62,28 +108,19 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        cin >> n >> k;
-        result = 0;
-        int max_height = 0;
+        cin >> n >> m >> k;
+        result = n;
+        
         for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
+            for(int j=0; j<m; j++){
                 cin >> d[i][j];
-                max_height = max(max_height, d[i][j]);
             }
         }
         
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                if(d[i][j] == max_height){
-                    position cur = {i, j, false, max_height, 1};
-                    dfs(cur);
-                }
-            }
-        }
+        vector<int> pick;
+        go(0, pick);
         
-        
-        cout << "#" << test_case << " " <<result << endl;
-        
+        cout << "#" << test_case << " " << result << endl;
     }
     return 0;
 }
