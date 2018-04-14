@@ -1,51 +1,56 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <cmath>
 
 using namespace std;
 
-//시간 복잡도: O(2^n)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 재귀함수
-//사용한 자료구조: 2차원 배열
+int n, k;
+int d[8][8];
+bool check[8][8];
 
-int d[16][16];
-int n;
-int result = 999999999;
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-void cal_power(vector<int> &left, vector<int> &right){
+struct position{
+    int x;
+    int y;
+    bool used;
+    int height;
+    int dist;
+};
+
+int result = 0;
+
+void dfs(position cur){
+    result = max(result, cur.dist);
+    check[cur.x][cur.y] = true;
     
-    int left_power = 0;
-    int right_power = 0;
-    
-    for(int i=0; i<n/2; i++){
-        for(int j=i+1; j<n/2; j++){
-            left_power = left_power + d[left[i]][left[j]] + d[left[j]][left[i]];
-            right_power = right_power + d[right[i]][right[j]] + d[right[j]][right[i]];
+    for(int i=0; i<4; i++){
+        
+        position next = cur;
+        next.x = next.x + dx[i];
+        next.y = next.y + dy[i];
+        next.height = d[next.x][next.y];
+        
+        if(next.x>=0 && next.x<n && next.y>=0 && next.y<n){
+            if(check[next.x][next.y] == false){
+                
+                if(next.height < cur.height){
+                    next.dist++;
+                    dfs(next);
+                }else{
+                
+                    if(cur.used == false && next.height - k <cur.height){
+                        next.height = cur.height - 1;
+                        next.used = true;
+                        next.dist++;
+                        dfs(next);
+                    }
+                }
+            }
         }
     }
     
-    result = min(result, abs(left_power - right_power));
-}
-
-void go(int index, vector<int> &left, vector<int> & right){
-
-    if(index == n){
-        if(left.size() == n/2 && right.size() == n/2){
-            cal_power(left, right);
-        }
-        return;
-    }
-
-    left.push_back(index);
-    go(index+1, left, right);
-    left.pop_back();
-    
-    right.push_back(index);
-    go(index+1, left, right);
-    right.pop_back();
-    
+    check[cur.x][cur.y] = false;
 }
 
 int main(int argc, char** argv)
@@ -57,20 +62,27 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        result = 999999999;
-        cin >> n;
-        
+        cin >> n >> k;
+        result = 0;
+        int max_height = 0;
         for(int i=0; i<n; i++){
             for(int j=0; j<n; j++){
                 cin >> d[i][j];
+                max_height = max(max_height, d[i][j]);
             }
         }
         
-        vector<int> left;
-        vector<int> right;
-        go(0, left, right);
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(d[i][j] == max_height){
+                    position cur = {i, j, false, max_height, 1};
+                    dfs(cur);
+                }
+            }
+        }
         
-        cout << "#" << test_case << " " << result << endl;
+        
+        cout << "#" << test_case << " " <<result << endl;
         
     }
     return 0;
