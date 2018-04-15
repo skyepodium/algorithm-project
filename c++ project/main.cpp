@@ -4,99 +4,173 @@
 
 using namespace std;
 
-int n, m, k;
-int d[20][20];
-
+int h, w;
 int result;
+int d[8][8];
+int test[8][8];
+int cctv_size = 0;
 
-void do_test(vector<int> &pick, vector<int> &ab){
+struct info{
+    int x;
+    int y;
+    int dir;
+    int type;
+};
+
+
+void go0(int x, int y){
     
-    //테스트를 위한 정보를 가져옴
-    int test[20][20];
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
+    for(int j=y; j<w; j++){
+        if(test[x][j] == 6) break;
+        if(test[x][j] == 0) test[x][j] = -1;
+    }
+    
+}
+
+void go1(int x, int y){
+    
+    for(int i=x; i<h; i++){
+        if(test[i][y] == 6) break;
+        if(test[i][y] == 0) test[i][y] = -1;
+    }
+    
+}
+
+void go2(int x, int y){
+    
+    for(int j=y; j>=0; j--){
+        if(test[x][j] == 6) break;
+        if(test[x][j] == 0) test[x][j] = -1;
+    }
+}
+
+void go3(int x, int y){
+    
+    for(int i=x; i>=0; i--){
+        if(test[i][y] == 6) break;
+        if(test[i][y] == 0) test[i][y] = -1;
+    }
+}
+
+void do_test(vector<info> &cctv){
+    
+    for(int i=0; i<h; i++){
+        for(int j=0; j<w; j++){
             test[i][j] = d[i][j];
         }
     }
-
-    //셀의 내용 변경
-    for(int i=0; i<pick.size(); i++){
-        for(int j=0; j<m; j++){
-            test[pick[i]][j] = ab[i];
-        }
-    }
     
-    //테스트 확인
-    int for_test = 0;
-    for(int j=0; j<m; j++){
-        bool is_success = false;
+    for(int k=0; k<cctv.size(); k++){
         
-        int cnt = 1;
-        int current = test[0][j];
-        for(int i=1; i<n; i++){
-            if(test[i][j] == current){
-                cnt++;
-            }else{
-                current = test[i][j];
-                cnt = 1;
+        if(cctv[k].type == 1){
+            if(cctv[k].dir == 0) go0(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 1) go1(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 2) go2(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 3) go3(cctv[k].x, cctv[k].y);
+        }
+        
+        if(cctv[k].type == 2){
+            
+            if(cctv[k].dir == 0 || cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
             }
             
-            if(cnt == k){
-                is_success = true;
+            if(cctv[k].dir == 1 || cctv[k].dir == 3){
+                go1(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+        }
+
+        if(cctv[k].type == 3){
+            
+            if(cctv[k].dir == 0){
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+
+            if(cctv[k].dir == 1){
+                go0(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+
+            if(cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+            }
+
+            if(cctv[k].dir == 3){
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+            }
+        }
+        
+        if(cctv[k].type == 4){
+
+            if(cctv[k].dir == 0){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
             }
             
-            if(i == n-1){
-                if(is_success == true){
-                    for_test++;
-                }
+            if(cctv[k].dir == 1){
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
             }
+
+            if(cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 3){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+        }
+        
+        if(cctv[k].type == 5){
+            go0(cctv[k].x, cctv[k].y);
+            go1(cctv[k].x, cctv[k].y);
+            go2(cctv[k].x, cctv[k].y);
+            go3(cctv[k].x, cctv[k].y);
+        }
+        
+    }
+    
+    int cnt = 0;
+    for(int i=0; i<h; i++){
+        for(int j=0; j<w; j++){
+            if(test[i][j] == 0) cnt++;
         }
     }
     
-    if(for_test == m){
-        result = min(result, (int)pick.size());
-    }
-    
+    result = min(result, cnt);
 }
 
-void pick_ab(int index, vector<int> &pick, vector<int> &ab){
+void go(int index, vector<info> &cctv){
     
-    if(index == pick.size()){
-        if(ab.size() == pick.size()){
-            do_test(pick, ab);
-        }
+    if(index == cctv_size){
+        
+        do_test(cctv);
+        
         return;
     }
     
-    //A를 넣음
-    ab.push_back(0);
-    pick_ab(index+1, pick, ab);
-    ab.pop_back();
-    
-    //B를 넣음
-    ab.push_back(1);
-    pick_ab(index+1, pick, ab);
-    ab.pop_back();
-    
-}
+    cctv[index].dir = 0;
+    go(index+1, cctv);
 
-void go(int index, vector<int> &pick){
-    
-    if(index == n){
-        
-        vector<int> ab;
-        pick_ab(0, pick, ab);
-        
-        return;
-    }
-    
-    // 이번 셀 선택함
-    pick.push_back(index);
-    go(index+1, pick);
-    pick.pop_back();
-    
-    // 선택하지 않음
-    go(index+1, pick);
+    cctv[index].dir = 1;
+    go(index+1, cctv);
+
+    cctv[index].dir = 2;
+    go(index+1, cctv);
+
+    cctv[index].dir = 3;
+    go(index+1, cctv);
 }
 
 int main(int argc, char** argv)
@@ -108,19 +182,25 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        cin >> n >> m >> k;
-        result = n;
+        result = 99999999;
+        cin >> w >> h;
         
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
+        vector<info> cctv;
+        
+        for(int i=0; i<h; i++){
+            for(int j=0; j<w; j++){
                 cin >> d[i][j];
+                if(d[i][j] != 0 && d[i][j] != 6){
+                    cctv.push_back({i, j, 0, d[i][j]});
+                }
             }
         }
         
-        vector<int> pick;
-        go(0, pick);
+        cctv_size = (int)cctv.size();
+        go(0, cctv);
         
         cout << "#" << test_case << " " << result << endl;
+        
     }
     return 0;
 }
