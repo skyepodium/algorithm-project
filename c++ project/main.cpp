@@ -7,8 +7,9 @@ using namespace std;
 int n, m;
 
 vector<int> num;
+bool check[10];
 
-void go(int cnt, vector<int> &pick, int prev){
+void go(int cnt, vector<int> &pick){
     
     if(cnt == m){
         
@@ -21,9 +22,11 @@ void go(int cnt, vector<int> &pick, int prev){
     
     for(int i=0; i<n; i++){
         
-        if(num[i]>prev){
+        if(check[i] == false){
+            check[i] = true;
             pick.push_back(num[i]);
-            go(cnt+1, pick, num[i]);
+            go(cnt+1, pick);
+            check[i] = false;
             pick.pop_back();
         }
     }
@@ -43,7 +46,7 @@ int main(){
     sort(num.begin(), num.end());
     
     vector<int> pick;
-    go(0, pick, 0);
+    go(0, pick);
     
 }
 
