@@ -1,43 +1,51 @@
 #include <iostream>
-#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int n, m;
-
-bool check[9];
-
-void go(int cnt, vector<int> &pick){
-    
-    if(cnt == m){
-        
-        for(int i=0; i<m; i++){
-            printf("%d ", pick[i]);
+class Rectangle {
+private:
+    int width, height;
+public:
+    Rectangle(int width, int height) {
+        if(width>0 && width<=1000 && height>0 && height<=2000){
+            this->width = width;
+            this->height = height;
         }
-        printf("\n");
-        return;
     }
-    
-    for(int i=1; i<=n; i++){
-        
-        if(check[i] == false){
-            check[i] = true;
-            pick.push_back(i);
-            go(cnt+1, pick);
-            check[i] = false;
-            pick.pop_back();
+    int get_width() const {
+        return width;
+    }
+    int get_height() const {
+        return height;
+    }
+    void set_width(int width) {
+        if(width>0 && width<=1000){
+            this->width = width;
         }
-        
     }
-    
-}
+    void set_height(int height) {
+        if(height>0 && height<=2000){
+            this->height = height;
+        }
+    }
+    int area() const {
+        return width*height;
+    }
+    int perimeter() const {
+        return 2*width+2*height;
+    }
+    bool is_square() const {
+        
+        if(width == height){
+            return true;
+        }else{
+            return false;
+        }
+    }
+};
 
 int main(){
-    
-    scanf("%d %d", &n, &m);
-    
-    vector<int> pick;
-    go(0, pick);
     
 }
 
