@@ -21,7 +21,7 @@ void go(int cnt, vector<int> &pick, int prev){
     
     for(int i=0; i<n; i++){
         
-        if(num[i] >= prev){
+        if(num[i]>prev){
             pick.push_back(num[i]);
             go(cnt+1, pick, num[i]);
             pick.pop_back();
