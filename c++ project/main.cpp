@@ -1,101 +1,214 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cmath>
 
 using namespace std;
 
-//시간 복잡도: O(m^3*n^2)
-//공간 복잡도: O(n^2)
+//시간 복잡도: O(2^21)
+//공간 복잡도: O(nm)
 //사용한 알고리즘: 재귀함수(백트래킹)
 //사용한 자료구조: 구조체, 2차원 배열, 1차원 벡터
 
+int h, w;
 int n, m;
-int d[50][50];
-
-vector<pair<int, int>> chicken;
-vector<pair<int, int>> house;
-int max_chicken;
-
-//최대값 안주어졌기 때문에 정수 최대값 넣었다.
 int result = 2147483647;
+int d[8][8];
+int test[8][8];
+int cctv_size = 0;
 
-//집별로 치킨거리 계산
-void chicken_dist(vector<pair<int, int>> &pick){
+//cctv정보를 저장할 구조체
+struct info{
+    int x;
+    int y;
+    int dir;
+    int type;
+};
+
+
+void go0(int x, int y){
     
-    int total_dist = 0;
-    //집별로 돌고
-    for(int i=0; i<house.size(); i++){
-        int x = house[i].first;
-        int y = house[i].second;
-        int dist = 2147483647;
-        
-        //m개의 치킨집 조사
-        for(int j=0; j<pick.size(); j++){
-            
-            int nx = pick[j].first;
-            int ny = pick[j].second;
-            int ndist = abs(nx-x) + abs(ny-y);
-            
-            //집별 치킨 거리갱신
-            dist = min(dist, ndist);
-        }
-        
-        total_dist += dist;
+    for(int j=y; j<w; j++){
+        if(test[x][j] == 6) break;
+        if(test[x][j] == 0) test[x][j] = -1;
     }
-    
-    //도시의 최소 치킨거리를 갱신한다.
-    result = min(result, total_dist);
     
 }
 
-//도시의 최대 치킨집 갯수에 대해 각각에 대해 선택한것을 pick에 넣는다.
-void go(int index, vector<pair<int, int>> &pick){
+void go1(int x, int y){
     
-    if(index == max_chicken){
-        //조합이 갖춰지면
-        if((int)pick.size() == m){
-            //치킨거리를 계산한다.
-            chicken_dist(pick);
+    for(int i=x; i<h; i++){
+        if(test[i][y] == 6) break;
+        if(test[i][y] == 0) test[i][y] = -1;
+    }
+    
+}
+
+void go2(int x, int y){
+    
+    for(int j=y; j>=0; j--){
+        if(test[x][j] == 6) break;
+        if(test[x][j] == 0) test[x][j] = -1;
+    }
+}
+
+void go3(int x, int y){
+    
+    for(int i=x; i>=0; i--){
+        if(test[i][y] == 6) break;
+        if(test[i][y] == 0) test[i][y] = -1;
+    }
+}
+
+void do_test(vector<info> &cctv){
+    
+    //test[i][j]는 검사를 위한 2차원 배열
+    //지도 정보를 기반으로 초기화 해준다.
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            test[i][j] = d[i][j];
         }
+    }
+    
+    for(int k=0; k<cctv.size(); k++){
+        
+        if(cctv[k].type == 1){
+            if(cctv[k].dir == 0) go0(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 1) go1(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 2) go2(cctv[k].x, cctv[k].y);
+            if(cctv[k].dir == 3) go3(cctv[k].x, cctv[k].y);
+        }
+        
+        if(cctv[k].type == 2){
+            
+            if(cctv[k].dir == 0 || cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 1 || cctv[k].dir == 3){
+                go1(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+        }
+        
+        if(cctv[k].type == 3){
+            
+            if(cctv[k].dir == 0){
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 1){
+                go0(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 3){
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+            }
+        }
+        
+        if(cctv[k].type == 4){
+            
+            if(cctv[k].dir == 0){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 1){
+                go1(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 2){
+                go0(cctv[k].x, cctv[k].y);
+                go2(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+            
+            if(cctv[k].dir == 3){
+                go0(cctv[k].x, cctv[k].y);
+                go1(cctv[k].x, cctv[k].y);
+                go3(cctv[k].x, cctv[k].y);
+            }
+        }
+        
+        if(cctv[k].type == 5){
+            go0(cctv[k].x, cctv[k].y);
+            go1(cctv[k].x, cctv[k].y);
+            go2(cctv[k].x, cctv[k].y);
+            go3(cctv[k].x, cctv[k].y);
+        }
+        
+    }
+    
+    int cnt = 0;
+    for(int i=0; i<h; i++){
+        for(int j=0; j<w; j++){
+            if(test[i][j] == 0) cnt++;
+        }
+    }
+    
+    result = min(result, cnt);
+}
+
+void go(int index, vector<info> &cctv){
+    
+    //cctv별 4가지 방향을 다 선택해줬으면
+    if(index == cctv_size){
+        
+        //cctv가 감시할 수 없는 사각지대를 검사한다.
+        do_test(cctv);
+        
         return;
     }
     
-    //치킨집 고름
-    pick.push_back(make_pair(chicken[index].first, chicken[index].second));
-    go(index+1, pick);
-    pick.pop_back();
-
-    //치킨집 안고름
-    go(index+1, pick);
+    
+    //4가지 방향에 대해 선택
+    //0은 동쪽, 1은 남쪽, 2는 서쪽, 3은 북쪽
+    cctv[index].dir = 0;
+    go(index+1, cctv);
+    
+    cctv[index].dir = 1;
+    go(index+1, cctv);
+    
+    cctv[index].dir = 2;
+    go(index+1, cctv);
+    
+    cctv[index].dir = 3;
+    go(index+1, cctv);
 }
 
 int main(){
-    
     cin >> n >> m;
     
-    //지도정보를 입력받는다.
+    //cctv를 넣을 구조체 벡터 생성
+    vector<info> cctv;
+    
+    //n*m 배열에 지도 정보를 입력받는다.
     for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
+        for(int j=0; j<m; j++){
+
             cin >> d[i][j];
-            //집일 경우 house 벡터에 넣고
-            if(d[i][j] == 1) house.push_back(make_pair(i, j));
             
-            //치킨집일 경우 chicken벡터에 넣는다.
-            if(d[i][j] == 2) chicken.push_back(make_pair(i, j));
+            //만약 cctv일 경우, cctv 벡터에 넣어준다.
+            if(d[i][j] != 0 && d[i][j] != 6){
+                cctv.push_back({i, j, 0, d[i][j]});
+            }
         }
     }
     
-    //치킨 벡터의 크기를 통해 도시에 있는 최대 치킨집의 갯수를 갱신한다.
-    max_chicken = (int)chicken.size();
-    
-    
-    //치킨집을 선태해서 저장할 pick벡터
-    vector<pair<int, int>> pick;
-    
-    //조합을 위한 백트래킹 시작
-    go(0, pick);
+    //cctv 벡터의 크기를 통해 cctv갯수를 갱신해준다.
+    cctv_size = (int)cctv.size();
+    go(0, cctv);
     
     cout << result << endl;
-    
 }
