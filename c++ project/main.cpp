@@ -81,24 +81,24 @@ void do_test(vector<info> &cctv){
                 go3(cctv[k].x, cctv[k].y);
             }
         }
-
+        
         if(cctv[k].type == 3){
             
             if(cctv[k].dir == 0){
                 go2(cctv[k].x, cctv[k].y);
                 go3(cctv[k].x, cctv[k].y);
             }
-
+            
             if(cctv[k].dir == 1){
                 go0(cctv[k].x, cctv[k].y);
                 go3(cctv[k].x, cctv[k].y);
             }
-
+            
             if(cctv[k].dir == 2){
                 go0(cctv[k].x, cctv[k].y);
                 go1(cctv[k].x, cctv[k].y);
             }
-
+            
             if(cctv[k].dir == 3){
                 go1(cctv[k].x, cctv[k].y);
                 go2(cctv[k].x, cctv[k].y);
@@ -106,7 +106,7 @@ void do_test(vector<info> &cctv){
         }
         
         if(cctv[k].type == 4){
-
+            
             if(cctv[k].dir == 0){
                 go0(cctv[k].x, cctv[k].y);
                 go1(cctv[k].x, cctv[k].y);
@@ -118,7 +118,7 @@ void do_test(vector<info> &cctv){
                 go2(cctv[k].x, cctv[k].y);
                 go3(cctv[k].x, cctv[k].y);
             }
-
+            
             if(cctv[k].dir == 2){
                 go0(cctv[k].x, cctv[k].y);
                 go2(cctv[k].x, cctv[k].y);
@@ -162,45 +162,35 @@ void go(int index, vector<info> &cctv){
     
     cctv[index].dir = 0;
     go(index+1, cctv);
-
+    
     cctv[index].dir = 1;
     go(index+1, cctv);
-
+    
     cctv[index].dir = 2;
     go(index+1, cctv);
-
+    
     cctv[index].dir = 3;
     go(index+1, cctv);
 }
 
 int main(int argc, char** argv)
 {
-    int test_case;
-    int T;
-    
-    cin>>T;
-    
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        result = 99999999;
-        cin >> w >> h;
+    result = 99999999;
+    cin >> h >> w;
         
-        vector<info> cctv;
+    vector<info> cctv;
         
-        for(int i=0; i<h; i++){
-            for(int j=0; j<w; j++){
-                cin >> d[i][j];
-                if(d[i][j] != 0 && d[i][j] != 6){
+    for(int i=0; i<h; i++){
+        for(int j=0; j<w; j++){
+            cin >> d[i][j];
+            if(d[i][j] != 0 && d[i][j] != 6){
                     cctv.push_back({i, j, 0, d[i][j]});
-                }
             }
         }
-        
-        cctv_size = (int)cctv.size();
-        go(0, cctv);
-        
-        cout << "#" << test_case << " " << result << endl;
-        
     }
-    return 0;
+        
+    cctv_size = (int)cctv.size();
+    go(0, cctv);
+        
+    cout << result << endl;
 }
