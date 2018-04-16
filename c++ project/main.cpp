@@ -1,40 +1,43 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 int n, m;
 
+bool check[9];
+
+void go(int cnt, vector<int> &pick){
+    
+    if(cnt == m){
+        
+        for(int i=0; i<m; i++){
+            printf("%d ", pick[i]);
+        }
+        printf("\n");
+        return;
+    }
+    
+    for(int i=1; i<=n; i++){
+        
+        if(check[i] == false){
+            check[i] = true;
+            pick.push_back(i);
+            go(cnt+1, pick);
+            check[i] = false;
+            pick.pop_back();
+        }
+        
+    }
+    
+}
+
 int main(){
     
     scanf("%d %d", &n, &m);
     
-    vector<int> d;
-    for(int i=1; i<=n; i++){
-        d.push_back(i);
-    }
-    
-    vector<int> v;
-    for(int i=0; i<m; i++){
-        v.push_back(1);
-    }
-    
-    for(int i=0; i<n-m; i++){
-        v.push_back(0);
-    }
-    
-    do{
-        
-        for(int i=0; i<n; i++){
-            if(v[i] == 1){
-                printf("%d ", d[i]);
-            }
-        }
-        printf("\n");
-        
-    }while(prev_permutation(v.begin(), v.end()));
-    
+    vector<int> pick;
+    go(0, pick);
     
 }
 
