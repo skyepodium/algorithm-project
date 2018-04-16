@@ -8,7 +8,7 @@ int n, m;
 
 vector<int> num;
 
-void go(int cnt, vector<int> &pick){
+void go(int cnt, vector<int> &pick, int prev){
     
     if(cnt == m){
         
@@ -21,10 +21,11 @@ void go(int cnt, vector<int> &pick){
     
     for(int i=0; i<n; i++){
         
-        pick.push_back(num[i]);
-        go(cnt+1, pick);
-        pick.pop_back();
-        
+        if(num[i] >= prev){
+            pick.push_back(num[i]);
+            go(cnt+1, pick, num[i]);
+            pick.pop_back();
+        }
     }
     
 }
@@ -42,7 +43,7 @@ int main(){
     sort(num.begin(), num.end());
     
     vector<int> pick;
-    go(0, pick);
+    go(0, pick, 0);
     
 }
 
