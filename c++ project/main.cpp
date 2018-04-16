@@ -4,6 +4,12 @@
 
 using namespace std;
 
+//시간 복잡도: O(2^21)
+//공간 복잡도: O(nm)
+//사용한 알고리즘: dfs backtracking
+//사용한 자료구조: 구조체, 2차원 배열, 1차원 벡터
+
+
 int h, w;
 int result;
 int d[8][8];
