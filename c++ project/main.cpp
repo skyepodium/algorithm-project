@@ -4,9 +4,9 @@
 
 using namespace std;
 
-//시간 복잡도: O(200C3*200 + 3)
+//시간 복잡도: O(n^3)
 //공간 복잡도: O(n^2)
-//사용한 알고리즘: 순열, prev_permutation
+//사용한 알고리즘: 3중 for문
 //사용한 자료구조: 2차원 배열, 1차원 벡터
 
 int n, m;
@@ -40,7 +40,7 @@ void do_test(vector<int> &pick){
 
 
 int main(){
-
+    
     cin >> n >> m;
     
     for(int i=0; i<m; i++){
@@ -52,34 +52,26 @@ int main(){
         no_pick[b][a] = true;
     }
 
-    //순열을 위한 벡터 생성
-    vector<int> v;
-    
-    //전체에서 선택할 3개만큼 1을 넣고
-    for(int i=0; i<3; i++){
-        v.push_back(1);
-    }
+    //nC3을 위한 3중 for문
+    for(int a=1; a<=n; a++){
+        for(int b=a+1; b<=n; b++){
+            for(int c=b+1; c<=n; c++){
 
-    //선택하지 않을 만큼 0을 넣는다.
-    for(int i=0; i<n-3; i++){
-        v.push_back(0);
-    }
-    
-    //순열 탐색
-    do{
-        vector<int> pick;
+                //선택한 정보를 넣을 벡터 pick생성
+                vector<int> pick;
 
-        //v[i] == 1이면 선택이 된것이다.
-        for(int i=0; i<n; i++){
-            if(v[i] == 1){
-                pick.push_back(i+1);
+                //선택한 정보를 pick벡터에 넣는다.
+                pick.push_back(a);
+                pick.push_back(b);
+                pick.push_back(c);
+                
+                //선택한 조합을 넘겨 조합 가능여부를 검사한다.
+                do_test(pick);
+                
             }
         }
-        
-        //조합 검사
-        do_test(pick);
-        
-    }while(prev_permutation(v.begin(), v.end()));
- 
+    }
+    
+    
     cout << result << endl;
 }
