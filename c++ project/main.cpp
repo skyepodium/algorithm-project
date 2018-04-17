@@ -1,66 +1,222 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: stl sort
-//사용한 자료구조: 구조체, 1차원 벡터
+int n, m, h;
+int d[31][11];
+int test[31][11];
+int result = -1;
 
-//회의실 정보를 저장할 구조체 생성
 struct info{
-    int start_day;
-    int end_day;
+    int a;
+    int b;
 };
 
-//비교 기준
-bool cmp(const info &a, const info &b){
+vector<info> can_pick;
+int can_pick_size = 0;
+
+int pick_size = 0;
+
+//사다리 구현
+bool find(int x, int y){
     
-    //1) 회의실 사용에 대한 정보가 있을때 가장 빨리 끝나는 것을 선택한다.
-    if(a.end_day < b.end_day){
-        return true;
+    int start_y = y;
+    while(x <= h+1){
+
+        //오른쪽 이동
+        if(test[x][y] == 1){
+            x = x+1;
+            y = y+1;
+            
+            //왼쪽 이동
+        }else if(test[x][y] == 2){
+            x = x+1;
+            y = y-1;
+        }else{
+            x = x+1;
+            y = y;
+        }
+    }
+
+    bool is_possible = false;
+    if(start_y == y){
+        is_possible = true;
+    }
     
-    //2) 회의실 사용이 끝나는 시간이 같을때 가장 먼저 시작하는 것을 고른다.
-    }else if(a.end_day == b.end_day){
-        
-        return a.start_day < b.start_day;
-        
-    }else{
-        return false;
+    return is_possible;
+}
+
+void test_init(){
+    for(int i=1; i<=h; i++){
+        for(int j=1; j<=n; j++){
+            test[i][j] = d[i][j];
+        }
     }
 }
 
-int main(){
-
-    int n;
-    cin >> n;
+void test0(){
     
-    //회의실 정보를 저장할 벡터 plan 생성
-    vector<info> plan;
-    //입력 정보를 plan벡터에 넣는다.
-    for(int i=0; i<n; i++){
-        int start, end;
-        cin >> start >> end;
-        
-        plan.push_back({start, end});
-    }
+    test_init();
     
-    //stl sort 사용, cmp는 기준
-    sort(plan.begin(), plan.end(), cmp);
-    
-    int cnt = 0;
-    int current = -1;
-    //회의실 사용정보를 선형 탐색
-    //가장빠른것 부터 취하고, 이후에는 일정이 겹치지 않으면 취한다.
-    for(int i=0; i<plan.size(); i++){
-        if(plan[i].start_day >= current){
-            current = plan[i].end_day;
-            cnt++;
+    bool is_possible = true;
+    for(int i=1; i<=n; i++){
+        if(find(1, i) == false){
+            is_possible = false;
+            break;
         }
     }
     
-    cout << cnt << endl;
+    if(is_possible == true){
+        result = 0;
+    }
+    
 }
 
+void test1(vector<info> &pick){
+    
+    test_init();
+    
+    int x1 = pick[0].a;
+    int y1 = pick[0].b;
+    int y2 = pick[0].b + 1;
+    
+    test[x1][y1] = 1;
+    test[x1][y2] = 2;
+    
+    bool is_possible = true;
+    for(int i=1; i<=n; i++){
+        if(find(1, i) == false){
+            is_possible = false;
+            break;
+        }
+    }
+    
+    if(is_possible == true){
+        result = 1;
+    }
+    
+}
+
+void test2(vector<info> &pick){
+    
+    test_init();
+    
+    for(int i=0; i<pick.size(); i++){
+        int x1 = pick[i].a;
+        int y1 = pick[i].b;
+        int y2 = pick[i].b + 1;
+        test[x1][y1] = 1;
+        test[x1][y2] = 2;
+    }
+    
+    bool is_possible = true;
+    for(int i=1; i<=n; i++){
+        if(find(1, i) == false){
+            is_possible = false;
+            break;
+        }
+    }
+    
+    if(is_possible == true){
+        result = 2;
+    }
+    
+}
+
+void test3(vector<info> &pick){
+    
+    test_init();
+    
+    for(int i=0; i<pick.size(); i++){
+        int x1 = pick[i].a;
+        int y1 = pick[i].b;
+        int y2 = pick[i].b + 1;
+        test[x1][y1] = 1;
+        test[x1][y2] = 2;
+    }
+    
+    bool is_possible = true;
+    for(int i=1; i<=n; i++){
+        if(find(1, i) == false){
+            is_possible = false;
+            break;
+        }
+    }
+    
+    if(is_possible == true){
+        result = 3;
+    }
+    
+}
+
+int main(){
+    
+    cin >> n >> m >> h;
+    for(int i=0; i<m; i++){
+        int a, b;
+        cin >> a >> b;
+        d[a][b] = 1;
+        d[a][b+1] = 2;
+    }
+    
+    //추가할 수 있는 가로선의 정보를 can_pick 벡터에 넣는다.
+    for(int i=1; i<=h; i++){
+        for(int j=1; j<=n; j++){
+            if(d[i][j] == 0 && d[i][j+1] == 0 && j+1 <=n){
+                can_pick.push_back({i, j});
+            }
+        }
+    }
+    
+    //전체에서 뽑을 수 있는 것의 수 갱신
+    can_pick_size = (int)can_pick.size();
+    
+    //0개 고름
+    test0();
+    
+    //1개 고름, 고를 수 있는게 1개보다 많아야해
+    if(result != 0 && can_pick_size >=1){
+        for(int i=0; i<can_pick_size; i++){
+            vector<info> pick;
+            pick.push_back({can_pick[i].a, can_pick[i].b});
+            test1(pick);
+            
+        }
+    }
+     
+    //2개 고름, 고를 수 있는게 2개보다 많아야해
+    if(result !=0 && result != 1 && can_pick_size >=2){
+        for(int i=0; i<can_pick_size; i++){
+            for(int j=i+1; j<can_pick_size; j++){
+
+                vector<info> pick;
+                pick.push_back({can_pick[i].a, can_pick[i].b});
+                pick.push_back({can_pick[j].a, can_pick[j].b});
+                test2(pick);
+                
+            }
+        }
+    }
+    
+    //3개 고름, 고를 수 있는게 3개보다 많아야해
+    if(result !=0 && result != 1 && result != 2 && can_pick_size >=3){
+        for(int i=0; i<can_pick_size; i++){
+            for(int j=i+1; j<can_pick_size; j++){
+                for(int k=j+1; k<can_pick_size; k++){
+       
+                    vector<info> pick;
+                    pick.push_back({can_pick[i].a, can_pick[i].b});
+                    pick.push_back({can_pick[j].a, can_pick[j].b});
+                    pick.push_back({can_pick[k].a, can_pick[k].b});
+                    test3(pick);
+                    
+                }
+            }
+        }
+    }
+
+    
+    cout << result << endl;
+    
+}
