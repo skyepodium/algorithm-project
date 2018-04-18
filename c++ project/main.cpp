@@ -156,6 +156,9 @@ int main(){
         for(int i=0; i<can_pick_size; i++){
             for(int j=i+1; j<can_pick_size; j++){
                 
+                //사다리가 안만들어 지는 경우 건너뜀
+                if(can_pick[i].a == can_pick[j].a && can_pick[i].b + 1 == can_pick[j].b) continue;
+                
                 vector<info> pick;
                 pick.push_back({can_pick[i].a, can_pick[i].b});
                 pick.push_back({can_pick[j].a, can_pick[j].b});
@@ -171,6 +174,10 @@ int main(){
         for(int i=0; i<can_pick_size; i++){
             for(int j=i+1; j<can_pick_size; j++){
                 for(int k=j+1; k<can_pick_size; k++){
+
+                    //사다리가 안만들어 지는 경우 건너뜀
+                    if(can_pick[i].a == can_pick[j].a && can_pick[i].b + 1 == can_pick[j].b) continue;
+                    if(can_pick[j].a == can_pick[k].a && can_pick[j].b + 1 == can_pick[k].b) continue;
                     
                     vector<info> pick;
                     pick.push_back({can_pick[i].a, can_pick[i].b});
