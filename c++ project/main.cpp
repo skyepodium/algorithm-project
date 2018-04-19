@@ -1,39 +1,93 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
-//call by reference로 벡터 받음
-void go(int index, vector<int> &pick){
+int d[102][102];
+int end_y = 0;
+
+bool go(int x, int y){
     
-    //길이가 3개이기 때문에 index는 0,1,2가 존재
-    //index가 3이 되면, 넘어간 것이므로 재귀종료
-    if(index == 3){
+    while(x <= 100){
         
-        //3개 다 골랐을때 벡터의 내용을 출력
-        for(int i=0; i<pick.size(); i++){
-            cout << pick[i] <<" ";
+        //그냥 아래로 이동
+        if(d[x][y] > 1 && d[x][y+1] ==2){
+            y = y + d[x][y] - 1;
+            x = x + 1;
+            
+            //왼쪽으로 이동
+        }else if(d[x][y] > 1 && d[x][y-1] == d[x][y]-1){
+            if(x == 1 && y==3){
+            }
+            y = y - d[x][y] + 1;
+            x = x + 1;
+            
+            //오른쪽 이동
+        }else{
+            
+            x = x + 1;
+            y = y;
         }
-        cout << endl;
         
-        return;
     }
     
-    //각각의 상황별로 4가지 상황이 있다. 0~3
-    for(int i=0; i<4; i++){
-        //넣어주면, 재귀함수에 의해 다시 돌아왔을때 넣은 것을 꼭 빼줘야한다.
-        pick.push_back(i);
-        go(index+1, pick);
-        pick.pop_back();
+    bool is_possible = false;
+    if(y == end_y) is_possible = true;
+    
+    return is_possible;
+}
+
+int main(int argc, char** argv)
+{
+    int test_case;
+    
+    for(test_case = 1; test_case <= 10; ++test_case)
+    {
+        int T;
+        
+        cin>>T;
+        
+        for(int i=0; i<100; i++){
+            for(int j=0; j<100; j++){
+                cin >> d[i][j];
+                
+                if(d[i][j] == 2){
+                    end_y = j;
+                }
+            }
+        }
+        
+        for(int i=0; i<100; i++){
+            
+            int length = 1;
+            for(int j=0; j<100; j++){
+                
+                
+                //가로선이 있을때
+                if(d[i][j] > 0 && d[i][j+1] > 0){
+                    d[i][j+1] = d[i][j]+1;
+                    length = d[i][j+1];
+                    
+                }else if(d[i][j] >0 && d[i][j+1] == 0){
+                    d[i][j-length+1] = length;
+                    length = 1;
+                }
+                
+            }
+        }
+        
+        
+        int result = 0;
+        //세로선 기준 사다리 타기
+        for(int j=0; j<100; j++){
+            if(d[0][j] == 1){
+                if(go(0, j) == true){
+                    result = j;
+                    break;
+                }
+            }
+        }
+        cout << "#" << test_case << " " <<result << endl;
     }
-    
+    return 0;
 }
 
-
-int main(){
-    
-    vector<int>pick;
-    //index 0부터 시작,
-    //빈 벡터를 함께 보내준다.
-    go(0, pick);
-}
