@@ -1,99 +1,74 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
 
-int d[102][102];
+//시간 복잡도: O()
+//공간 복잡도: O(10000)
+//사용한 알고리즘: 반복문
+//사용한 자료구조: 스택(1차원 벡터), 2차원 배열, 1차원 배열
+
+bool map[102][102];
+int end_x = 0;
 int end_y = 0;
+int n;
+int dx[] = {0, -1, 0, 1};
+int dy[] = {1, 0, -1, 0};
 
-int go(int x, int y){
+vector<int> dragon;
+
+void make_generation(vector<int> &dragon){
     
-    int cnt = 1;
-    while(x <= 100){
-        
-        //그냥 아래로 이동
-        if(d[x][y] > 1 && d[x][y+1] ==2){
-            cnt = cnt + d[x][y];
-            y = y + d[x][y] - 1;
-            x = x + 1;
-            
-            //왼쪽으로 이동
-        }else if(d[x][y] > 1 && d[x][y-1] == d[x][y]-1){
+    int size = (int)dragon.size();
 
-            cnt = cnt + d[x][y];
-            y = y - d[x][y] + 1;
-            x = x + 1;
-            
-            //오른쪽 이동
-        }else{
-            
-            x = x + 1;
-            y = y;
-            cnt++;
+    for(int i=size-1; i>=0; i--){
+        int dir = (dragon[i] + 1)%4;
+        
+        end_x = end_x + dx[dir];
+        end_y = end_y + dy[dir];
+        
+        map[end_x][end_y] = true;
+        
+        dragon.push_back(dir);
+    }
+}
+
+int main(){
+    
+    cin >> n;
+    for(int i=0; i<n; i++){
+        int y, x, d, g;
+        cin >> y >> x >> d >> g;
+        dragon.clear();
+        
+        end_x = x;
+        end_y = y;
+        map[end_x][end_y] = true;
+        
+        //0세대는 미리 만들어 놓는다.
+        end_x = x + dx[d];
+        end_y = y + dy[d];
+        map[end_x][end_y] = true;
+        dragon.push_back(d);
+
+        //세대를 만들어보자
+        for(int i=0; i<g; i++){
+            make_generation(dragon);
         }
         
     }
     
-    return cnt - 2;
-}
-
-int main(int argc, char** argv)
-{
-    int test_case;
-    
-    for(test_case = 1; test_case <= 10; ++test_case)
-    {
-        int T;
-        
-        cin>>T;
-        
-        for(int i=0; i<100; i++){
-            for(int j=0; j<100; j++){
-                cin >> d[i][j];
-                
-                if(d[i][j] == 2){
-                    end_y = j;
-                }
-            }
-        }
-        
-        for(int i=0; i<100; i++){
+    int result = 0;
+    for(int i=0; i<=100; i++){
+        for(int j=0; j<=100; j++){
             
-            int length = 1;
-            for(int j=0; j<100; j++){
-                
-                
-                //가로선이 있을때
-                if(d[i][j] > 0 && d[i][j+1] > 0){
-                    d[i][j+1] = d[i][j]+1;
-                    length = d[i][j+1];
-                    
-                }else if(d[i][j] >0 && d[i][j+1] == 0){
-                    d[i][j-length+1] = length;
-                    length = 1;
-                }
-                
+            if(map[i][j] == true && map[i][j+1] == true && map[i+1][j] == true && map[i+1][j+1] == true){
+                    result++;
             }
         }
-        
-        
-        int result_index = 0;
-        int max_cnt = 2147483647;
-        //세로선 기준 사다리 타기
-        for(int j=0; j<100; j++){
-            if(d[0][j] == 1){
-                
-                int cnt = go(0, j);
-
-                if(cnt <= max_cnt){
-                    max_cnt = cnt;
-                    result_index = j;
-                }
-                
-            }
-        }
-        cout << "#" << test_case << " " <<result_index << endl;
     }
-    return 0;
+    
+    cout << result << endl;
+    
 }
-
