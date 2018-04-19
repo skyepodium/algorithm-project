@@ -1,23 +1,26 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 int d[102][102];
 int end_y = 0;
 
-bool go(int x, int y){
+int go(int x, int y){
     
+    int cnt = 1;
     while(x <= 100){
         
         //그냥 아래로 이동
         if(d[x][y] > 1 && d[x][y+1] ==2){
+            cnt = cnt + d[x][y];
             y = y + d[x][y] - 1;
             x = x + 1;
             
             //왼쪽으로 이동
         }else if(d[x][y] > 1 && d[x][y-1] == d[x][y]-1){
-            if(x == 1 && y==3){
-            }
+
+            cnt = cnt + d[x][y];
             y = y - d[x][y] + 1;
             x = x + 1;
             
@@ -26,14 +29,12 @@ bool go(int x, int y){
             
             x = x + 1;
             y = y;
+            cnt++;
         }
         
     }
     
-    bool is_possible = false;
-    if(y == end_y) is_possible = true;
-    
-    return is_possible;
+    return cnt - 2;
 }
 
 int main(int argc, char** argv)
@@ -76,17 +77,22 @@ int main(int argc, char** argv)
         }
         
         
-        int result = 0;
+        int result_index = 0;
+        int max_cnt = 2147483647;
         //세로선 기준 사다리 타기
         for(int j=0; j<100; j++){
             if(d[0][j] == 1){
-                if(go(0, j) == true){
-                    result = j;
-                    break;
+                
+                int cnt = go(0, j);
+
+                if(cnt <= max_cnt){
+                    max_cnt = cnt;
+                    result_index = j;
                 }
+                
             }
         }
-        cout << "#" << test_case << " " <<result << endl;
+        cout << "#" << test_case << " " <<result_index << endl;
     }
     return 0;
 }
