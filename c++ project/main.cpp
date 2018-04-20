@@ -1,49 +1,76 @@
 #include <iostream>
-#include <algorithm>
+#include <string>
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 동적 계획법, Top-Down
-//사용한 자료구조: 1차원 배열
+int n, m;
+int d[300][300];
+bool check[300][300];
 
-int a[1001];
-int d[1001];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-int go(int i){
+int cur_sheep = 0;
+int cur_wolf = 0;
+
+int total_sheep = 0;
+int total_wolf = 0;
+
+void dfs(int x, int y){
     
-    if(d[i] > 1){
-        return d[i];
-    }
+    check[x][y] = true;
+    if(d[x][y] == 2) cur_sheep++;
+    else if(d[x][y] == 3) cur_wolf++;
+
     
-    int max_val = 0;
-    for(int j=0; j<i; j++){
-        if(a[j] < a[i]){
-            max_val = max(max_val, go(j));
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        
+        if(nx>=0 && nx<n && ny>=0 && ny<m){
+            if(check[nx][ny] == false && d[nx][ny] != 1){
+                dfs(nx, ny);
+            }
         }
+        
     }
     
-    d[i] = max_val + 1;
-
-    return d[i];
 }
 
 int main(){
     
-    int n;
-    cin >> n;
+    cin >> n >> m;
     
     for(int i=0; i<n; i++){
-        cin >> a[i];
-        d[i] = 1;
+        string word;
+        cin >> word;
+        for(int j=0; j<m; j++){
+            
+            //0 필드, 1 펜스, 2 양, 3 늑대
+            if(word[j] == '.') d[i][j] = 0;
+            else if(word[j] == '#') d[i][j] = 1;
+            else if(word[j] == 'o') d[i][j] = 2;
+            else d[i][j] = 3;
+            
+        }
     }
     
-    int result = 0;
     for(int i=0; i<n; i++){
-        result = max(result, go(i));
+        for(int j=0; j<m; j++){
+            if(check[i][j] == false){
+                cur_sheep = 0;
+                cur_wolf = 0;
+                dfs(i, j);
+                
+                if(cur_sheep > cur_wolf){
+                    total_sheep += cur_sheep;
+                }else{
+                    total_wolf += cur_wolf;
+                }
+                
+            }
+        }
     }
     
-    cout << result << endl;
+    cout << total_sheep << " " << total_wolf << endl;
 }
-
