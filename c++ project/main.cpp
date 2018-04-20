@@ -1,7 +1,13 @@
 #include <iostream>
 #include <string>
+#include <queue>
 
 using namespace std;
+
+//시간 복잡도: O(nm)
+//공간 복잡도: O(nm)
+//사용한 알고리즘: bfs
+//사용한 자료구조: 2차원 배열
 
 int n, m;
 int d[300][300];
@@ -16,26 +22,35 @@ int cur_wolf = 0;
 int total_sheep = 0;
 int total_wolf = 0;
 
-void dfs(int x, int y){
+void bfs(int x, int y){
     
     check[x][y] = true;
-    if(d[x][y] == 2) cur_sheep++;
-    else if(d[x][y] == 3) cur_wolf++;
-
     
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
+    
+    while(!q.empty()){
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
         
-        if(nx>=0 && nx<n && ny>=0 && ny<m){
-            if(check[nx][ny] == false && d[nx][ny] != 1){
-                dfs(nx, ny);
+        if(d[x][y] == 2) cur_sheep++;
+        else if(d[x][y] == 3) cur_wolf++;
+        
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(check[nx][ny] == false && d[nx][ny] != 1){
+                    check[nx][ny] = true;
+                    q.push(make_pair(nx, ny));
+                }
             }
         }
-        
     }
-    
 }
+
 
 int main(){
     
@@ -60,7 +75,7 @@ int main(){
             if(check[i][j] == false){
                 cur_sheep = 0;
                 cur_wolf = 0;
-                dfs(i, j);
+                bfs(i, j);
                 
                 if(cur_sheep > cur_wolf){
                     total_sheep += cur_sheep;
