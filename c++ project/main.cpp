@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
 
 using namespace std;
@@ -8,49 +9,87 @@ using namespace std;
 //사용한 알고리즘: 동적 계획법 Top-down
 //사용한 자료구조: 2차원 배열
 
-int d[2][100001];
-int a[2][100001];
+int d[9][9];
+bool check[9][9];
 
-int go(int i, int j){
-    
-    if(j<2){
-        return d[i][j];
+void check_sudoku(){
+    bool is_possible = true;
+    //가로 검사
+    for(int i=0; i<9; i++){
+        int origin = d[i][0];
+        for(int j=1; j<9; j++){
+            
+            if(d[i][j] == origin){
+                is_possible = false;
+                break;
+            }
+        }
     }
     
-    if(d[i][j] >= 0){
-        return d[i][j];
+    //세로검사
+    for(int j=0; j<9; j++){
+        int origin = d[0][j];
+        for(int i=1; i<9; i++){
+            
+            if(d[i][j] == origin){
+                is_possible = false;
+                break;
+            }
+        }
+    }
+
+    if(is_possible == true){
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                cout << d[i][j] <<" ";
+            }
+            cout << endl;
+        }
     }
     
-    if(i==0) d[0][j] = max(go(1, j-1), go(1, j-2)) + a[0][j];
-    else d[1][j] = max(go(0, j-1), go(0, j-2)) + a[1][j];
     
-    return d[i][j];
+}
+
+void go(int index, vector<pair<int, int>> &v){
+    
+    if(index == (int)v.size()){
+        
+        check_sudoku();
+        
+        return;
+    }
+    
+    for(int i=1; i<=9; i++){
+        
+        int x = v[index].first;
+        int y = v[index].second;
+        if(check[x][y] == false){
+            
+            d[x][y] = i;
+            check[x][y] = true;
+            go(index+1, v);
+            d[x][y] = 0;
+            check[x][y] = false;
+            
+        }
+        
+    }
+    
 }
 
 int main(){
     
-    int t;
-    cin >> t;
+    //2차원 배열에 입력 받고
     
-    while(t--){
-        int n;
-        cin >> n;
-        for(int i=0; i<2; i++){
-            for(int j=0; j<n; j++){
-                scanf("%d", &a[i][j]);
-                d[i][j] = -1;
-            }
+    vector<pair<int, int>> v;
+    for(int i=0; i<9; i++){
+        for(int j=0; j<9; j++){
+            cin >> d[i][j];
+            if(d[i][j] > 0) check[i][j] = true;
+            else if(d[i][j] == 0) v.push_back(make_pair(i, j));
         }
-        
-        d[0][0] = a[0][0];
-        d[1][0] = a[1][0];
-        d[0][1] = d[1][0] + a[0][1];
-        d[1][1] = d[0][0] + a[1][1];
-        
-        printf("%d\n", max(go(0, n-1), go(1, n-1)));
-        
     }
     
+    go(0, v);
     
 }
-
