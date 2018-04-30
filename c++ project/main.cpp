@@ -6,8 +6,12 @@ int main(){
     int n;
     cin >> n;
     
-    if(n == 0) cout << "YONSEI" << endl;
-    else cout << "Leading the Way to the Future" << endl;
+    n = n - 1;
     
-    
+    for(int i=1; i<=10101; i++){
+        if(i*(i+1) == n){
+            cout << i << endl;
+            break;
+        }
+    }
 }
