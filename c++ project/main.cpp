@@ -3,32 +3,29 @@
 
 //시간 복잡도: O(n)
 //공간 복잡도: O(n)
-//사용한 알고리즘: 동적 계획법, Bottom-Up
+//사용한 알고리즘: 그리디 알고리즘
 //사용한 자료구조: 1차원 배열
 
 using namespace std;
 
-int a[5] = {1, 10, 30, 50, 100};
+int a[5] = {100, 50, 30, 10, 1};
 int d[5000];
+int cnt = 0;
 
 int main(){
 
     int n;
     cin >> n;
     
-    d[0] = 0;
-    
-    for(int i=1; i<=n; i++){
-        int min_val = 5000;
+    for(int i=0; i<5; i++){
         
-        for(int j=0; j<5; j++){
-            if(i - a[j] >=0){
-                min_val = min(min_val, d[i-a[j]] + 1);
-            }
+        while(n>=a[i]){
+            n = n - a[i];
+            cnt++;
         }
-        d[i] = min_val;
+        
     }
     
-    cout << d[n] << endl;
+    cout << cnt << endl;
     
 }
