@@ -1,86 +1,33 @@
 #include <iostream>
-#include <queue>
 #include <algorithm>
+
+int a[5] = {100, 50, 30, 10, 1};
+int d[5000];
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: BFS
-//사용한 자료구조: 배열, queue
-
-int n, m;
-int d[1001][1001];
-int check[1001][1001];
-
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
-
-int tomato_cnt = 0;
-queue<pair<int, int>> tomato;
-
-void bfs(){
-    
-    while(!tomato.empty()){
-        
-        int x = tomato.front().first;
-        int y = tomato.front().second;
-        tomato.pop();
-        
-        for(int i=0; i<4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(nx>=0 && nx<n && ny>=0 && ny<m){
-                if(check[nx][ny] == false && d[nx][ny] == 0){
-                    check[nx][ny] = true;
-                    tomato_cnt--;
-                    d[nx][ny] = d[x][y] + 1;
-                    tomato.push(make_pair(nx, ny));
-
-                }
-            }
-            
-        }
-        
-    }
-}
-
+//시간 복잡도: O(n)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 동적 계획법, Bottom-Up
+//사용한 자료구조: 1차원 배열
 
 int main(){
-
-
-    cin >> m >> n;
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            cin >> d[i][j];
-            
-            if(d[i][j] == 0) tomato_cnt++;
-            
-            if(d[i][j] == 1){
-                tomato.push(make_pair(i, j));
-                check[i][j] = true;
+    int n;
+    cin >> n;
+    
+    for(int i=1; i<=n; i++){
+        int min_val = 5000;
+        for(int j=0; j<5; j++){
+            if(i-a[j] >= 0){
+                min_val = min(min_val, d[i-a[j]] + 1);
             }
-            
         }
-    }
-
-    bfs();
-    
-    int result = 0;
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            result = max(result, d[i][j]);
-        }
+        d[i] = min_val;
+        
     }
     
-    
-    if(tomato_cnt == 0){
-        cout << result - 1 << endl;
-    }else{
-        cout << -1 << endl;
-    }
+    cout << d[n] << endl;
     
 }
+
