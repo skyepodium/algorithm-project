@@ -1,31 +1,31 @@
 #include <iostream>
-#include <algorithm>
-
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 그리디 알고리즘
-//사용한 자료구조: 1차원 배열
 
 using namespace std;
 
-int a[5] = {100, 50, 30, 10, 1};
-int d[5000];
-int cnt = 0;
-
-int main(){
-
-    int n;
-    cin >> n;
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
     
-    for(int i=0; i<5; i++){
+    cin>>T;
+    
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        int d, h, m;
+        cin >> d >> h >> m;
         
-        while(n>=a[i]){
-            n = n - a[i];
-            cnt++;
-        }
+        int time_base = 671;
+        int time_recognize = h*60 + m;
+        
+        int result = 0;
+        
+        if(d < 11) result = -1;
+        else if(d == 11 && time_recognize < time_base) result = -1;
+        else result = (d-11)*1440 + time_recognize - time_base;
+        
+        
+        cout << "#" << test_case << " " << result << endl;
         
     }
-    
-    cout << cnt << endl;
-    
+    return 0;
 }
