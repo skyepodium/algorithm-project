@@ -11,23 +11,35 @@ using namespace std;
 //사용한 알고리즘: 동적 계획법, Bottom-Up
 //사용한 자료구조: 1차원 배열
 
+int go(int i){
+    
+    if(i<1){
+        d[i] = 0;
+        return d[i];
+    }
+    
+    if(d[i] > 0){
+        return d[i];
+    }
+    
+    int min_val = 5000;
+    for(int j=0; j<5; j++){
+        if(i-a[j] >= 0){
+            min_val = min(min_val, go(i-a[j]) + 1);
+        }
+    }
+    d[i] = min_val;
+    
+    
+    return d[i];
+}
+
 int main(){
     
     int n;
     cin >> n;
     
-    for(int i=1; i<=n; i++){
-        int min_val = 5000;
-        for(int j=0; j<5; j++){
-            if(i-a[j] >= 0){
-                min_val = min(min_val, d[i-a[j]] + 1);
-            }
-        }
-        d[i] = min_val;
-        
-    }
-    
-    cout << d[n] << endl;
+    cout << go(n) << endl;
     
 }
 
