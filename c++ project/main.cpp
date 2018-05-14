@@ -1,31 +1,86 @@
 #include <iostream>
+#include <queue>
+#include <algorithm>
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+//시간 복잡도: O(n^2)
+//공간 복잡도: O(n^2)
+//사용한 알고리즘: BFS
+//사용한 자료구조: 배열, queue
+
+int n, m;
+int d[1001][1001];
+int check[1001][1001];
+
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+
+int tomato_cnt = 0;
+queue<pair<int, int>> tomato;
+
+void bfs(){
     
-    cin>>T;
-    
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        int d, h, m;
-        cin >> d >> h >> m;
+    while(!tomato.empty()){
         
-        int time_base = 671;
-        int time_recognize = h*60 + m;
+        int x = tomato.front().first;
+        int y = tomato.front().second;
+        tomato.pop();
         
-        int result = 0;
-        
-        if(d < 11) result = -1;
-        else if(d == 11 && time_recognize < time_base) result = -1;
-        else result = (d-11)*1440 + time_recognize - time_base;
-        
-        
-        cout << "#" << test_case << " " << result << endl;
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(check[nx][ny] == false && d[nx][ny] == 0){
+                    check[nx][ny] = true;
+                    tomato_cnt--;
+                    d[nx][ny] = d[x][y] + 1;
+                    tomato.push(make_pair(nx, ny));
+
+                }
+            }
+            
+        }
         
     }
-    return 0;
+}
+
+
+int main(){
+
+
+    cin >> m >> n;
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            cin >> d[i][j];
+            
+            if(d[i][j] == 0) tomato_cnt++;
+            
+            if(d[i][j] == 1){
+                tomato.push(make_pair(i, j));
+                check[i][j] = true;
+            }
+            
+        }
+    }
+
+    bfs();
+    
+    int result = 0;
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            result = max(result, d[i][j]);
+        }
+    }
+    
+    
+    if(tomato_cnt == 0){
+        cout << result - 1 << endl;
+    }else{
+        cout << -1 << endl;
+    }
+    
 }
