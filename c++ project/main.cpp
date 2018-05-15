@@ -1,34 +1,55 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 선형 탐색
-//사용한 자료구조: 1차원 배열
+int d[16][16];
 
-long long int a[10001];
+int result = 0;
+int n, m;
 
-int main(){
-
-    int n;
-    cin >> n;
-
-    a[1] = 1;
-    for(int i=2; i<=n; i++){
-        a[i] = a[i-1] + i;
-    }
-
-    long long int up_sum = 0;
-    for(int i=1; i<=n; i++){
-        up_sum = up_sum + a[i];
+void cal_sum(int x, int y){
+    
+    int sum_result = 0;
+    for(int i=x; i<x+m; i++){
+        for(int j=y; j<y+m; j++){
+            sum_result += d[i][j];
+        }
     }
     
-    long long int down_sum = 0;
-    for(int i=n-1; i>=1; i=i-2){
-        down_sum = down_sum + a[i];
+    result = max(result, sum_result);
+}
+
+
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    
+    cin>>T;
+    
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        result = 0;
+
+        cin >> n >> m;
+        
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                cin >> d[i][j];
+            }
+        }
+        
+        for(int i=0; i<= n-m; i++){
+            for(int j=0; j<= n-m; j++){
+                
+                cal_sum(i, j);
+                
+            }
+        }
+        
+        cout << "#" << test_case <<" " << result << endl;
+        
     }
-    
-    cout << up_sum + down_sum << endl;
-    
+    return 0;
 }
