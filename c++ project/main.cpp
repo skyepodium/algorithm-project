@@ -1,14 +1,24 @@
 #include <iostream>
-#include <algorithm>
-#include <cmath>
 
 using namespace std;
 
-int main(){
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
     
-    int a, b;
-    cin >> a >> b;
+    cin>>T;
     
-    cout << abs(a-b+1) << endl;
-    
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        int a, b;
+        cin >> a >> b;
+        
+        cout << "#" << test_case << " " << a/b << " " << a%b << endl;
+        
+        
+        
+        
+    }
+    return 0;
 }
