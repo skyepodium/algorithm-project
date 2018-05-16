@@ -1,19 +1,14 @@
 #include <iostream>
-#include <string>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
 int main(){
     
-    string word;
-    cin >> word;
+    int a, b;
+    cin >> a >> b;
     
-    for(int i=0; i<word.size(); i++){
-        if(word[i] >=97 && word[i] <=122){
-            word[i] = word[i] - 32;
-        }
-        printf("%c", word[i]);
-    }
-    cout << endl;
+    cout << abs(a-b+1) << endl;
     
 }
