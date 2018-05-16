@@ -1,22 +1,24 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
+
+int cal_result(int a){
+    
+    int result = 0;
+    
+    while(a > 0){
+        
+        result = result + a%10;
+        a = a / 10;
+    }
+    
+    return result;
+}
 
 int main(){
     
     int n;
     cin >> n;
     
-    vector<int> v(n);
-    for(int i=0; i<n; i++){
-        cin >> v[i];
-    }
-    
-    sort(v.begin(), v.end());
-    
-    int size = (int)v.size();
-    
-    cout << v[size/2] << endl;
+    cout << cal_result(n) << endl;
 }
