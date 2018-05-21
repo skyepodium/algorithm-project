@@ -1,17 +1,16 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
 int main(){
     
-    long long int a, b, c;
-    cin >> a >> b >> c;
+    int n;
+    cin >> n;
     
-    long long int result = 0;
-    result = a*b - c;
-    
-    if(result > 0) cout << result << endl;
-    else cout << 0 << endl;
-    
+    for(int i=0; i<=n; i++){
+        cout << pow(2, i) << " ";
+    }
+    cout << endl;
     
 }
