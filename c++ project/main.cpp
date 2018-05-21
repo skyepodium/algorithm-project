@@ -4,12 +4,14 @@ using namespace std;
 
 int main(){
     
-    int n;
-    cin >> n;
+    int a, b;
+    cin >> a >> b;
     
-    for(int i=1; i<=n; i++){
-        if(n%i == 0) cout << i <<" " ;
-    }
-    cout << endl;
+    if(a==1 && b==2) cout << "B" << endl;
+    else if(a==1 && b==3) cout << "A" << endl;
+    else if(a==2 && b==1) cout << "A" << endl;
+    else if(a==2 && b==3) cout << "B" << endl;
+    else if(a==3 && b==1) cout << "B" << endl;
+    else cout << "A" << endl;
     
 }
