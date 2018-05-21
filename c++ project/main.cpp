@@ -1,7 +1,11 @@
 #include <iostream>
-#include <string>
+#include <cstring>
+#include <vector>
 
 using namespace std;
+
+int d[9][9];
+bool check[10];
 
 int main(int argc, char** argv)
 {
@@ -12,83 +16,75 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        string num;
-        cin >> num;
+        for(int i=0; i<9; i++){
+            for(int j=0; j<9; j++){
+                cin >> d[i][j];
+            }
+        }
         
-        bool is_possible = true;
-
+        bool is_true = true;
         
-        int month = (num[4] - 48) * 10 + (num[5] - 48);
+        //가로 검사
+        for(int i=0; i<9; i++){
+            memset(check, false, sizeof(check));
+            for(int j=0; j<9; j++){
+                if(check[d[i][j]] == false) check[d[i][j]] = true;
+                else{
+                    is_true = false;
+                    break;
+                }
+            }
+        }
+
+        //세로 검사
+        if(is_true){
+            for(int j=0; j<9; j++){
+                memset(check, false, sizeof(check));
+                for(int i=0; i<9; i++){
+                    if(check[d[i][j]] == false) check[d[i][j]] = true;
+                    else{
+                        is_true = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        vector<pair<int, int>> v;
+        v.push_back(make_pair(0, 0));
+        v.push_back(make_pair(0, 3));
+        v.push_back(make_pair(0, 6));
+        v.push_back(make_pair(3, 0));
+        v.push_back(make_pair(3, 3));
+        v.push_back(make_pair(3, 6));
+        v.push_back(make_pair(6, 0));
+        v.push_back(make_pair(6, 3));
+        v.push_back(make_pair(6, 6));
+
+        //네모 검사
+        if(is_true){
+            
+            for(int k=0; k<9; k++){
+                
+                int x = v[k].first;
+                int y = v[k].second;
+                
+                memset(check, false, sizeof(check));
+                for(int i=x; i<x+3; i++){
+                    for(int j=y; j<y+3; j++){
+                        if(check[d[i][j]] == false) check[d[i][j]] = true;
+                        else{
+                            is_true = false;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         
-        if(month <= 0 || month >= 13) is_possible = false;
-        
-        int day = (num[6] - 48) * 10 + (num[7] - 48);
-        
-        if(month == 1){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 2){
-            if(day<1 || day > 28) is_possible = false;
-        }
-
-        if(month == 3){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 4){
-            if(day<1 || day > 30) is_possible = false;
-        }
-
-        if(month == 5){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 6){
-            if(day<1 || day > 30) is_possible = false;
-        }
-
-        if(month == 7){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 8){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 9){
-            if(day<1 || day > 30) is_possible = false;
-        }
-
-        if(month == 10){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
-        if(month == 11){
-            if(day<1 || day > 30) is_possible = false;
-        }
-
-        if(month == 12){
-            if(day<1 || day > 31) is_possible = false;
-        }
-
         cout << "#" << test_case << " ";
-        if(is_possible){
-            for(int i=0; i<4; i++){
-                cout << num[i];
-            }
-            cout << "/";
-            for(int i=4; i<6; i++){
-                cout << num[i];
-            }
-            cout << "/";
-            for(int i=6; i<8; i++){
-                cout << num[i];
-            }
-            cout << endl;
-        }else{
-            cout << -1 << endl;
-        }
+        if(is_true) cout << 1 << endl;
+        else cout << 0 << endl;
         
         
     }
