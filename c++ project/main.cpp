@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
@@ -12,18 +11,23 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        string word;
-        cin >> word;
+        int h1, m1, h2, m2;
+        cin >> h1 >> m1 >> h2 >> m2;
         
-        cout << "#" <<test_case << " ";
+        int hour = h1 + h2;
+        int minute = m1 + m2;
         
-        for(int i=0; i<(int)word.size(); i++){
-            if(word[i] == 'a' || word[i] == 'e' || word[i] == 'i' || word[i] == 'o' || word[i] == 'u') continue;
-            else printf("%c", word[i]);
+        if(minute >= 60){
+            minute = minute - 60;
+            hour++;
         }
-        cout << endl;
+        
+        if(hour > 12){
+            hour = hour - 12;
+        }
+        
+        cout << "#" << test_case << " " << hour << " " << minute << endl;
         
     }
     return 0;
 }
-
