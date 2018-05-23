@@ -11,22 +11,16 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        int h1, m1, h2, m2;
-        cin >> h1 >> m1 >> h2 >> m2;
-        
-        int hour = h1 + h2;
-        int minute = m1 + m2;
-        
-        if(minute >= 60){
-            minute = minute - 60;
-            hour++;
+        int sum_result = 0;
+        for(int i=0; i<5; i++){
+            int num;
+            cin >> num;
+            if(num <= 40) sum_result += 40;
+            else sum_result += num;
         }
         
-        if(hour > 12){
-            hour = hour - 12;
-        }
+        cout << "#" << test_case << " " << sum_result/5 << endl;
         
-        cout << "#" << test_case << " " << hour << " " << minute << endl;
         
     }
     return 0;
