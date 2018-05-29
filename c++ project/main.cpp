@@ -1,31 +1,62 @@
 #include <iostream>
 #include <queue>
-#include <stack>
-#include <vector>
-#include <algorithm>
 
 using namespace std;
 
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+//시간 복잡도: O(n)
+//공간 복잡도: O(n)
+//사용한 알고리즘: BFS
+//사용한 자료구조: 1차원 배열
+
+int height = 0;
+int start_point = 0, end_point = 0;
+int top_dist = 0;
+int down_dist = 0;
+
+int d[1000001];
+bool check[1000001];
+
+void bfs(int start){
+    check[start] = true;
+    queue<int> q;
+    q.push(start);
     
-    cin>>T;
-    
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        int sum_result = 0;
-        for(int i=0; i<5; i++){
-            int num;
-            cin >> num;
-            if(num <= 40) sum_result += 40;
-            else sum_result += num;
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        
+        int next;
+        next = node + top_dist;
+        if(check[next] == false && next >0 && next <= height){
+            check[next] = true;
+            d[next] = d[node] + 1;
+            q.push(next);
         }
         
-        cout << "#" << test_case << " " << sum_result/5 << endl;
-        
+        next = node - down_dist;
+        if(check[next] == false && next >0 && next <= height){
+            check[next] = true;
+            d[next] = d[node] + 1;
+            q.push(next);
+        }
         
     }
-    return 0;
+}
+
+int main(){
+    
+    cin >> height >> start_point >> end_point >> top_dist >> down_dist;
+    
+    bfs(start_point);
+    
+    if(start_point == end_point){
+        cout << 0 << endl;
+    }else{
+        if(d[end_point] > 0){
+            cout << d[end_point] << endl;
+        }else{
+            cout << "use the stairs" << endl;
+        }
+    }
+    
 }
