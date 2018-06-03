@@ -1,27 +1,21 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <stack>
-#include <algorithm>
 
 using namespace std;
 
-int d[201][3];
+long long d[31];
 
 int main(){
     
     int n;
     cin >> n;
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<3; j++){
-            cin >> d[i][j];
-        }
-    }
+    d[0] = 1;
     
-    for(int j=0; j<3; j++){
-        for(int i=0; i<n; i++){
-            
+    for(int i=2; i<=n; i+=2){
+        d[i] = d[i-2]*3;
+        for(int j=i-4; j>=0; j-=2){
+            d[i] += d[j]*2;
         }
     }
+    cout << d[n] << endl;
 }
