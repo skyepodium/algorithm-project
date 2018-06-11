@@ -1,25 +1,20 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-#include <cstring>
 
 using namespace std;
 
-long long d[31];
-
 int main(){
     
-    int n;
-    cin >> n;
+    int num;
+    cin >> num;
     
-    d[0] = 1;
+    if(num == 1) cout << 'a' << endl;
+    else if(num == 2) cout << 'b' << endl;
+    else if(num == 3) cout << 'b' << endl;
+    else if(num == 4) cout << 'c' << endl;
+    else if(num == 5) cout << 'd' << endl;
+    else if(num == 6) cout << 'd' << endl;
+    else if(num == 7) cout << 'd' << endl;
+    else cout << 'c' << endl;
     
-    for(int i=2; i<=n; i+=2){
-        d[i] = d[i-2]*3;
-        for(int j=i-4; j>=0; j-=2){
-            d[i] += d[j]*2;
-        }
-    }
-    cout << d[n] << endl;
+    
 }
