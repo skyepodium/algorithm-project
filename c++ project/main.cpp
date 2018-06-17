@@ -1,46 +1,72 @@
 #include <iostream>
-#include <cmath>
-#include <vector>
-#include <algorithm>
+#include <sstream>
+#include <string>
+#include <stack>
 
 using namespace std;
 
-struct info{
-    double l;
-    int num;
-};
+//Implement this class
+//Please use stack only
 
-bool cmp(const info &a, const info &b){
-    
-    return a.l < b.l;
-}
+stack<int> first;
+stack<int> second;
 
-int main() {
-    
-    double x, y, r;
-    cin >> x >> y >> r;
-    
-    
-    vector<info> v;
-    for(int i=0; i<5; i++){
-        int a, b;
-        cin >> a >> b;
-        
-        double diff_x = abs(a-x);
-        double diff_y = abs(b-y);
-        
-        double length = sqrt(diff_x*diff_x + diff_y*diff_y);
-        v.push_back({length, i+1});
+class Queue {
+public:
+    /*
+     * Description: ENQUEUE가 입력되면, first 스택에 값을 넣는다.
+     * Time complexity:O(1)
+     * Space complexity:O(n)
+     */
+    void enqueue(int v) {
+        first.push(v);
     }
     
-    
-    sort(v.begin(), v.end(), cmp);
-    
-    double result_num = v[0].num;
-    double result_l = v[0].l;
-    
-    if(r<result_l) cout << -1 << endl;
-    else cout << result_num << endl;
-    
+    /*
+     * Description:
+     * Time complexity:O(n^2)
+     * Space complexity:O(n)
+     */
+    int dequeue() {
+        
+        //first 스택의 모든 값을 second 스택으로 거꾸로 옮김
+        while(!first.empty()){
+            int num = first.top();
+            first.pop();
+            second.push(num);
+        }
+        
+        int result = 0;
+        result = second.top();
+        second.pop();
+        
+        //second 스택의 모든 값을 first 스택으로 거꾸로 옮김
+        while(!second.empty()){
+            int num = second.top();
+            second.pop();
+            first.push(num);
+        }
+        
+        return result;
+    }
+};
+
+int main(int argc, const char *argv[]) {
+    Queue queue;
+    string line;
+    getline(cin, line);
+    int count = stoi(line);
+    for (int i = 0; i < count; ++i) {
+        getline(cin, line);
+        stringstream ss(line);
+        string token;
+        getline(ss, token, ' ');
+        if (token == "ENQUEUE") {
+            getline(ss, token, ' ');
+            queue.enqueue(stoi(token));
+        } else if (token == "DEQUEUE") {
+            cout<<queue.dequeue()<<endl;
+        }
+    }
 }
 
