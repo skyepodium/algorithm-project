@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 //시간 복잡도: O(2^n)
 //공간 복잡도: O(n)
