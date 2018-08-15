@@ -1,48 +1,44 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(1)
-//사용한 알고리즘: 선형 탐색
+//시간 복잡도: O(??)
+//공간 복잡도: O(8)
+//사용한 알고리즘: 그리디 알고리즘
 //사용한 자료구조: 1차원 배열
 
-void cal_clap(int a){
+int pay = 0;
+int money[8] = {50000, 10000, 5000, 1000, 500, 100, 50, 10};
 
-    int origin_num = a;
-    int clap_num = 0;
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
     
-    while(a>0){
-        //각 자릿수 검사
-        int b = a%10;
-        
-        //만약 숫자가 3또는 6또는 9이면 박수횟수 증가
-        if(b==3 || b==6 || b==9) clap_num++;
-        
-        a = a/10;
-    }
+    cin>>T;
     
-    if(clap_num == 1) cout << "- ";
-    else if(clap_num == 0) cout << origin_num << " ";
-    else{
-        for(int i=0; i<clap_num; i++){
-            cout << "-";
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        cin >> pay;
+        vector<int> v;
+        
+        //그리디 알고리즘
+        //제일 큰것부터, for문 돌면서 갯수를 계산한다.
+        for(int i=0; i<8; i++){
+            int count = 0;
+            while(pay >= money[i]){
+                pay = pay - money[i];
+                count++;
+            }
+            v.push_back(count);
         }
-        cout << " ";
-    }
-    
-}
-
-int main(){
-    
-    int n;
-    cin >> n;
-    
-    //for문으로 n번까지 검사
-    for(int i=1; i<=n; i++){
         
-        //박수횟수 검사
-        cal_clap(i);
+        cout << "#" << test_case << endl;
+        for(int i=0; i<v.size(); i++){
+            cout << v[i] << " ";
+        }
+        cout << endl;
     }
-    cout << endl;
+    return 0;
 }
