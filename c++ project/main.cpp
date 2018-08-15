@@ -1,16 +1,18 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 //시간 복잡도: O(n)
-//공간 복잡도: O(1)
+//공간 복잡도: O(n)
 //사용한 알고리즘: for문
-//사용한 자료구조: 없음
-
+//사용한 자료구조: 1차원 배열
 
 int num;
+int d[1001];
+int min_dis;
 int result;
-int v;
+
 int main(int argc, char** argv)
 {
     int test_case;
@@ -20,31 +22,20 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        //초기화
-        v = 0;
+        min_dis = 2147483647;
         result = 0;
-        cin >> num;
         
-        //반목문을 돌면서 command를 수행한다.
+        cin >> num;
         for(int i=0; i<num; i++){
-            int a, b;
-            cin >> a;
-
-            if(a != 0){
-                cin >> b;
-                if(a==1) v = v+b;
-                else {
-                    v = v-b;
-                    //속도는 0밑으로 내려가지 않는다.
-                    if(v<0) v = 0;
-                }
-            }
-            
-            //command마다 이동거리 갱신
-            result = result + v;
+            cin >> d[i];
+            min_dis = min(min_dis, abs(d[i]));
         }
         
-        cout << "#" << test_case << " " << result << endl;
+        for(int i=0; i<num; i++){
+            if(min_dis == abs(d[i])) result++;
+        }
+        
+        cout << "#" << test_case << " " << min_dis << " " << result << endl;
     }
     return 0;
 }
