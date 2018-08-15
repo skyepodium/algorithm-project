@@ -1,17 +1,14 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: for문
-//사용한 자료구조: 1차원 배열
+//시간 복잡도: O(1)
+//공간 복잡도: O(1)
+//사용한 알고리즘: 없음
+//사용한 자료구조: 없음
 
-int num;
-int d[1001];
-int min_dis;
-int result;
+
+int p, q, r, s, w;
 
 int main(int argc, char** argv)
 {
@@ -22,20 +19,18 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        min_dis = 2147483647;
-        result = 0;
+        cin >> p >> q >> r >> s >> w;
         
-        cin >> num;
-        for(int i=0; i<num; i++){
-            cin >> d[i];
-            min_dis = min(min_dis, abs(d[i]));
-        }
+        int a = w*p;
         
-        for(int i=0; i<num; i++){
-            if(min_dis == abs(d[i])) result++;
-        }
+        int b = 0;
+        if(r>=w) b = q;
+        else b = q + s*(w-r);
         
-        cout << "#" << test_case << " " << min_dis << " " << result << endl;
+        cout << "#" << test_case << " ";
+        if(a<b) cout << a << endl;
+        else if(a>b) cout << b << endl;
+        else cout << a << endl;
     }
     return 0;
 }
