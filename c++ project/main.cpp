@@ -1,22 +1,20 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <string>
 
 using namespace std;
 
-int total_num, find_order;
+//시간 복잡도: O(n^2)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 2중 for문
+//사용한 자료구조: 1차원 배열, 1차원 벡터
 
-string result[11] = {"", "A+", "A0", "A-", "B+", "B0", "B-", "C+", "C0", "C-", "D0"};
+//두개의 숫자열을 저장할 배열 2개 생성
+int a1[20];
+int a2[20];
 
-struct student{
-    float score;
-    int origin_order;
-};
-
-bool cmp(const student &a, const student &b ){
-    return a.score > b.score;
-}
+//계산의 최대값을 저장할 변수 result
+int result;
 
 int main(int argc, char** argv)
 {
@@ -27,34 +25,70 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
+        //정수 최소값으로 매번 초기화 시켜준다.
+        result = -2147483647;
+        int a, b;
+        cin >> a >> b;
         
-        vector<student> v;
-        cin >> total_num >> find_order;
-        for(int i=0; i<total_num; i++){
-            float a, b, c;
-            cin >> a >> b >> c;
-            float score = a*0.35 + b*0.45 + c*0.2;
-            v.push_back({score, i});
+        //첫번째 숫자열을 입력받는다.
+        for(int i=0; i<a; i++){
+            cin >> a1[i];
         }
         
-        sort(v.begin(), v.end(), cmp);
+        //두번째 숫자열을 입력받는다.
+        for(int i=0; i<b; i++){
+            cin >> a2[i];
+        }
         
-        float mid_order = 0;
-        for(int i=0; i<v.size(); i++){
-            if((v[i].origin_order + 1) == find_order){
-                mid_order = i+1;
+        //반복문의 횟수 계산
+        int loop_order = b-a;
+        
+        //짧은 숫자열을 저장할 벡터v1, 긴 숫자열을 저장할 벡터v2
+        vector<int> v1;
+        vector<int> v2;
+        
+        //만약 첫번째로 주어진 숫자열의 길이가 두번째 보다 크다면
+        if(a>b){
+            loop_order = a-b;
+            
+            for(int i=0; i<b; i++){
+                v1.push_back(a2[i]);
+            }
+            
+            for(int i=0; i<a; i++){
+                v2.push_back(a1[i]);
+            }
+            
+            //a,b 스왑
+            int c;
+            c = a;
+            a = b;
+            b = c;
+            
+        }else{
+            for(int i=0; i<a; i++){
+                v1.push_back(a1[i]);
+            }
+            
+            for(int i=0; i<b; i++){
+                v2.push_back(a2[i]);
             }
         }
         
-        int result_order = mid_order/(total_num/10);
-        float d = mid_order/(total_num/10);
-        if(d != (int)d){
-            result_order++;
+        //두개의 벡터를 비교하면서 값을 계산한다.
+        for(int i=0; i<loop_order+1; i++){
+            
+            //각 횟수의 계산값을 저장할 변수 total
+            int total = 0;
+            for(int j=0; j<a; j++){
+                total = total + v1[j] * v2[j+i];
+            }
+            
+            //계산의 최대값 갱신
+            result = max(result, total);
         }
         
-        
-        cout << "#" << test_case << " " << result[result_order] << endl;
-        
+        cout << "#" << test_case << " " << result << endl;
     }
     return 0;
 }
