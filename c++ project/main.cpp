@@ -2,15 +2,15 @@
 
 using namespace std;
 
-//시간 복잡도: O(logn)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 반복문
-//사용한 자료구조: 1차원 배열
+//시간 복잡도: O(n)
+//공간 복잡도: O(1)
+//사용한 알고리즘: for문
+//사용한 자료구조: 없음
 
-int d[5] = {2, 3, 5, 7, 11};
-int result[5];
+
 int num;
-
+int result;
+int v;
 int main(int argc, char** argv)
 {
     int test_case;
@@ -20,27 +20,31 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        //배열 초기화
-        for(int i=0; i<5; i++) result[i] = 0;
-        
+        //초기화
+        v = 0;
+        result = 0;
         cin >> num;
         
-        //반복문으로 배열을 돌면서 주어진 수를 소인수분해한다.
-        for(int i=0; i<5; i++){
-            int count = 0;
-            while(num%d[i] == 0){
-                num = num/d[i];
-                count++;
+        //반목문을 돌면서 command를 수행한다.
+        for(int i=0; i<num; i++){
+            int a, b;
+            cin >> a;
+
+            if(a != 0){
+                cin >> b;
+                if(a==1) v = v+b;
+                else {
+                    v = v-b;
+                    //속도는 0밑으로 내려가지 않는다.
+                    if(v<0) v = 0;
+                }
             }
-            result[i] = count;
+            
+            //command마다 이동거리 갱신
+            result = result + v;
         }
         
-        //출력
-        cout << "#" << test_case << " ";
-        for(int i=0; i<5; i++){
-            cout << result [i] << " ";
-        }
-        cout << endl;
+        cout << "#" << test_case << " " << result << endl;
     }
     return 0;
 }
