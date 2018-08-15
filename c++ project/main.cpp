@@ -1,33 +1,15 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-//시간 복잡도: O(??)
-//공간 복잡도: O(10)
-//사용한 알고리즘: 반복문
-//사용한 자료구조: 1차원 배열
+//시간 복잡도: O(n^2)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 2중 반복문
+//사용한 자료구조: string
 
-bool d[10];
-bool is_complete = false;
-int mul_num = 1;
-int num;
 
-void check_num(int a){
-    
-    while(a>0){
-        d[a%10] = true;
-        a = a/10;
-    }
-}
-
-void check_complete(){
-    bool check_complete = true;
-    for(int i=0; i<10; i++){
-        if(d[i] == false) check_complete = false;
-    }
-    
-    if(check_complete) is_complete = true;
-}
+int result;
 
 int main(int argc, char** argv)
 {
@@ -38,18 +20,56 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        for(int i=0; i<10; i++) d[i] = false;
-        is_complete = false;
-        mul_num = 1;
-        cin >> num;
+        //초기화
+        result = 0;
         
-        while(is_complete == false){
-            check_num(num*mul_num);
-            mul_num++;
-            check_complete();
+        //문자열 입력받는다.
+        string word1;
+        cin >> word1;
+        
+        int count = 1;
+        
+        //문자열을 찾았는지 알려주는 변수
+        bool find_complete = false;
+
+        while(find_complete == false){
+
+            //count의 크기만큼 문자열을 생성한다.
+            string temp;
+            for(int i=0; i<count; i++){
+                temp = temp + word1[i];
+            }
+            
+            //새로 생성한 문자열을 반복하여 word2를 생성한다.
+            int num = 30/count;
+            int num_remain = 30%count;
+        
+            string word2;
+            for(int i=0; i<num; i++){
+                word2 = word2 + temp;
+            }
+            for(int i=0; i<num_remain; i++){
+                word2 = word2 + temp[i];
+            }
+        
+            //word1, word2 두 문자열이 같은지를 검사한다.
+            bool is_find = true;
+            for(int i=0; i<30; i++){
+                if(word1[i] != word2[i]){
+                    is_find = false;
+                    break;
+                }
+            }
+        
+            //두 문자열이 같으면 반복문을 종료한다.
+            if(is_find == true){
+                result = count;
+                find_complete = true;
+            }
+        
+            count++;
         }
-        
-        cout << "#" << test_case << " "  << num * (mul_num-1) << endl;
+        cout <<"#" << test_case << " " << result << endl;
     }
     return 0;
 }
