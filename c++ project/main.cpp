@@ -1,16 +1,16 @@
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
 //시간 복잡도: O(n^2)
 //공간 복잡도: O(n^2)
-//사용한 알고리즘: for문
+//사용한 알고리즘: 2중 for문
 //사용한 자료구조: 2차원 배열
 
 int n;
-int d[10][10];
-int dx[] = {0, 1, 0, -1};
-int dy[] = {1, 0, -1, 0};
+char d[7][7];
 
 int main(int argc, char** argv)
 {
@@ -21,48 +21,50 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        for(int i=0; i<10; i++){
-            for(int j=0; j<10; j++){
-                d[i][j] = 0;
-            }
-        }
-        
         cin >> n;
-        int num = 1;
-        int c_x = 0;
-        int c_y = 0;
-        int c_dir = 0;
-        
-        while(num<=n*n){
-            if(d[c_x][c_y] == 0){
-                d[c_x][c_y] = num;
-                num++;
-            }
-            
-            int n_x = c_x + dx[c_dir];
-            int n_y = c_y + dy[c_dir];
-            
-            if(n_x>=0 && n_x<n && n_y>=0 && n_y<n){
-                if(d[n_x][n_y] == 0){
-                    c_x = n_x;
-                    c_y = n_y;
-                }else{
-                    c_dir = (c_dir+3)%4;
-                }
-            }else{
-                c_dir = (c_dir+3)%4;
-            }
-            
-        }
-        
-        cout << "#" << test_case << endl;
         for(int i=0; i<n; i++){
             for(int j=0; j<n; j++){
-                cout << d[i][j] <<" ";
+                cin >> d[i][j];
             }
-            cout << endl;
         }
         
+        //90도
+        vector<string> v1;
+        for(int j=0; j<n; j++){
+            string num;
+            for(int i=n-1; i>=0; i--){
+                num = num + d[i][j];
+            }
+            v1.push_back(num);
+        }
+        
+        //180도
+        vector<string> v2;
+        for(int i=n-1; i>=0; i--){
+            string num;
+            for(int j=n-1; j>=0; j--){
+                num = num + d[i][j];
+            }
+            v2.push_back(num);
+        }
+        
+        //270도
+        vector<string> v3;
+        for(int j=n-1; j>=0; j--){
+            string num;
+            for(int i=0; i<n; i++){
+                num = num + d[i][j];
+            }
+            v3.push_back(num);
+        }
+        
+        cout << "#" << test_case << " " << endl;
+        for(int i=0; i<v1.size(); i++){
+            cout << v1[i] << " ";
+            cout << v2[i] << " ";
+            cout << v3[i] << endl;
+        }
+    
     }
     return 0;
 }
