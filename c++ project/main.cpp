@@ -1,16 +1,22 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 선형 탐색
-//사용한 자료구조: 1차원 배열
+int total_num, find_order;
 
-int max_val = 0;
-int result = 0;
-int d[101];
+string result[11] = {"", "A+", "A0", "A-", "B+", "B0", "B-", "C+", "C0", "C-", "D0"};
+
+struct student{
+    float score;
+    int origin_order;
+};
+
+bool cmp(const student &a, const student &b ){
+    return a.score > b.score;
+}
 
 int main(int argc, char** argv)
 {
@@ -21,37 +27,35 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        //테스트케이스 번호 입력
-        int test_case_num;
-        cin >> test_case_num;
         
-        //초기화
-        max_val = 0;
-        result = 0;
-        for(int i=0; i<101; i++) d[i] = 0;
-
-        //1000명의 점수를 입력받고, 최빈수++
-        for(int i=0; i<1000; i++){
-            int num;
-            cin >> num;
-            d[num]++;
+        vector<student> v;
+        cin >> total_num >> find_order;
+        for(int i=0; i<total_num; i++){
+            float a, b, c;
+            cin >> a >> b >> c;
+            float score = a*0.35 + b*0.45 + c*0.2;
+            v.push_back({score, i});
         }
         
-        //100개의 배열 선형탐색, 최빈수 찾는다.
-        for(int i=0; i<101; i++){
-            if(d[i] > max_val){
-                max_val = d[i];
-                result = i;
-
-            }else if(d[i] == max_val){
-                if(result < i) result = i;
-                
+        sort(v.begin(), v.end(), cmp);
+        
+        float mid_order = 0;
+        for(int i=0; i<v.size(); i++){
+            if((v[i].origin_order + 1) == find_order){
+                mid_order = i+1;
             }
         }
         
-        //결과출력
-        cout << "#" << test_case << " " << result << endl;
+        int result_order = mid_order/(total_num/10);
+        float d = mid_order/(total_num/10);
+        if(d != (int)d){
+            result_order++;
+        }
+        
+        
+        cout << "#" << test_case << " " << result[result_order] << endl;
         
     }
     return 0;
 }
+
