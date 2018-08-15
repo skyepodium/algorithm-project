@@ -2,7 +2,14 @@
 
 using namespace std;
 
-int day[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+//시간 복잡도: O(1)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 선형 탐색
+//사용한 자료구조: 1차원 배열
+
+//각 월별 날짜수 배열에 저장
+int day[12] = {31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
+
 
 int main(int argc, char** argv)
 {
@@ -16,20 +23,13 @@ int main(int argc, char** argv)
         int a, b, c, d;
         cin >> a >> b >> c >> d;
         
-        int month1 = 0;
-        for(int i=0; i<a-1; i++){
-            month1 = month1 + day[i];
-        }
+        //첫쨋날 날짜수 계산
+        int first_day = day[a-2] + b;
         
-        int first_day = month1 + b;
-
-        int month2 = 0;
-        for(int i=0; i<c-1; i++){
-            month2 = month2 + day[i];
-        }
+        //둘쨋날 날짜수 계산
+        int second_day = day[c-2] + d;
         
-        int second_day = month2 + d;
-        
+        //날짜수 차이 출력
         cout << "#" << test_case << " " << second_day - first_day + 1<< endl;
         
     }
