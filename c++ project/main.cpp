@@ -1,16 +1,43 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 2중 for문
-//사용한 자료구조: 2차원 배열
+vector<int> bi_pattern;
+vector<int> result;
 
-int n;
-char d[7][7];
+void int_to_bi(int num){
+    
+    vector<int> v;
+    while(num>0){
+        v.push_back(num%2);
+        num = num/2;
+    }
+    if(v.size() < 6){
+        for(int i=0; i<6-v.size(); i++){
+            v.push_back(0);
+        }
+    }
+    for(int i=5; i>=0; i--){
+        bi_pattern.push_back(v[i]);
+        cout << v[i] <<" ";
+    }
+//    cout << endl;
+}
+
+char ch_to_bi(char ch){
+    char num;
+    
+    if(ch >= 65) num = ch - 65;
+    else if(ch >= 48) num = ch + 4;
+    else if(ch == 43) num = 62;
+    else num = 63;
+    
+    return num;
+}
 
 int main(int argc, char** argv)
 {
@@ -21,50 +48,49 @@ int main(int argc, char** argv)
     
     for(test_case = 1; test_case <= T; ++test_case)
     {
-        cin >> n;
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                cin >> d[i][j];
-            }
+        bi_pattern.clear();
+        string word;
+        cin >> word;
+        
+        string bi_word;
+        vector<int> num_word;
+        for(int i=0; i<word.size(); i++){
+            num_word.push_back(ch_to_bi(word[i]));
         }
         
-        //90도
-        vector<string> v1;
-        for(int j=0; j<n; j++){
-            string num;
-            for(int i=n-1; i>=0; i--){
-                num = num + d[i][j];
-            }
-            v1.push_back(num);
+        for(int i=0; i<num_word.size(); i++){
+//            cout << num_word[i] << endl;
+            int_to_bi(num_word[i]);
         }
         
-        //180도
-        vector<string> v2;
-        for(int i=n-1; i>=0; i--){
-            string num;
-            for(int j=n-1; j>=0; j--){
-                num = num + d[i][j];
-            }
-            v2.push_back(num);
+        cout << endl;
+        cout << endl;
+        for(int i=0; i<bi_pattern.size(); i++){
+            cout << bi_pattern[i] << " ";
         }
+        cout << endl;
         
-        //270도
-        vector<string> v3;
-        for(int j=n-1; j>=0; j--){
-            string num;
-            for(int i=0; i<n; i++){
-                num = num + d[i][j];
+        /*
+         
+        int count = 0;
+        int num = 0;
+        for(int i=((int)bi_pattern.size()-1); i>=0; i--){
+            num = num + bi_pattern[i]*pow(2, count);
+            count++;
+            if(count >7){
+                result.push_back(num);
+                cout << num << endl;
+                
+                count = 0;
+                num = 0;
             }
-            v3.push_back(num);
         }
+        */
         
-        cout << "#" << test_case << " " << endl;
-        for(int i=0; i<v1.size(); i++){
-            cout << v1[i] << " ";
-            cout << v2[i] << " ";
-            cout << v3[i] << endl;
+//        cout << result.size() << endl;
+        for(int i=0; i<result.size(); i++){
+//            cout << result[i] << endl;
         }
-    
     }
     return 0;
 }
