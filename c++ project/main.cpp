@@ -1,13 +1,15 @@
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 int main(){
-
-    string name;
-    cin >> name;
     
-    cout << name << "??!" << endl;
+    int n;
+    cin >> n;
+    
+    for(int i=1; i<=n; i++){
+        cout << "Hello World, Judge " << i << "!" << endl;
+    }
+
 }
 
