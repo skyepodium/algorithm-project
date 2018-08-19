@@ -1,15 +1,24 @@
 #include <iostream>
+#include <string>
+#include <cmath>
 
 using namespace std;
 
 int main(){
     
-    int n;
-    cin >> n;
+    string num;
+    cin >> num;
     
-    for(int i=1; i<=n; i++){
-        cout << "Hello World, Judge " << i << "!" << endl;
+    int result = 0;
+    for(int i=0; i<num.size(); i++){
+        
+        int mul_num = 0;
+        if(num[i] >=65) mul_num = num[i] - 55;
+        else mul_num = num[i] - 48;
+        
+        result = result + mul_num*pow(16,num.size()-1-i);
     }
+    cout << result << endl;
 
 }
 
