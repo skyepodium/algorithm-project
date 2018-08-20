@@ -1,24 +1,25 @@
 #include <iostream>
 #include <string>
-#include <cmath>
 
 using namespace std;
 
 int main(){
     
-    string num;
-    cin >> num;
+    string num1, num2;
+    cin >> num1 >> num2;
     
-    int result = 0;
-    for(int i=0; i<num.size(); i++){
+    bool is_right = true;
+    if(num1.size() == num2.size()){
         
-        int mul_num = 0;
-        if(num[i] >=65) mul_num = num[i] - 55;
-        else mul_num = num[i] - 48;
+        for(int i=0; i<num1.size(); i++){
+            if(num1[i] != num2[i]){
+                is_right = false;
+                break;
+            }
+        }
         
-        result = result + mul_num*pow(16,num.size()-1-i);
-    }
-    cout << result << endl;
-
+    }else is_right = false;
+    
+    if(is_right == true) cout << 1 << endl;
+    else cout << 0 << endl;
 }
-
