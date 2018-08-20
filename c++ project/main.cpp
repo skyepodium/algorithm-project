@@ -1,25 +1,27 @@
 #include <iostream>
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
+//시간 복잡도: O(n)
+//공간 복잡도: O(1)
+//사용한 알고리즘: 선형탐색, STL MAX, MIN
+//사용한 자료구조: 없음
+
+int min_val = 1000000;
+int max_val = -1000000;
+
+int n, num;
+
 int main(){
     
-    string num1, num2;
-    cin >> num1 >> num2;
+    cin >> n;
     
-    bool is_right = true;
-    if(num1.size() == num2.size()){
-        
-        for(int i=0; i<num1.size(); i++){
-            if(num1[i] != num2[i]){
-                is_right = false;
-                break;
-            }
-        }
-        
-    }else is_right = false;
+    for(int i=0; i<n; i++){
+        cin >> num;
+        min_val = min(min_val, num);
+        max_val = max(max_val, num);
+    }
     
-    if(is_right == true) cout << 1 << endl;
-    else cout << 0 << endl;
+    cout << min_val << " " << max_val << endl;
 }
