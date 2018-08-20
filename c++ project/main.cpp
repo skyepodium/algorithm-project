@@ -1,27 +1,36 @@
 #include <iostream>
-#include <algorithm>
-
+#include <string>
 using namespace std;
-
-//시간 복잡도: O(n)
-//공간 복잡도: O(1)
-//사용한 알고리즘: 선형탐색, STL MAX, MIN
-//사용한 자료구조: 없음
-
-int min_val = 1000000;
-int max_val = -1000000;
-
-int n, num;
 
 int main(){
     
-    cin >> n;
+    int t;
+    cin >> t;
     
-    for(int i=0; i<n; i++){
+    while(t--){
+        
+        string num;
         cin >> num;
-        min_val = min(min_val, num);
-        max_val = max(max_val, num);
+        
+        int n = 0;
+        
+        for(int i=(int)num.size() - 1; i>=0; i--){
+            
+            if(i%2 == 0){
+                int a = (num[i]-48)*2;
+                if(a >= 10){
+                    n = n + a/10 + a%10;
+                }else{
+                    n = n + a;
+                }
+            }else{
+                n = n + (num[i]-48);
+            }
+        }
+        
+        if(n%10 == 0) cout << "T" << endl;
+        else cout << "F" << endl;
+        
     }
     
-    cout << min_val << " " << max_val << endl;
 }
