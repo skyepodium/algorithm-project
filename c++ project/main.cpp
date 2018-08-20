@@ -1,36 +1,34 @@
 #include <iostream>
 #include <string>
+
 using namespace std;
+
+//시간 복잡도: O(1)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 없음
+//사용한 자료구조: 1차원 배열
+
+
+int month[12] = {31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
 int main(){
     
-    int t;
-    cin >> t;
+    int m, d;
+    cin >> m >> d;
+    int dayz = 0;
+    if(m == 1) dayz = d - 1;
+    else dayz = month[m-2] + d - 1;
+    dayz = dayz%7;
     
-    while(t--){
-        
-        string num;
-        cin >> num;
-        
-        int n = 0;
-        
-        for(int i=(int)num.size() - 1; i>=0; i--){
-            
-            if(i%2 == 0){
-                int a = (num[i]-48)*2;
-                if(a >= 10){
-                    n = n + a/10 + a%10;
-                }else{
-                    n = n + a;
-                }
-            }else{
-                n = n + (num[i]-48);
-            }
-        }
-        
-        if(n%10 == 0) cout << "T" << endl;
-        else cout << "F" << endl;
-        
-    }
+    string result;
+    if(dayz  == 0) result = "MON";
+    else if(dayz == 1) result = "TUE";
+    else if(dayz == 2) result = "WED";
+    else if(dayz == 3) result = "THU";
+    else if(dayz == 4) result = "FRI";
+    else if(dayz == 5) result = "SAT";
+    else result = "SUN";
+    
+    cout << result << endl;
     
 }
