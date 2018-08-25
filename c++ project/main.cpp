@@ -2,27 +2,29 @@
 
 using namespace std;
 
-int mod = 1000000000;
-
-int d[201][201];
-
-int main(){
-    
-    int n, k;
-    cin >> n >> k;
-    
-    for(int i=0; i<=n; i++){
-        
-        d[i][1] = 1;
-        
-        for(int j=0; j<=n; j++){
-            for(int h=1; h<=k; h++){
-                d[i][h] = d[i][h]%mod + d[j][h-1]%mod;
-                d[i][h] %= mod;
-            }
-        }
+long long int count2(long long int num){
+    long long int result = 0;
+    for(long long int i=2; i<=num; i = i*2){
+        result = result + num/i;
     }
     
-    cout << d[n][k] << endl;
+    return result;
+}
+
+long long int count5(long long int num){
+    long long int result = 0;
+    for(long long int i=5; i<=num; i = i*5){
+        result = result + num/i;
+    }
+    
+    return result;
+}
+int main(){
+    
+    long long int n, m;
+    cin >> n >> m;
+    
+    cout << min(count2(n) - count2(m) - count2(n-m), count5(n) - count5(m) - count5(n-m)) << endl;
+    
 }
 
