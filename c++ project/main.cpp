@@ -1,9 +1,8 @@
 #include <iostream>
 #include <string>
-#include <stack>
 
 //시간 복잡도: O(n)
-//공간 복잡도: O(n)
+//공간 복잡도: O(1)
 //사용한 알고리즘: 없음
 //사용한 자료구조: string class(스택)
 
@@ -11,33 +10,32 @@ using namespace std;
 
 int main(){
     
-    int n;
-    cin >> n;
-    for(int i=0; i<n; i++){
-        string word;
-        cin >> word;
-
-        stack<char> s;
+    string word;
+    getline(cin, word);
+    
+    for(int i=0; i<word.size(); i++){
         
-        bool is_right = true;
-        for(int i=0; i<word.size(); i++){
-            if(word[i] == '('){
-                s.push('(');
+        char ch = word[i];
+        if(ch >= 97){
+            
+            if(ch + 13 > 122){
+                printf("%c", ch + 13 - 26);
             }else{
-                if(s.size() == 0){
-                    is_right = false;
-                    break;
-                }
-                s.pop();
+                printf("%c", ch + 13);
             }
+            
+        }else if(ch >= 65){
+
+            if(ch + 13 > 90){
+                printf("%c", ch + 13 - 26);
+            }else{
+                printf("%c", ch + 13);
+            }
+
+        }else{
+            printf("%c", ch);
         }
         
-        if(s.size() != 0) is_right = false;
-        if(is_right == true) cout << "YES" << endl;
-        else cout << "NO" << endl;
     }
-    
-    
-    
-    
+    cout << endl;
 }
