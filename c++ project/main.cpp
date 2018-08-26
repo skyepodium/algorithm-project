@@ -1,30 +1,33 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-long long int count2(long long int num){
-    long long int result = 0;
-    for(long long int i=2; i<=num; i = i*2){
-        result = result + num/i;
-    }
-    
-    return result;
-}
+long long int d[1000001];
+long long int mod = 1000000009;
 
-long long int count5(long long int num){
-    long long int result = 0;
-    for(long long int i=5; i<=num; i = i*5){
-        result = result + num/i;
-    }
-    
-    return result;
-}
 int main(){
     
-    long long int n, m;
-    cin >> n >> m;
+    d[1] = 1;
+    d[2] = 2;
+    d[3] = 4;
     
-    cout << min(count2(n) - count2(m) - count2(n-m), count5(n) - count5(m) - count5(n-m)) << endl;
+    for(long long int i=4; i<=1000000; i++){
+        d[i] = d[i-1]%mod + d[i-2]%mod + d[i-3]%mod;
+        d[i] %= mod;
+    }
+    
+    long long int n;
+    cin >> n;
+    
+    for(long long int i=0; i<n; i++){
+        long long int num;
+        cin >> num;
+        
+        cout << d[num]%mod << endl;
+    }
+    
+    
     
 }
 
