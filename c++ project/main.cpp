@@ -1,42 +1,38 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
-int a[201];
-int d[201];
+int d[10001];
 
-int n;
-
-int go(int i){
-
-    d[i] = 1;
-    if(d[i] > 1) return d[i];
-    
-    for(int j=0; j<n; j++){
-        if(a[j] < a[i]){
-            d[i] = max(d[i], d[j]+1);
-        }
-    }
-    
-    return d[i];
-}
+int n, m;
+int cnt = 0;
 
 int main(){
     
-
-    cin >> n;
+    cin >> n >> m;
     
     for(int i=0; i<n; i++){
-        cin >> a[i];
+        cin >> d[i];
     }
     
     for(int i=0; i<n; i++){
-        go(i);
+        int result = 0;
+        for(int j=i; j<n; j++){
+            
+            if(result == m){
+                cnt++;
+                break;
+            }else{
+                if(result < m){
+                    result = result + d[j];
+                    if(result == m){
+                        cnt++;
+                        break;
+                    }
+                }
+            }
+        }
     }
     
-    cout << n - *max_element(d, d+n) << endl;
-    
+    cout << cnt << endl;
 }
-
-
