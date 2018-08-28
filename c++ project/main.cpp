@@ -1,45 +1,64 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(2^n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 백트래킹
-//사용한 자료구조: 1차원 배열
-//비고: 원래는 0/1Knapsack문제. 단, 20까지는 재귀로 가능
+struct info{
+    int num;
+    int g;
+    int s;
+    int b;
+    int grade;
+};
 
+bool cmp(const info &a, const info &b){
 
-int n;
-int l[21];
-int j[21];
-int result = 0;
-
-void go(int index, int health, int happy){
-    
-    if(index == n){
-        if(health > 0){
-            if(happy > result) result = happy;
+    if(a.g == b.g){
+        
+        if(a.s == b.s){
+            
+            return a.b > b.b;
         }
-        return;
+        else{
+            return a.s > b.s;
+        }
+        
+    }else{
+        return a.g > b.g;
     }
-    
-    go(index+1, health - l[index], happy + j[index]);
-    go(index+1, health, happy);
 }
 
 int main(){
     
-
-    cin >> n;
+    int n, k;
+    cin >> n >> k;
+    
+    vector<info> v;
     for(int i=0; i<n; i++){
-        cin >> l[i];
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+        v.push_back( { a, b, c, d, 0});
     }
     
-    for(int i=0; i<n; i++){
-        cin >> j[i];
-    }
-
-    go(0, 100, 0);
+    sort(v.begin(), v.end(), cmp);
     
-    cout << result << endl;
+    v[0].grade = 1;
+    int diff = 0;
+    for(int i=1; i<v.size(); i++){
+        if(v[i].g == v[i-1].g && v[i].s == v[i-1].s && v[i].b == v[i-1].b){
+            v[i].grade = v[i-1].grade;
+            diff++;
+        }else{
+            v[i].grade = v[i-1].grade + 1 + diff;
+            diff = 0;
+        }
+    }
+    
+    for(int i=0; i<v.size(); i++){
+        if(v[i].num == k){
+            cout << v[i].grade << endl;
+            break;
+        }
+    }
 }
