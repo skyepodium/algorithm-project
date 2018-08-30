@@ -1,64 +1,41 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
+
+#define max_val 1000001
 
 using namespace std;
 
-struct info{
-    int num;
-    int g;
-    int s;
-    int b;
-    int grade;
-};
+int n, m, input;
 
-bool cmp(const info &a, const info &b){
+int a[100001];
 
-    if(a.g == b.g){
+bool binary_search(int num){
+    
+    int start = 0;
+    int end = n;
+    int mid = 0;
+    while(start <= end){
         
-        if(a.s == b.s){
-            
-            return a.b > b.b;
-        }
-        else{
-            return a.s > b.s;
-        }
+        mid = (start + end)/2;
         
-    }else{
-        return a.g > b.g;
+        if(a[mid] == num) return true;
+        else if(num < a[mid]) end = mid - 1;
+        else start = mid + 1;
     }
+    
+    return false;
 }
 
 int main(){
     
-    int n, k;
-    cin >> n >> k;
+    cin >> n;
+    for(int i=0; i<n; i++) scanf("%d", &a[i]);
+    sort(a, a+n);
     
-    vector<info> v;
-    for(int i=0; i<n; i++){
-        int a, b, c, d;
-        cin >> a >> b >> c >> d;
-        v.push_back( { a, b, c, d, 0});
+    cin >> m;
+    for(int i=0; i<m; i++){
+        scanf("%d", &input);
+        printf("%d\n", binary_search(input));
     }
     
-    sort(v.begin(), v.end(), cmp);
-    
-    v[0].grade = 1;
-    int diff = 0;
-    for(int i=1; i<v.size(); i++){
-        if(v[i].g == v[i-1].g && v[i].s == v[i-1].s && v[i].b == v[i-1].b){
-            v[i].grade = v[i-1].grade;
-            diff++;
-        }else{
-            v[i].grade = v[i-1].grade + 1 + diff;
-            diff = 0;
-        }
-    }
-    
-    for(int i=0; i<v.size(); i++){
-        if(v[i].num == k){
-            cout << v[i].grade << endl;
-            break;
-        }
-    }
 }
