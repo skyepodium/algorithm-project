@@ -1,21 +1,29 @@
 #include <iostream>
-#include <algorithm>
 
 #define max_val 10001
-#define lld long long int
 
 using namespace std;
+
+//시간 복잡도: O(nlogn)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 이분 탐색(재귀)
+//사용한 자료구조: 1차원 배열
+
 
 int d[max_val];
 int max_cost = 0;
 int n, m;
-lld sum_cost = 0;
-lld result = 0;
+int result = 0;
+int sum_cost = 0;
 
+int max(int a, int b){
+    if(a<b) return b;
+    else return a;
+}
 
-lld cal_cost(int mid){
+int cal_cost(int mid){
     
-    lld ret = 0;
+    int ret = 0;
     
     for(int i=0; i<n; i++){
         if(d[i] < mid) ret = ret + d[i];
@@ -25,25 +33,17 @@ lld cal_cost(int mid){
     return ret;
 }
 
-void binary_search(){
+void binary_search(int start, int end){
     
-    int start = 0;
-    int end = max_cost;
-    int mid = 0;
-    lld tmp = 0;
+    if(start >= end) return;
+    int mid = (start + end)/2;
+    int tmp = cal_cost(mid);
     
-    while(start < end){
-        
-        mid = (start + end)/2;
-        
-        tmp = cal_cost(mid);
-        
-        if(tmp <= m){
-            result = mid;
-            start = mid + 1;
-        }else{
-            end = mid;
-        }
+    if(tmp <= m){
+        result = mid;
+        binary_search(mid+1, end);
+    }else{
+        binary_search(start, mid);
     }
 }
 
@@ -61,8 +61,8 @@ int main(){
     if(sum_cost <= m){
         printf("%d\n", max_cost);
     }else{
-        binary_search();
-        printf("%lld\n", result);
+        binary_search(0, max_cost);
+        printf("%d\n", result);
     }
     
 }
