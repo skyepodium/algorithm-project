@@ -1,46 +1,68 @@
 #include <iostream>
 #include <algorithm>
 
-#define max_val 500001
+#define max_val 10001
+#define lld long long int
 
 using namespace std;
 
-//시간 복잡도: O(mlogn)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 이분 탐색(재귀), STL sort
-//사용한 자료구조: 1차원 배열
-
-
-int n, m, num;
 int d[max_val];
+int max_cost = 0;
+int n, m;
+lld sum_cost = 0;
+lld result = 0;
 
 
-//이분 탐색 재귀
-bool binary_search(int val, int start, int end){
+lld cal_cost(int mid){
     
-    if(start > end) return false;
+    lld ret = 0;
     
-    int mid = (start + end)/2;
+    for(int i=0; i<n; i++){
+        if(d[i] < mid) ret = ret + d[i];
+        else ret = ret + mid;
+    }
     
-    if(d[mid] == val) return true;
-    else if(d[mid] < val) return binary_search(val, mid+1, end);
-    else return binary_search(val, start, mid-1);
+    return ret;
 }
 
+void binary_search(){
+    
+    int start = 0;
+    int end = max_cost;
+    int mid = 0;
+    lld tmp = 0;
+    
+    while(start < end){
+        
+        mid = (start + end)/2;
+        
+        tmp = cal_cost(mid);
+        
+        if(tmp <= m){
+            result = mid;
+            start = mid + 1;
+        }else{
+            end = mid;
+        }
+    }
+}
 
 int main(){
     
     scanf("%d", &n);
-    
-    for(int i=0; i<n; i++) scanf("%d", &d[i]);
-    
-    sort(d, d+n);
+    for(int i=0; i<n; i++){
+        scanf("%d", &d[i]);
+        sum_cost = sum_cost + d[i];
+        max_cost = max(max_cost, d[i]);
+    }
     
     scanf("%d", &m);
     
-    for(int i=0; i<m; i++){
-        scanf("%d", &num);
-        printf("%d ", binary_search(num, 0, n));
+    if(sum_cost <= m){
+        printf("%d\n", max_cost);
+    }else{
+        binary_search();
+        printf("%lld\n", result);
     }
-    printf("\n");
+    
 }
