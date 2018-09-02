@@ -1,54 +1,79 @@
 #include <iostream>
-#include <vector>
-#include <cstring>
-
-#define max_int 101
+#define max_int 1000000
+#define lld long long int
 
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: DFS
-//사용한 자료구조: 인접 리스트(2차원 벡터)
+lld tree[max_int*4];
 
+int n, m, k;
+int a, b, c;
+int idx;
 
-vector<int> a[max_int];
-bool check[max_int];
-int n = 0;
-int num = 0;
-
-void dfs(int node){
+//5. 인덱스 트리를 업데이트 한다.
+void update_tree(int node, lld delta){
     
-    for(int i=0; i<a[node].size(); i++){
-        int next = a[node][i];
-        
-        if(check[next] == false){
-            check[next] = true;
-            dfs(next);
-        }
+    //노드가 1일때도 넣어야하기 때문에 0보다 크다로 설정한다.
+    while(node > 0){
+        tree[node] = tree[node] + delta;
+        node = node/2;
     }
+}
+
+//6. 인덱스 트리에서 구간합을 계산한다.
+lld sum_data(int start, int end){
+    
+    lld result = 0;
+    
+    while(start <= end){
+        
+        if(start%2 == 1) result = result + tree[start];
+        if(end%2 == 0) result = result + tree[end];
+        
+        start = (start + 1)/2;
+        end = (end - 1)/2;
+    }
+    return result;
 }
 
 
 int main(){
     
-    cin >> n;
+    scanf("%d %d %d", &n, &m, &k);
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            cin >> num;
-            if(num == 1) a[i].push_back(j);
-        }
+    //1. n을 넘는 최소의 리프노드 수 2^n를 찾는다.
+    idx = 1;
+    while(idx<n){
+        idx = idx*2;
+    }
+    //1부터 시작, 1을 빼준다.
+    idx--;
+
+    //2. 리프노드에 수를 입력받는다.
+    for(int i=1; i<=n; i++){
+        scanf("%lld", &tree[idx+i]);
     }
     
-    for(int i=0; i<n; i++){
-        dfs(i);
-        for(int j=0; j<n; j++){
-            if(check[j] == true) cout << "1 ";
-            else cout << "0 ";
-        }
-        cout << endl;
-        memset(check, false, sizeof(check));
+    //3. sum_indexed tree를 구성한다.
+    for(int i=idx; i>=1; i--){
+        tree[i] = tree[i*2] + tree[i*2+1];
     }
     
+    //4. m+k개의 명령을 입력받는다.
+    for(int i=1; i<=m+k; i++){
+        scanf("%d %d %d", &a, &b, &c);
+
+        //5. 인덱스 트리를 업데이트한다.
+        if(a == 1){
+        
+            lld delta = c - tree[idx+b];
+            update_tree(idx+b, delta);
+        }
+        //6. 구간합을 출력한다.
+        else{
+            printf("%lld\n", sum_data(idx+b, idx+c));
+        }
+    }
 }
+
+
