@@ -1,101 +1,68 @@
 #include <iostream>
-#define max_int 2000000
+#define max_int 21
 #define lld long long int
 
 using namespace std;
 
-lld tree[max_int*4];
-int n, m, k;
-int idx;
-int a, b, c;
-int mod = 1000000007;
+//n!의 갯수를 저장할 배열
+lld facto[max_int];
 
-void init(){
-    
-    for(int i=0;i<=max_int; i++) tree[i] = 1;
-}
-
-void update_tree(int node, lld son, lld mom){
-    
-    while(node>0){
-        
-        if(tree[node] == 0){
-            tree[node] = (tree[node*2]%mod * tree[node*2+1]%mod)%mod;
-            tree[node] = tree[node]%mod;
-        }
-        else{
-            tree[node] = ((tree[node]/3)*(mom))%mod;
-            tree[node] = tree[node]%mod;
-        }
-
-        node = node/2;
-    }
-}
-
-lld mul_data(int start, int end){
-    
-    lld result = 1;
-    while(start <= end){
-        
-        if(start%2 == 1){
-            result = (result%mod * tree[start]%mod)%mod;
-            result = result%mod;
-        }
-        if(end%2 == 0){
-            result = (result%mod * tree[end]%mod)%mod;
-            result = result%mod;
-        }
-        
-        start = (start+1)/2;
-        end = (end-1)/2;
-    }
-    
-    return result%mod;
-}
-
+//순열은 1~n까지의 수가 1번씩 사용된다.
+//어떤 숫자가 사용되었는지 기록하는 배열
+bool check[max_int];
+int n, a, num;
+lld k;
 
 int main(){
     
-    scanf("%d %d %d", &n, &m, &k);
-    
-    //0. 트리를 모두 1로 초기화한다.
-    init();
-    
-    //1. n을 넘는 리프노드의 최대 개수를 계산한다.
-    idx = 1;
-    while(idx<n){
-        idx = idx*2;
-    }
-    //트리가 1부터 시작하기 때문에 1을 빼준다.
-    idx--;
-    
-    //2. 리프노드에 수를 입력받는다.
-    for(int i=1; i<=n; i++){
-        scanf("%lld", &tree[i+idx]);
+    //1. 1! ~ 20!까지의 n! 갯수를 미리 계산한다.
+    facto[1] = 1;
+    for(int i=2; i<=20; i++){
+        facto[i] = facto[i-1]*i;
     }
     
-    //3. Mul Indexed Tree를 구성한다.
-    for(int i=idx; i>=1; i--){
-        tree[i] = (tree[i*2]%mod * tree[i*2+1]%mod)%mod;
-        tree[i] = tree[i]%mod;
-    }
+    scanf("%d", &n);
     
-    //4. m+k개의 명령을 입력받는다.
-    for(int i=1; i<=m+k; i++){
-        scanf("%d %d %d", &a, &b, &c);
+    scanf("%d", &a);
+
+    //2. k번째 수열을 나타내는 n개의 수를 출력한다.
+    if(a == 1){
+        scanf("%lld", &k);
         
-        //5. 트리를 업데이트 한다.
-        if(a==1){
-            if(tree[idx+b] == 0){
-                tree[(idx+b)*2] = (lld)c%mod;
+        for(int i=n-1; i>=0; i--){
+            for(int j=1; j<=n; j++){
+                if(check[j] == true) continue;
+                
+                if(facto[i] < k){
+                    k = k - facto[i];
+                }
+                else{
+                    printf("%d ", j);
+                    check[j] = true;
+                    break;
+                }
+                if(i==0 && check[j] == false){
+                    printf("%d ", j);
+                }
             }
-            update_tree(idx+b, tree[idx+b], (lld)c);
         }
+        printf("\n");
         
-        //6. 구간합을 계산한다.
-        else{
-            printf("%lld\n", mul_data(idx+b, idx+c)%mod);
-        }
     }
     
+    //3. 몇번째 수열인지 출력한다.
+    else{
+        lld result = 0;
+        for(int i=n; i>=1; i--){
+            scanf("%d", &num);
+            
+            for(int j=1; j<num; j++){
+                if(check[j] == false){
+                    result = result += facto[i-1];
+                }
+            }
+            check[num] = true;
+        }
+        printf("%lld\n", result+1);
+    }
 }
