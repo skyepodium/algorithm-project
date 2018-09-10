@@ -1,41 +1,39 @@
 #include <iostream>
-#define max_int 201
+#define max_int 65
+#define lld long long int
+
 using namespace std;
 
-int n, m;
-int parent[max_int];
-int num;
-int start, next_node;
-
-int find(int node){
-    if(parent[node] == node) return node;
-    else return parent[node] = find(parent[node]);
-}
-
+int t, n;
+lld d[max_int][10];
+lld result;
 
 int main(){
-    scanf("%d %d", &n, &m);
+
+    for(int j=0; j<=9; j++){
+        d[1][j] = 1;
+    }
     
-    for(int i=1; i<=n; i++) parent[i] = i;
-    
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &num);
-            
-            if(num == 1) parent[find(i)] = find(j);
+    for(int i=2; i<=64; i++){
+        for(int j=0; j<=9; j++){
+            for(int k=j; k<=9; k++){
+                d[i][j] = d[i][j] + d[i-1][k];
+            }
         }
     }
     
-    scanf("%d", &start);
-    bool is_right = true;
-    for(int i=0; i<m-1; i++){
-        scanf("%d", &next_node);
-        if(find(start) != find(next_node)){
-            is_right = false;
-            break;
+    scanf("%d", &t);
+    
+    while(t--){
+        
+        scanf("%d", &n);
+        
+        result = 0;
+        for(int j=0; j<=9; j++){
+            result = result + d[n][j];
         }
+        
+        printf("%lld\n", result);
     }
     
-    if(is_right) printf("YES\n");
-    else printf("NO\n");
 }
