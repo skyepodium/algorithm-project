@@ -1,37 +1,41 @@
 #include <iostream>
-#include <cstring>
-#define max_int 101
-
+#define max_int 201
 using namespace std;
 
-bool check[max_int];
-int n, k, num;
+int n, m;
+int parent[max_int];
+int num;
+int start, next_node;
 
-int main(int argc, char** argv)
-{
-    int test_case;
-    int T;
+int find(int node){
+    if(parent[node] == node) return node;
+    else return parent[node] = find(parent[node]);
+}
+
+
+int main(){
+    scanf("%d %d", &n, &m);
     
-    cin>>T;
+    for(int i=1; i<=n; i++) parent[i] = i;
     
-    for(test_case = 1; test_case <= T; ++test_case)
-    {
-        memset(check, false, sizeof(check));
-        scanf("%d %d", &n, &k);
-        
-        for(int i=0; i<k; i++){
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
             scanf("%d", &num);
-            check[num] = true;
+            
+            if(num == 1) parent[find(i)] = find(j);
         }
-        
-        printf("#%d ", test_case);
-        for(int i=1; i<=n; i++){
-            if(check[i] == false){
-                printf("%d ", i);
-            }
-        }
-        printf("\n");
-        
     }
-    return 0;
+    
+    scanf("%d", &start);
+    bool is_right = true;
+    for(int i=0; i<m-1; i++){
+        scanf("%d", &next_node);
+        if(find(start) != find(next_node)){
+            is_right = false;
+            break;
+        }
+    }
+    
+    if(is_right) printf("YES\n");
+    else printf("NO\n");
 }
