@@ -1,39 +1,51 @@
 #include <iostream>
-#define max_int 65
-#define lld long long int
+#include <string>
+#define max_int 101
 
 using namespace std;
 
-int t, n;
-lld d[max_int][10];
-lld result;
+char d[101][101];
+int n, k;
 
 int main(){
-
-    for(int j=0; j<=9; j++){
-        d[1][j] = 1;
+    scanf("%d", &n);
+    
+    
+    for(int i=0; i<n; i++){
+        string word;
+        cin >> word;
+        for(int j=0; j<word.size(); j++){
+            d[i][j] = word[j];
+        }
     }
     
-    for(int i=2; i<=64; i++){
-        for(int j=0; j<=9; j++){
-            for(int k=j; k<=9; k++){
-                d[i][j] = d[i][j] + d[i-1][k];
+    scanf("%d", &k);
+    if(k == 1){
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                printf("%c", d[i][j]);
             }
+            printf("\n");
         }
     }
     
-    scanf("%d", &t);
-    
-    while(t--){
-        
-        scanf("%d", &n);
-        
-        result = 0;
-        for(int j=0; j<=9; j++){
-            result = result + d[n][j];
+    else if(k == 2){
+        for(int i=0; i<n; i++){
+            for(int j=n-1; j>=0; j--){
+                printf("%c", d[i][j]);
+            }
+            printf("\n");
         }
-        
-        printf("%lld\n", result);
     }
     
+    else{
+        for(int i=n-1; i>=0; i--){
+            for(int j=0; j<n; j++){
+                printf("%c", d[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+
 }
