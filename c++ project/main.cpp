@@ -1,51 +1,35 @@
 #include <iostream>
-#include <string>
-#define max_int 101
+#include <algorithm>
+#define max_int 500001
 
 using namespace std;
 
-char d[101][101];
-int n, k;
+int t, n, m;
+char num[max_int];
+
+bool cmp(char &a, char &b){
+    return a > b;
+}
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d", &t);
     
-    
-    for(int i=0; i<n; i++){
-        string word;
-        cin >> word;
-        for(int j=0; j<word.size(); j++){
-            d[i][j] = word[j];
-        }
-    }
-    
-    scanf("%d", &k);
-    if(k == 1){
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                printf("%c", d[i][j]);
-            }
-            printf("\n");
-        }
-    }
-    
-    else if(k == 2){
-        for(int i=0; i<n; i++){
-            for(int j=n-1; j>=0; j--){
-                printf("%c", d[i][j]);
-            }
-            printf("\n");
-        }
-    }
-    
-    else{
-        for(int i=n-1; i>=0; i--){
-            for(int j=0; j<n; j++){
-                printf("%c", d[i][j]);
-            }
-            printf("\n");
-        }
-    }
+    for(int test_case = 1; test_case <=t; test_case++){
+        
+        scanf("%d %d", &n, &m);
+        
+        scanf("%s", num);
 
-
+        sort(num, num+n, cmp);
+        
+        
+        printf("#%d ", test_case);
+        for(int i=0; i<n-m; i++){
+            printf("%c", num[i]);
+        }
+        printf("\n");
+        
+    }
+    
+    
 }
