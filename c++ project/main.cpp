@@ -1,31 +1,36 @@
-#include <iostream>
+#include <vector>
+#define max_int 10000001
 
 using namespace std;
 
-bool check[1001];
-int a[101];
-int n;
+//시간 복잡도: O(nloglogn)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 에라토스테네스의 체
+//사용한 자료구조: 1차원 배열
 
-int main(){
-    scanf("%d", &n);
+bool check[max_int];
+
+long long solution(int N) {
     
-    for(int i=0; i<n; i++){
-        scanf("%d", &a[i]);
-    }
+    //1. 배열 초기화
+    for(int i=0; i<=N; i++) check[i] = false;
     
-    check[1] = true;
-    for(int i=2; i*i<1001; i++){
-        for(int j=i*i; j<1001; j=j+i){
+    //2. 에라토스테네스의 체로 소수가 아닌 수를 true로 체크한다.
+    for(int i=2; i*i<=N; i++){
+        for(int j=i*i; j<=N; j=j+i){
             check[j] = true;
         }
     }
     
-    int cnt = 0;
-    for(int i=0; i<n; i++){
-        if(check[a[i]] == false){
-            cnt++;
+    long long answer = 0;
+    
+    //3. 체크 배열에서 false인 i는 소수이다.
+    //answer에 소수를 더해준다.
+    for(int i=2; i<=N; i++){
+        if(check[i] == false){
+            answer = answer + i;
         }
     }
     
-    cout << cnt << endl;
+    return answer;
 }
