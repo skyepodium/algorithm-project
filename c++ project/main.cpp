@@ -1,36 +1,57 @@
-#include <vector>
-#define max_int 10000001
+#include <iostream>
+#include <queue>
+#define max_int 10001
 
 using namespace std;
 
-//시간 복잡도: O(nloglogn)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 에라토스테네스의 체
-//사용한 자료구조: 1차원 배열
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+int check[max_int][max_int];
+int d[max_int][max_int];
+struct info{
+    int x;
+    int y;
+};
+info arr[max_int];
+int n, m;
 
-bool check[max_int];
-
-long long solution(int N) {
+void bfs(int x, int y){
     
-    //1. 배열 초기화
-    for(int i=0; i<=N; i++) check[i] = false;
+    check[x][y] = 0;
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
     
-    //2. 에라토스테네스의 체로 소수가 아닌 수를 true로 체크한다.
-    for(int i=2; i*i<=N; i++){
-        for(int j=i*i; j<=N; j=j+i){
-            check[j] = true;
+    while(!q.empty()){
+        
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
+        
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx>=0 && nx<n && ny>=0 && ny<n){
+                if(check[nx][ny] == 0){
+                    check[nx][ny] = check[x][y] + 1;
+                    q.push(make_pair(nx, ny));
+                }
+            }
         }
     }
+}
+
+
+int main(){
+    scanf("%d %d", &n, &m);
     
-    long long answer = 0;
-    
-    //3. 체크 배열에서 false인 i는 소수이다.
-    //answer에 소수를 더해준다.
-    for(int i=2; i<=N; i++){
-        if(check[i] == false){
-            answer = answer + i;
-        }
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &arr[i].x, &arr[i].y);
     }
     
-    return answer;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            bfs(i, j);
+        }
+    }
 }
