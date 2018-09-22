@@ -1,27 +1,22 @@
-#include <iostream>
-#include <cstring>
+#include <string>
+#include <vector>
+
 using namespace std;
 
-int t;
-char word[100];
-
-int main(int argc, char** argv)
-{
-    scanf("%d", &t);
+bool solution(string s) {
+    bool answer = true;
     
-    for(int test_case = 1; test_case <= t; ++test_case)
-    {
-        scanf("%s", word);
-        int length = (int)strlen(word);
- 
-        int last_number = word[length-1] - '0';
-
-        bool is_odd = true;
-        if(last_number%2 == 0) is_odd = false;
-        
-        if(is_odd) printf("#%d Odd\n", test_case);
-        else printf("#%d Even\n", test_case);
+    int size = (int)s.size();
+    if(size != 4 && size != 6){
+        answer = false;
     }
     
-    return 0;
+    for(int i=0; i<size; i++){
+        if(s[i] - '0' < 0 || s[i] - '0' >9){
+            answer = false;
+            break;
+        }
+    }
+    
+    return answer;
 }
