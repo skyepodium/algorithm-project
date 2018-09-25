@@ -1,8 +1,9 @@
 #include <iostream>
-
+#define max_int 50
 using namespace std;
 
-int t, n, m;
+int t, n;
+int d[max_int][max_int];
 
 int main(int argc, char** argv)
 {
@@ -10,18 +11,32 @@ int main(int argc, char** argv)
     
     for(int test_case = 1; test_case <= t; ++test_case)
     {
-        scanf("%d %d", &n, &m);
+        scanf("%d", &n);
         
-        int a, b;
-        b = n/2;
-        a = n - b*2;
-        
-        while(a+b < m){
-            b = b-1;
-            a = a+2;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                scanf("%1d", &d[i][j]);
+            }
+        }
+
+        int sum = 0;
+        for(int i=0; i<n; i++){
+            
+            if(i<=n/2){
+                for(int j=n/2-i; j<=n/2+i; j++){
+                    sum = sum + d[i][j];
+                }
+            }
+            else{
+                for(int j=n/2-(n-1-i); j<=n/2+(n-1-i); j++){
+                    sum = sum + d[i][j];
+                }
+            }
+            
         }
         
-        printf("#%d %d %d\n", test_case, a, b);
+        printf("#%d %d\n", test_case, sum);
+        
     }
     
     return 0;
