@@ -1,47 +1,45 @@
 #include <iostream>
-#define max_int 2001
+#define max_int 1000001
 
 using namespace std;
 
-//시간 복잡도: O(n^2 + m)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 반복문
-//사용한 자료구조: 2차원 배열
+int t;
+int d, a, b, cnt;
+int check[max_int];
 
-int n, m, s, e;
-int a[max_int];
-int d[max_int][max_int];
-
-int main(){
+int main(int argc, char** argv)
+{
+    scanf("%d", &t);
     
-    scanf("%d", &n);
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
-    }
-    
-    for(int i=1; i<=n; i++){
-        d[i][i] = 1;
-    }
-    
-    for(int i=1; i<=n-1; i++){
-        if(a[i] == a[i+1]){
-            d[i][i+1] = 1;
+    check[1] = true;
+    for(int i=2; i*i<=max_int; i++){
+        for(int j=i*i; j<=max_int; j=j+i){
+            check[j] = true;
         }
     }
-    
-    for(int j=3; j<=n; j++){
-        for(int i=1; i<=j; i++){
-            if(a[i] == a[j] && d[i+1][j-1] == 1){
-                d[i][j] = 1;
+
+    for(int test_case = 1; test_case <= t; ++test_case)
+    {
+        scanf("%d %d %d", &d, &a, &b);
+        
+        cnt = 0;
+        for(int i=a; i<=b; i++){
+            if(check[i] == false){
+                int num = i;
+                while(num>0){
+                    if(num%10 == d){
+                        cnt++;
+                        break;
+                    }
+                    num = num/10;
+                }
             }
         }
-    }
-    
-    scanf("%d", &m);
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &s, &e);
-        printf("%d\n", d[s][e]);
+        
+        printf("#%d %d\n", test_case, cnt);
+        
     }
     
     return 0;
 }
+
