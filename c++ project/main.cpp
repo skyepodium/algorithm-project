@@ -1,7 +1,7 @@
 #include <iostream>
 
-#define max_int 101
-#define max_val 101
+#define max_int 501
+#define max_val 501
 
 using namespace std;
 
@@ -32,14 +32,18 @@ int main(){
         }
     }
     
+    
+    int cnt = 0;
     for(int i=1; i<=n; i++){
-        int cnt = 0;
+        bool is_right = true;
         for(int j=1; j<=n; j++){
-            if(i==j) continue;
-            if(d[i][j] == max_val && d[j][i] == max_val) cnt++;
+            if(d[i][j] == max_val && d[j][i] == max_val){
+                is_right = false;
+                break;
+            }
         }
-        printf("%d\n", cnt);
+        if(is_right) cnt++;
     }
     
-    
+    printf("%d\n", cnt);
 }
