@@ -1,20 +1,29 @@
 #include <iostream>
 
-#define max_int 21
-#define max_val 21000;
+#define max_int 401
+#define max_val 4400000
 
 using namespace std;
 
-int n;
+int n, m, a, b, c;
 int d[max_int][max_int];
 
+int min(int a, int b){
+    return a < b ? a : b;
+}
+
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
     for(int i=1; i<=n; i++){
         for(int j=1; j<=n; j++){
-            scanf("%d", &d[i][j]);
+            d[i][j] = max_val;
         }
+    }
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        d[a][b] = c;
     }
     
     for(int k=1; k<=n; k++){
@@ -27,10 +36,12 @@ int main(){
         }
     }
     
+    int result = max_val;
     for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            cout << d[i][j] << " ";
-        }
-        cout << endl;
+        result = min(result, d[i][i]);
     }
+    
+    if(result == max_val) printf("-1\n");
+    else printf("%d\n", result);
+    
 }
