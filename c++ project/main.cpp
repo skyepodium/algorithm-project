@@ -3,28 +3,30 @@
 #include <vector>
 #include <algorithm>
 
-#define max_int 501
+#define max_int 1001
 
 using namespace std;
 
-int n, num;
+int n, m, num, start_node, end_node;
 int ind[max_int];
-int d[max_int];
-int cost[max_int];
 vector<int> v[max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int i=1; i<=n; i++){
-        scanf("%d", &cost[i]);
-        
-        while(true){
-            scanf("%d", &num);
-            if(num == -1) break;
-            
-            v[num].push_back(i);
-            ind[i] += 1;
+    for(int i=0; i<m; i++){
+        scanf("%d", &num);
+
+        for(int j=0; j<num; j++){
+            scanf("%d", &end_node);
+            if(j == 0){
+                start_node = end_node;
+            }
+            else{
+                v[start_node].push_back(end_node);
+                start_node = end_node;
+                ind[end_node] += 1;
+            }
         }
     }
     
@@ -32,18 +34,18 @@ int main(){
     for(int i=1; i<=n; i++){
         if(ind[i] == 0){
             q.push(i);
-            d[i] = cost[i];
         }
     }
     
+    
+    vector<int> result;
     while(!q.empty()){
         int node = q.front();
+        result.push_back(node);
         q.pop();
         
         for(int i=0; i<v[node].size(); i++){
             int next = v[node][i];
-            
-            d[next] = max(d[next], d[node] + cost[next]);
             
             ind[next] -= 1;
             
@@ -53,8 +55,15 @@ int main(){
         }
     }
     
-    for(int i=1; i<=n; i++){
-        printf("%d\n", d[i]);
+    if(result.size() != n){
+        printf("0\n");
     }
+    else{
+        for(int i=0; i<result.size(); i++){
+            printf("%d\n", result[i]);
+        }
+    }
+    
+    
     
 }
