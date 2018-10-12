@@ -1,56 +1,75 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
+#include <queue>
+#include <algorithm>
 
-#define max_int 21
+#define max_int 1001
 
 using namespace std;
 
-int n, cost;
+int t, n, k, start_node, end_node, final_node;
+int cost[max_int];
 int d[max_int];
-struct info{
-    int start;
-    int end;
-    int cost;
-};
+int ind[max_int];
+vector<int> v[max_int];
 
-vector<info> v;
-
-bool cmp(const info &a, const info &b){
-    return a.cost < b.cost;
-}
-
-int find(int node){
-    if(d[node] == node) return node;
-    else return d[node] = find(d[node]);
+void init(){
+    for(int i=1; i<=n; i++){
+        cost[i] = 0;
+        d[i] = 0;
+        ind[i] = 0;
+        v[i].clear();
+    }
 }
 
 int main(){
-    scanf("%d ", &n);
+    scanf("%d", &t);
     
-    for(int i=1; i<=n; i++) d[i] = i;
-    
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &cost);
-            v.push_back({i, j, cost});
-        }
-    }
-    
-    sort(v.begin(), v.end(), cmp);
-    
-    int result = 0;
-    for(int i=0; i<v.size(); i++){
-        int s = v[i].start;
-        int e = v[i].end;
+    while(t--){
+        scanf("%d %d", &n, &k);
         
-        if(find(s) != find(e)){
-            d[find(s)] = find(e);
-            result = result + v[i].cost;
+        init();
+
+        
+        for(int i=1; i<=n; i++){
+            scanf("%d", &cost[i]);
         }
+        
+        for(int i=1; i<=k; i++){
+            scanf("%d %d", &start_node, &end_node);
+            v[start_node].push_back(end_node);
+            ind[end_node] += 1;
+        }
+        
+        scanf("%d", &final_node);
+        
+        queue<int> q;
+        for(int i=1; i<=n; i++){
+            if(ind[i] == 0){
+                q.push(i);
+                d[i] = cost[i];
+            }
+        }
+        
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+            
+            for(int i=0; i<v[node].size(); i++){
+                int next = v[node][i];
+                
+                d[next] = max(d[next], d[node] + cost[next]);
+                
+                ind[next] -= 1;
+                
+                if(ind[next] == 0){
+                    q.push(next);
+                }
+            }
+        }
+        
+        printf("%d\n", d[final_node]);
+        
     }
-    
-    cout << result << endl;
-    
     
 }
