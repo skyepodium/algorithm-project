@@ -1,74 +1,57 @@
 #include <iostream>
-#include <cstring>
 #include <vector>
 
-#define max_int 10
+#define max_int 501
+#define max_val 5010000
 
 using namespace std;
 
-int t;
+int n, m;
+int dist[max_int];
+struct info{
+    int cur;
+    int next;
+    int cost;
+};
 
-char num[max_int];
-char rev_num[max_int];
-vector<int> result;
-
-void do_reverse(){
-    
-    int size = (int)strlen(num);
-    
-    for(int i=0; i<size; i++){
-        rev_num[i] = num[size-i-1];
-    }
-}
-
-void do_sum(){
-    
-    int size = (int)strlen(num);
-    
-    bool plus = false;
-    for(int i=size-1; i>=0; i--){
-        int sum_num = num[i] - '0' + rev_num[i] - '0';
-        if(plus){
-            sum_num += 1;
-            plus = false;
-        }
-
-        if(sum_num > 9){
-            plus = true;
-            result.push_back(sum_num-10);
-        }
-        else{
-            result.push_back(sum_num);
-        }
-        
-        if(i == 0 && plus) result.push_back(1);
-    }
-}
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d", &n, &m);
     
-    while(t--){
-        result.clear();
-        scanf("%s", num);
-        
-        do_reverse();
-        do_sum();
-
-        bool is_ok = true;
-        int size = (int)result.size();
-        for(int i=0; i<size/2; i++){
-            if(result[i] != result[size-i-1]){
-                is_ok = false;
-                break;
-            }
-        }
-        
-        if(is_ok) printf("YES\n");
-        else printf("NO\n");
-
-
+    vector<info> v(m);
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &v[i].cur, &v[i].next, &v[i].cost);
     }
     
+    for(int i=1; i<=n; i++) dist[i] = max_val;
+    dist[1] = 0;
+    
+    bool is_negative = false;
+    for(int i=1; i<=n; i++){
+        for(int j=0; j<m; j++){
+            
+            int cur = v[j].cur;
+            int next = v[j].next;
+            int cost = v[j].cost;
+            
+            if(dist[cur] != max_val && dist[next] > dist[cur] + cost){
+                dist[next] = dist[cur] + cost;
+                
+                if(i == n){
+                    is_negative = true;
+                }
+            }
+        }
+    }
+    
+    if(is_negative){
+        printf("-1\n");
+    }
+    else{
+        for(int i=2; i<=n; i++){
+            if(dist[i] != max_val) printf("%d\n", dist[i]);
+            else printf("-1\n");
+        }
+    }
     
 }
