@@ -1,49 +1,49 @@
 #include <iostream>
 
-#define max_int 21
-#define max_val 210000
+#define max_int 1000001
+
 using namespace std;
 
-int n;
-int d[max_int][max_int];
-bool unused[max_int][max_int];
-int main(){
-    scanf("%d", &n);
-    
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            scanf("%d", &d[i][j]);
-        }
-    }
-    
-    for(int k=0; k<n; k++){
-        for(int i=0; i<n; i++){
-            if(i == k) continue;
-            for(int j=0; j<n; j++){
-                if(i == j) continue;
-                if(k == j) continue;
+int t, n, m, a, b, c;
+int d[max_int];
 
-                if(d[i][j] > d[i][k] + d[k][j]){
-                    printf("-1\n");
-                    return 0;
+int find(int node){
+    
+    if(d[node] == node) return node;
+    else return d[node] = find(d[node]);
+}
+
+int main(int argc, char** argv)
+{
+    scanf("%d", &t);
+    
+    for(int test_case = 1; test_case <= t; ++test_case)
+    {
+        scanf("%d %d", &n, &m);
+        
+        for(int i=1; i<=n; i++) d[i] = i;
+        
+        printf("#%d ", test_case);
+        for(int i=0; i<m; i++){
+            scanf("%d %d %d", &a, &b, &c);
+            
+            //합집합
+            if(a == 0){
+                d[find(b)] = find(c);
+            }
+            //찾는다.
+            else{
+                if(find(b) == find(c)){
+                    printf("1");
                 }
-                
-                if(d[i][j] == d[i][k] + d[k][j]){
-                    unused[i][j] = true;
+                else{
+                    printf("0");
                 }
             }
         }
+        printf("\n");
     }
     
-    int result = 0;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(unused[i][j] == false){
-                result += d[i][j];
-            }
-        }
-    }
-    
-    printf("%d\n", result/2);
     return 0;
 }
+
