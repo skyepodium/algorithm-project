@@ -1,69 +1,74 @@
 #include <iostream>
-#include <queue>
+#include <cstring>
 #include <vector>
-#include <algorithm>
 
-#define max_int 1001
+#define max_int 10
 
 using namespace std;
 
-int n, m, num, start_node, end_node;
-int ind[max_int];
-vector<int> v[max_int];
+int t;
+
+char num[max_int];
+char rev_num[max_int];
+vector<int> result;
+
+void do_reverse(){
+    
+    int size = (int)strlen(num);
+    
+    for(int i=0; i<size; i++){
+        rev_num[i] = num[size-i-1];
+    }
+}
+
+void do_sum(){
+    
+    int size = (int)strlen(num);
+    
+    bool plus = false;
+    for(int i=size-1; i>=0; i--){
+        int sum_num = num[i] - '0' + rev_num[i] - '0';
+        if(plus){
+            sum_num += 1;
+            plus = false;
+        }
+
+        if(sum_num > 9){
+            plus = true;
+            result.push_back(sum_num-10);
+        }
+        else{
+            result.push_back(sum_num);
+        }
+        
+        if(i == 0 && plus) result.push_back(1);
+    }
+}
 
 int main(){
-    scanf("%d %d", &n, &m);
+    scanf("%d", &t);
     
-    for(int i=0; i<m; i++){
-        scanf("%d", &num);
-
-        for(int j=0; j<num; j++){
-            scanf("%d", &end_node);
-            if(j == 0){
-                start_node = end_node;
-            }
-            else{
-                v[start_node].push_back(end_node);
-                start_node = end_node;
-                ind[end_node] += 1;
-            }
-        }
-    }
-    
-    queue<int> q;
-    for(int i=1; i<=n; i++){
-        if(ind[i] == 0){
-            q.push(i);
-        }
-    }
-    
-    
-    vector<int> result;
-    while(!q.empty()){
-        int node = q.front();
-        result.push_back(node);
-        q.pop();
+    while(t--){
+        result.clear();
+        scanf("%s", num);
         
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            
-            ind[next] -= 1;
-            
-            if(ind[next] == 0){
-                q.push(next);
+        do_reverse();
+        do_sum();
+
+        bool is_ok = true;
+        int size = (int)result.size();
+        for(int i=0; i<size/2; i++){
+            if(result[i] != result[size-i-1]){
+                is_ok = false;
+                break;
             }
         }
+        
+        if(is_ok) printf("YES\n");
+        else printf("NO\n");
+
+
     }
-    
-    if(result.size() != n){
-        printf("0\n");
-    }
-    else{
-        for(int i=0; i<result.size(); i++){
-            printf("%d\n", result[i]);
-        }
-    }
-    
     
     
 }
