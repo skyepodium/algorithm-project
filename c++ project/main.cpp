@@ -1,57 +1,49 @@
 #include <iostream>
-#include <vector>
 
-#define max_int 501
-#define max_val 5010000
-
+#define max_int 21
+#define max_val 210000
 using namespace std;
 
-int n, m;
-int dist[max_int];
-struct info{
-    int cur;
-    int next;
-    int cost;
-};
-
-
+int n;
+int d[max_int][max_int];
+bool unused[max_int][max_int];
 int main(){
-    scanf("%d %d", &n, &m);
+    scanf("%d", &n);
     
-    vector<info> v(m);
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &v[i].cur, &v[i].next, &v[i].cost);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            scanf("%d", &d[i][j]);
+        }
     }
     
-    for(int i=1; i<=n; i++) dist[i] = max_val;
-    dist[1] = 0;
-    
-    bool is_negative = false;
-    for(int i=1; i<=n; i++){
-        for(int j=0; j<m; j++){
-            
-            int cur = v[j].cur;
-            int next = v[j].next;
-            int cost = v[j].cost;
-            
-            if(dist[cur] != max_val && dist[next] > dist[cur] + cost){
-                dist[next] = dist[cur] + cost;
+    for(int k=0; k<n; k++){
+        for(int i=0; i<n; i++){
+            if(i == k) continue;
+            for(int j=0; j<n; j++){
+                if(i == j) continue;
+                if(k == j) continue;
+
+                if(d[i][j] > d[i][k] + d[k][j]){
+                    printf("-1\n");
+                    return 0;
+                }
                 
-                if(i == n){
-                    is_negative = true;
+                if(d[i][j] == d[i][k] + d[k][j]){
+                    unused[i][j] = true;
                 }
             }
         }
     }
     
-    if(is_negative){
-        printf("-1\n");
-    }
-    else{
-        for(int i=2; i<=n; i++){
-            if(dist[i] != max_val) printf("%d\n", dist[i]);
-            else printf("-1\n");
+    int result = 0;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(unused[i][j] == false){
+                result += d[i][j];
+            }
         }
     }
     
+    printf("%d\n", result/2);
+    return 0;
 }
