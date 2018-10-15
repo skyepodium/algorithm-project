@@ -1,63 +1,55 @@
 #include <iostream>
-#include <algorithm>
+#include <queue>
 #include <vector>
+#include <algorithm>
 
-#define max_int 101
-#define max_val 1010000
+#define max_int 10001
 
 using namespace std;
 
-int n, m;
-int d[max_int][max_int];
+int ind[max_int];
+int d[max_int];
+int n, m, start_node, end_node, a, b, c;
 
 struct info{
-    int index;
-    int num;
+    int cur;
+    int cost;
 };
 
-bool cmp(const info &a, const info &b){
-    return a.num < b.num;
-}
+vector<info> v[max_int];
 
 int main(){
     scanf("%d %d", &n, &m);
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            if(i!=j) d[i][j] = max_val;
-        }
-    }
-    
     for(int i=0; i<m; i++){
-        int a, b;
-        scanf("%d %d", &a, &b);
-        d[a][b] = 1;
-        d[b][a] = 1;
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+        ind[b] += 1;
     }
     
-    for(int k=1; k<=n; k++){
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                
-                if(d[i][j] > d[i][k] + d[k][j]){
-                    d[i][j] = d[i][k] + d[k][j];
-                }
+    scanf("%d %d", &start_node, &end_node);
+    
+    queue<info> q;
+    d[start_node] = 0;
+    q.push({start_node, d[start_node]});
+    
+    while(!q.empty()){
+        
+        info node = q.front();
+        q.pop();
+        
+        for(int i=0; i<v[node.cur].size(); i++){
+            info next = v[node.cur][i];
+            
+            d[next.cur] = max(d[next.cur], d[node.cur] + next.cost);
+            
+            ind[next.cur] -= 1;
+            
+            if(ind[next.cur] == 0){
+                q.push(next);
             }
         }
     }
     
-    vector<info> result;
-    for(int i=1; i<=n; i++){
-        int ret = 0;
-        for(int j=1; j<=n; j++){
-            if(i!=j) ret += d[i][j];
-        }
-        result.push_back({i, ret});
-    }
-
-    sort(result.begin(), result.end(), cmp);
-    
-    
-    
-    printf("%d\n", result[0].index);
+    cout <<d[end_node] << endl;
 }
