@@ -19,7 +19,7 @@ int main(){
     
     for(int i=1; i<=n; i++){
         for(int j=1; j<i; j++){
-            if(a[j] > a[i]){
+            if(a[j] < a[i]){
                 d[i] = max(d[i], d[j]+1);
             }
         }
