@@ -3,82 +3,86 @@
 #include <vector>
 #include <algorithm>
 
-#define max_int 10001
+#define max_int 1001
 
 using namespace std;
 
-int n, m, start_node, end_node, a, b, c;
-int d[max_int];
+int t, k, m, p, a, b;
+vector<int> v[max_int];
 int ind[max_int];
-int rind[max_int];
 
 struct info{
-    int cur;
-    int cost;
+    int value;
+    int cnt;
 };
 
-vector<info> v[max_int];
-vector<info> w[max_int];
-bool check[max_int];
+info max_stahler[max_int];
+int stahaler[max_int];
+int result = 0;
+
+void init(){
+    for(int i=1; i<=m; i++){
+        v[i].clear();
+        ind[i] = 0;
+        max_stahler[i].value = 0;
+        max_stahler[i].cnt = 0;
+        stahaler[i] = 0;
+    }
+    result=0;
+}
 
 int main(){
-    scanf("%d %d", &n, &m);
-    
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        ind[b] += 1;
+    scanf("%d", &t);
+    while(t--){
+        scanf("%d %d %d", &k, &m, &p);
+        init();
+        for(int i=0; i<p; i++){
+            scanf("%d %d", &a, &b);
+            
+            v[a].push_back(b);
+            ind[b] += 1;
+        }
         
-        w[b].push_back({a, c});
-        rind[a] += 1;
-    }
-    
-    scanf("%d %d", &start_node, &end_node);
-    
-    queue<info> q;
-    d[start_node] = 0;
-    q.push({start_node, 0});
-    
-    while(!q.empty()){
-        info node = q.front();
-        q.pop();
-        
-        for(int i=0; i<v[node.cur].size(); i++){
-            info next = v[node.cur][i];
-            
-            d[next.cur] = max(d[next.cur], d[node.cur] + next.cost);
-            
-            ind[next.cur] -= 1;
-            
-            if(ind[next.cur] == 0){
-                q.push(next);
+        queue<int> q;
+        for(int i=1; i<=m; i++){
+            if(ind[i] == 0){
+                stahaler[i] = 1;
+                q.push(i);
             }
         }
-    }
-    
-    printf("%d\n", d[end_node]);
-    
-    int cnt = 0;
-    queue<info> rq;
-    check[end_node] = true;
-    rq.push({end_node, d[end_node]});
-    
-    while(!rq.empty()){
-        info node = rq.front();
-        rq.pop();
         
-        for(int i=0; i<w[node.cur].size(); i++){
-            info next = w[node.cur][i];
-            if(check[node.cur] && d[node.cur] - next.cost == d[next.cur]){
-                check[next.cur] = true;
-                cnt++;
-            }
-            rind[next.cur] -= 1;
-            if(rind[next.cur] == 0) rq.push(next);
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
             
-        }
-    }
+            for(int i=0; i<v[node].size(); i++){
+                int next = v[node][i];
 
-    
-    printf("%d\n", cnt);
+                if(max_stahler[next].value == stahaler[node]){
+                    max_stahler[next].cnt += 1;
+                }
+                
+                if(stahaler[node] > max_stahler[next].value){
+                    max_stahler[next].value = stahaler[node];
+                    max_stahler[next].cnt = 1;
+                }
+                
+                
+                ind[next] -= 1;
+                
+                if(ind[next] == 0){
+                    
+                    if(max_stahler[next].cnt >= 2) stahaler[next] = max_stahler[next].value + 1;
+                    else stahaler[next] = max_stahler[next].value;
+
+                    result = max(result, stahaler[next]);
+
+                    q.push(next);
+                    
+                }
+            }
+        }
+        
+        printf("%d %d\n", k, result);
+    }
 }
