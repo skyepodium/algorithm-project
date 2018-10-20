@@ -1,62 +1,20 @@
 #include <iostream>
-#include <queue>
-#include <vector>
 #include <algorithm>
 
-#define max_int 101
+#define max_int 1001
 using namespace std;
 
-int n, m, x, y, z;
-int ind[max_int];
-int cnt[max_int][max_int];
-int d[max_int][max_int];
-
-vector<int> v[max_int];
+int n;
+int d[max_int];
+int max_score = 0;
+int min_score = 1001;
 
 int main(){
-    scanf("%d %d", &n, &m);
-    
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &x, &y, &z);
-        v[y].push_back(x);
-        cnt[x][y] = z;
-        ind[x]++;
-    }
-    
-    queue<int> q;
+    scanf("%d", &n);
     for(int i=1; i<=n; i++){
-        if(ind[i] == 0){
-            q.push(i);
-            d[i][i] = 1;
-        }
+        scanf("%d", &d[i]);
+        max_score = max(max_score, d[i]);
+        min_score = min(min_score, d[i]);
     }
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            
-            for(int j=1; j<=n; j++){
-                if(d[node][j] != 0){
-                    d[next][j] += cnt[next][node] * d[node][j];
-                }
-            }
-            
-            ind[next]--;
-            
-            if(ind[next] == 0){
-                q.push(next);
-            }
-        }
-    }
-    
-    for(int i=1; i<=n; i++){
-        if(d[n][i] != 0){
-            printf("%d %d\n", i, d[n][i]);
-        }
-    }
-    
-    
+    printf("%d\n", max_score - min_score);
 }
