@@ -1,12 +1,9 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
-#include <set>
 
 using namespace std;
 
-int t;
-int d[7];
+int t, n, q, l, r;
+int d[1001];
 
 int main(int argc, char** argv)
 {
@@ -14,25 +11,20 @@ int main(int argc, char** argv)
     
     for(int test_case = 1; test_case <= t; ++test_case)
     {
-        for(int i=0; i<7; i++) scanf("%d", &d[i]);
-
-        set<int> result;
-        for(int i=0; i<7; i++){
-            for(int j=i+1; j<7; j++){
-                for(int k=j+1; k<7; k++){
-                    result.insert(d[i]+d[j]+d[k]);
-                }
+        for(int i=0; i<=n; i++) d[i] = 0;
+        
+        scanf("%d %d", &n, &q);
+        for(int i=1; i<=q; i++){
+            scanf("%d %d", &l, &r);
+            for(int j=l; j<=r; j++){
+                d[j] = i;
             }
         }
         
-        set<int>::iterator iter;
-        int cnt = 1;
-        for(iter = --result.end(); iter != result.begin(); iter--){
-            if(cnt == 5){
-                printf("#%d %d\n", test_case, *iter);
-            }
-            cnt++;
-        }
+        printf("#%d ", test_case);
+        for(int i=1; i<=n; i++) printf("%d ", d[i]);
+        printf("\n");
+        
         
     }
     
