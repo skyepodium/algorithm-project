@@ -7,56 +7,78 @@
 
 using namespace std;
 
-int n, cnt, num;
-int cost[max_int];
+int n, m, start_node, end_node, a, b, c;
 int d[max_int];
 int ind[max_int];
-vector<int> v[max_int];
+int rind[max_int];
+
+struct info{
+    int cur;
+    int cost;
+};
+
+vector<info> v[max_int];
+vector<info> w[max_int];
+bool check[max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int i=1; i<=n; i++){
-        scanf("%d", &cost[i]);
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+        ind[b] += 1;
         
-        scanf("%d", &cnt);
-        
-        for(int j=0; j<cnt; j++){
-            scanf("%d", &num);
-            v[num].push_back(i);
-            ind[i] += 1;
-        }
+        w[b].push_back({a, c});
+        rind[a] += 1;
     }
     
-    queue<int> q;
-    for(int i=1; i<=n; i++){
-        if(ind[i] == 0){
-            q.push(i);
-            d[i] = cost[i];
-        }
-    }
+    scanf("%d %d", &start_node, &end_node);
+    
+    queue<info> q;
+    d[start_node] = 0;
+    q.push({start_node, 0});
     
     while(!q.empty()){
-        int node = q.front();
+        info node = q.front();
         q.pop();
         
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
+        for(int i=0; i<v[node.cur].size(); i++){
+            info next = v[node.cur][i];
             
-            d[next] = max(d[next], d[node] + cost[next]);
-            ind[next] -= 1;
+            d[next.cur] = max(d[next.cur], d[node.cur] + next.cost);
             
-            if(ind[next] == 0){
+            ind[next.cur] -= 1;
+            
+            if(ind[next.cur] == 0){
                 q.push(next);
             }
         }
     }
     
-    int result = 0;
-    for(int i=1; i<=n; i++){
-        result = max(result, d[i]);
+    printf("%d\n", d[end_node]);
+    
+    int cnt = 0;
+    queue<info> rq;
+    check[end_node] = true;
+    rq.push({end_node, d[end_node]});
+    
+    while(!rq.empty()){
+        info node = rq.front();
+        rq.pop();
+        
+        for(int i=0; i<w[node.cur].size(); i++){
+            info next = w[node.cur][i];
+            if(check[node.cur] && d[node.cur] - next.cost == d[next.cur]){
+                check[next.cur] = true;
+                cnt++;
+            }
+            rind[next.cur] -= 1;
+            if(rind[next.cur] == 0) rq.push(next);
+            
+        }
     }
+
     
-    printf("%d\n", result);
-    
+    printf("%d\n", cnt);
 }
