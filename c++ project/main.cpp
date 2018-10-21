@@ -1,35 +1,48 @@
 #include <iostream>
-#include <queue>
 #include <vector>
 #include <algorithm>
+#include <queue>
 #include <cstring>
 
-#define max_int 51
+#define max_int 21
 
 using namespace std;
 
-//시간 복잡도 계산을 못할거 같은 이유는 인구이동이 끝날때 까지 반복문을 수행하는데
-//인구이동이 언제 끝날지 모르겠어 그게 답이잖아.
-//인구이동이 일어나는 횟수를 X라고 하면, 시간복잡도는 O(X*n^2)... 잘 모르겠다
+int n;
+int cur_size = 2;
+int cur_eat = 0;
 
-//시간 복잡도: O(X*n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 완전탐색, 플러드 필 by BFS
-//사용한 자료구조: 그래프 by 2차원 배열
-
-
-int n, l, r, people_num, area_cnt;
+int cur_x, cur_y;
 int d[max_int][max_int];
-bool check[max_int][max_int];
+int result;
+int check[max_int][max_int];
 int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
-int result = 0;
-bool is_move = false;
-vector<pair<int, int>> v;
 
 
-void check_area(int x, int y){
+struct info{
+    int x;
+    int y;
+    int dist;
+};
 
+vector<info> v;
+
+bool cmp(const info &a, const info &b){
+    
+    if(a.dist == b.dist){
+        
+        if(a.x == b.x){
+            return a.y < b.y;
+        }
+        else return a.x < b.x;
+    }
+    else return a.dist < b.dist;
+}
+
+void find_dist(int x, int y){
+    
+    check[x][y] = 0;
     queue<pair<int, int>> q;
     q.push(make_pair(x, y));
     
@@ -42,108 +55,87 @@ void check_area(int x, int y){
             int nx = x + dx[i];
             int ny = y + dy[i];
             
-            int diff = abs(d[nx][ny] - d[x][y]);
-            
             if(nx>=0 && nx<n && ny>=0 && ny<n){
-                if(check[nx][ny] == false && diff>=l && diff<=r){
-                    check[nx][ny] = true;
+                if(check[nx][ny] == 0 && d[nx][ny] <= cur_size){
+                    check[nx][ny] = check[x][y] + 1;
                     q.push(make_pair(nx, ny));
                 }
             }
         }
     }
-}
-
-void union_area(int x, int y){
-    
-    queue<pair<int, int>> q;
-    q.push(make_pair(x, y));
-    check[x][y] = false;
-    
-    while(!q.empty()){
-        x = q.front().first;
-        y = q.front().second;
-        q.pop();
-
-        v.push_back(make_pair(x, y));
-        people_num += d[x][y];
-        area_cnt += 1;
-        
-        for(int i=0; i<4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            int diff = abs(d[nx][ny] - d[x][y]);
-            
-            if(nx>=0 && nx<n && ny>=0 && ny<n){
-                if(check[nx][ny] == true && diff>=l && diff<=r){
-                    check[nx][ny] = false;
-                    q.push(make_pair(nx, ny));
-                }
-            }
-        }
-    }
-}
-
-void dist_people(){
-    int after_people = people_num/area_cnt;
-    for(int i=0; i<(int)v.size(); i++){
-        int x = v[i].first;
-        int y = v[i].second;
-        d[x][y] = after_people;
-    }
-    is_move = true;
 }
 
 int main(){
-    scanf("%d %d %d", &n, &l, &r);
     
+    scanf("%d", &n);
+    
+    //1. 지도 정보 입력
     for(int i=0; i<n; i++){
         for(int j=0; j<n; j++){
             scanf("%d", &d[i][j]);
+            if(d[i][j] == 9){
+                cur_x = i;
+                cur_y = j;
+                d[i][j] = 0;
+            }
         }
     }
     
     while(true){
         
-        //1. bfs로 돌면서 인구이동이 발생할 나라들을 체크해놓는다.
+        //2. 물고기의 위치를 찾는다.
         for(int i=0; i<n; i++){
             for(int j=0; j<n; j++){
-                if(check[i][j] == false){
-                    check_area(i, j);
+                if(d[i][j] > 0 && d[i][j] < cur_size){
+                    
+                    find_dist(cur_x, cur_y);
+                    
+                    int dist = check[i][j];
+                    if(dist > 0)v.push_back({i, j, dist});
+                    memset(check, 0, sizeof(check));
                 }
             }
         }
         
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                //위에서 체크한 내용을 거꾸로 이용한다.
-                //true -> false로
-                if(check[i][j] == true){
-                    
-                    //사용할 변수 초기화
-                    people_num = 0;
-                    area_cnt = 0;
-                    v.clear();
-                    
-                    //2. 플러드 필을 이용해서 연합을 만든다.
-                    union_area(i, j);
-
-                    //3. 인구 분배
-                    dist_people();
-                }
-            }
+        //3. 상어 이동
+        int fish_cnt = (int)v.size();
+        
+        //1) 먹을 수 있는 물고기가 없다면 종료
+        if(fish_cnt == 0){
+            break;
         }
-
-        //인구이동이 일어나지 않았다면 종료시킨다.
-        if(is_move == false) break;
-        //인구이동이 일어났다면 인구이동 += 1
-        else result++;
-
-        //변수 초기화
-        is_move = false;
-        memset(check, false, sizeof(check));
+        else{
+            
+            //2) 먹을 수 있는 물고기가 1마리보다 많을때
+            if(fish_cnt > 1) sort(v.begin(), v.end(), cmp);
+            
+            int nx = v[0].x;
+            int ny = v[0].y;
+            int move_time = v[0].dist;
+            
+            //상어 크기 업데이트
+            cur_eat++;
+            if(cur_eat == cur_size){
+                cur_eat = 0;
+                cur_size++;
+            }
+            
+            
+            //상어의 위치 업데이트
+            cur_x = nx;
+            cur_y = ny;
+            
+            //지도 변경
+            d[nx][ny] = 0;
+            
+            //변수 초기화
+            v.clear();
+            
+            //시간 업데이트
+            result += move_time;
+        }
     }
     printf("%d\n", result);
+    
 }
 
