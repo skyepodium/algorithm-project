@@ -1,47 +1,57 @@
 #include <iostream>
 #include <algorithm>
 
+#define max_int 100001
 #define max_val 2147483647
 
 using namespace std;
 
-int n;
-int cur[3];
-int min_array[3];
-int max_array[3];
+int n, m, s, e;
+int idx;
+int tree[max_int*4];
 
-int min_array2[3];
-int max_array2[3];
+int find_data(int start, int end){
+    
+    int result = max_val;
+    
+    while(start <= end){
+        
+        if(start%2 == 1) result = min(result, tree[start]);
+        if(end%2 == 0) result = min(result, tree[end]);
+        
+        start = (start + 1)/2;
+        end = (end - 1)/2;
+        
+    }
+    
+    
+    return result;
+}
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int i=0; i<3; i++){
-        scanf("%d", &cur[i]);
-        min_array[i] = cur[i];
-        max_array[i] = cur[i];
+    //1. n을 넘는 2의 제곱수를 구한다.
+    idx=1;
+    while(idx<n){
+        idx = idx*2;
+    }
+    idx--;
+    
+    //2. 리프노드에 수를 입력받는다.
+    for(int i=1; i<=n; i++){
+        scanf("%d", &tree[i+idx]);
     }
     
-    for(int i=1; i<n; i++){
-        for(int j=0; j<3; j++){
-            scanf("%d", &cur[j]);
-            
-        }
-        
-        min_array2[0] = min(min_array[0], min_array[1]) + cur[0];
-        min_array2[1] = min(min_array[0], min(min_array[1], min_array[2])) + cur[1];
-        min_array2[2] = min(min_array[1], min_array[2]) + cur[2];
-
-        max_array2[0] = max(max_array[0], max_array[1]) + cur[0];
-        max_array2[1] = max(max_array[0], max(max_array[1], max_array[2])) + cur[1];
-        max_array2[2] = max(max_array[1], max_array[2]) + cur[2];
-        
-        for(int j=0; j<3; j++){
-            min_array[j] = min_array2[j];
-            max_array[j] = max_array2[j];
-        }
+    //3. min_index 트리를 구성한다.
+    for(int i=idx; i>=1; i--){
+        tree[i] = min(tree[i*2], tree[i*2+1]);
     }
     
-    printf("%d %d\n", max(max_array[0], max(max_array[1], max_array[2])), min(min_array[0], min(min_array[1], min_array[2])));
+    //4. 질문을 입력받는다.
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &s, &e);
+        printf("%d\n", find_data(s+idx, e+idx));
+    }
     
 }
