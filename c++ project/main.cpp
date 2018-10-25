@@ -1,47 +1,47 @@
 #include <iostream>
-#include <queue>
+#include <algorithm>
 
-#define max_int 5000001
+#define max_val 2147483647
 
 using namespace std;
 
-//시간 복잡도: O(n)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 슬라이딩 윈도우
-//사용한 자료구조: 덱
+int n;
+int cur[3];
+int min_array[3];
+int max_array[3];
 
-
-int n, l;
-int a[max_int];
-int d[max_int];
-int ans[max_int];
+int min_array2[3];
+int max_array2[3];
 
 int main(){
-    scanf("%d %d", &n, &l);
+    scanf("%d", &n);
     
-    for(int i=0; i<n; i++){
-        scanf("%d", &a[i]);
+    for(int i=0; i<3; i++){
+        scanf("%d", &cur[i]);
+        min_array[i] = cur[i];
+        max_array[i] = cur[i];
     }
     
-    deque<pair<int, int>> q;
-    for(int i=0; i<n; i++){
-        int cur = a[i];
-        
-        if(!q.empty() && q.front().second <= i-l){
-            q.pop_front();
+    for(int i=1; i<n; i++){
+        for(int j=0; j<3; j++){
+            scanf("%d", &cur[j]);
+            
         }
         
-        while(!q.empty() && q.back().first > cur){
-            q.pop_back();
+        min_array2[0] = min(min_array[0], min_array[1]) + cur[0];
+        min_array2[1] = min(min_array[0], min(min_array[1], min_array[2])) + cur[1];
+        min_array2[2] = min(min_array[1], min_array[2]) + cur[2];
+
+        max_array2[0] = max(max_array[0], max_array[1]) + cur[0];
+        max_array2[1] = max(max_array[0], max(max_array[1], max_array[2])) + cur[1];
+        max_array2[2] = max(max_array[1], max_array[2]) + cur[2];
+        
+        for(int j=0; j<3; j++){
+            min_array[j] = min_array2[j];
+            max_array[j] = max_array2[j];
         }
-        
-        q.push_back(make_pair(cur, i));
-        ans[i] = q.front().first;
-        
     }
     
-    for(int i=0; i<n; i++){
-        printf("%d ", ans[i]);
-    }
-    printf("\n");
+    printf("%d %d\n", max(max_array[0], max(max_array[1], max_array[2])), min(min_array[0], min(min_array[1], min_array[2])));
+    
 }
