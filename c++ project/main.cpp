@@ -1,75 +1,70 @@
 #include <iostream>
-#define max_int 1000001
-#define lld long long int
 #include <queue>
+#include <vector>
 
+#define max_val 2147483647
+#define max_int 126
 using namespace std;
 
-lld tree[max_int*4];
-int n, m, k;
-int idx;
-int a, b, c;
+int n, idx;
+int a[max_int][max_int];
+int d[max_int][max_int];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-void update_tree(int node, lld delta){
-    
-    while(node>0){
-        tree[node] = tree[node] + delta;
-        node = node/2;
+struct info{
+    int x;
+    int y;
+    int cost;
+};
+
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
     }
-}
-
-lld sum_data(int start, int end){
-    
-    lld result = 0;
-    while(start <= end){
-        
-        if(start%2 == 1) result = result + tree[start];
-        if(end%2 == 0) result = result + tree[end];
-        
-        start = (start+1)/2;
-        end = (end-1)/2;
-    }
-    
-    return result;
-}
-
+};
 
 int main(){
-    
-    scanf("%d %d %d", &n, &m, &k);
-    
-    //1. n을 넘는 리프노드의 최대 개수를 계산한다.
-    idx = 1;
-    while(idx<n){
-        idx = idx*2;
-    }
-    //트리가 1부터 시작하기 때문에 1을 빼준다.
-    idx--;
-    
-    //2. 리프노드에 수를 입력받는다.
-    for(int i=1; i<=n; i++){
-        scanf("%lld", &tree[i+idx]);
-    }
-    
-    //3. Sum Indexed Tree를 구성한다.
-    for(int i=idx; i>=1; i--){
-        tree[i] = tree[i*2] + tree[i*2+1];
-    }
-    
-    //4. m+k개의 명령을 입력받는다.
-    for(int i=1; i<=m+k; i++){
-        scanf("%d %d %d", &a, &b, &c);
+
+    idx = 0;
+    while(true){
+        scanf("%d", &n);
+        idx++;
+        if(n==0) break;
         
-        //5. 트리를 업데이트 한다.
-        if(a==1){
-            lld delta = c - tree[idx+b];
-            update_tree(idx+b, delta);
+        //1. 지도를 입력받는다.
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                scanf("%d", &a[i][j]);
+                d[i][j] = max_val;
+            }
         }
         
-        //6. 구간합을 계산한다.
-        else{
-            printf("%lld\n", sum_data(idx+b, idx+c));
+        priority_queue<info, vector<info>, cmp> pq;
+        d[0][0] = a[0][0];
+        pq.push({0, 0, d[0][0]});
+        
+        while(!pq.empty()){
+            
+            int x = pq.top().x;
+            int y = pq.top().y;
+            int cost = pq.top().cost;
+            pq.pop();
+            
+            for(int i=0; i<4; i++){
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                
+                if(nx>=0 && nx<n && ny>=0 && ny<n){
+                    if(d[nx][ny] > cost + a[nx][ny]){
+                        d[nx][ny] = cost + a[nx][ny];
+                        pq.push({nx, ny, d[nx][ny]});
+                    }
+                }
+            }
         }
+        
+        printf("Problem %d: %d\n", idx, d[n-1][n-1]);
+        
     }
-    
 }
