@@ -1,75 +1,38 @@
 #include <iostream>
-#include <queue>
-#include <vector>
 
-#define max_val 2147483647
-#define max_int 20001
+#define lld long long
+#define max_int 101
 
 using namespace std;
 
-int n, m, a, b;
-int d[max_int];
-
-struct info{
-    int cur;
-    int cost;
-};
-
-vector<info> v[max_int];
-
-struct cmp{
-    bool operator()(const info &a, const info &b){
-        return a.cost > b.cost;
-    }
-};
+int n;
+int a[max_int][max_int];
+lld d[max_int][max_int];
 
 int main(){
-    scanf("%d %d", &n, &m);
+    scanf("%d", &n);
     
-    for(int i=0; i<=n; i++) d[i] = max_val;
-    
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back({b, 1});
-        v[b].push_back({a, 1});
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            scanf("%d", &a[i][j]);
+        }
     }
     
-    d[1] = 0;
-    priority_queue<info, vector<info>, cmp> pq;
-    pq.push({1, 0});
-    
-    while(!pq.empty()){
-        info node = pq.top();
-        pq.pop();
-        
-        for(int i=0; i<v[node.cur].size(); i++){
-            info next = v[node.cur][i];
+    d[1][1] = 1;
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(a[i][j] == 0) continue;
             
-            if(d[next.cur] > d[node.cur] + next.cost){
-                d[next.cur] = d[node.cur] + next.cost;
-                pq.push(next);
+            if(a[i][j] + i <=n){
+                d[i+a[i][j]][j] += d[i][j];
+            }
+            
+            if(a[i][j] + j <=n){
+                d[i][j+a[i][j]] += d[i][j];
             }
         }
     }
-    
-    int hide_num = 0;
-    int dist = 0;
-    int cnt = 0;
-    
-    for(int i=1; i<=n; i++){
-        
-        if(d[i] > dist){
-            hide_num = i;
-            dist = d[i];
-            cnt = 1;
-        }
-        else if(d[i] == dist){
-            cnt++;
-        }
-    }
-    
-    printf("%d %d %d\n", hide_num, dist, cnt);
-    
-    
+
+    printf("%lld\n", d[n][n]);
     
 }
