@@ -1,38 +1,23 @@
 #include <iostream>
 
-#define lld long long
-#define max_int 101
-
 using namespace std;
 
-int n;
-int a[max_int][max_int];
-lld d[max_int][max_int];
+int a, b, c, d, e, f;
+
+int ccw(int x1, int y1, int x2, int y2, int x3, int y3){
+    
+    int temp = x1*y2 + x2*y3 + x3*y1;
+    temp = temp - y1*x2-y2*x3-y3*x1;
+    
+    if(temp > 0) return 1;
+    else if(temp < 0) return -1;
+    else return 0;
+}
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d %d %d %d %d", &a, &b, &c, &d, &e, &f);
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &a[i][j]);
-        }
-    }
+    printf("%d\n", ccw(a, b, c, d, e, f));
     
-    d[1][1] = 1;
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            if(a[i][j] == 0) continue;
-            
-            if(a[i][j] + i <=n){
-                d[i+a[i][j]][j] += d[i][j];
-            }
-            
-            if(a[i][j] + j <=n){
-                d[i][j+a[i][j]] += d[i][j];
-            }
-        }
-    }
-
-    printf("%lld\n", d[n][n]);
     
 }
