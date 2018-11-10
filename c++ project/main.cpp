@@ -1,36 +1,39 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
-//시간 복잡도: O(nt)
-//공간 복잡도: O(n)
-//사용한 알고리즘: 동적 계획법, Top-Down
+//시간 복잡도: O(nk)
+//공간 복잡도: O(k)
+//사용한 알고리즘: 동적 계획법, Bottom-Up
 //사용한 자료구조: 1차원 배열
 
-int t, n;
-int d[12];
-
-int go(int i){
-    
-    if(i==0) return 1;
-    
-    if(d[i] > 0) return d[i];
-    
-    for(int j=1; j<=3; j++){
-        if(i-j >= 0) d[i] += go(i-j);
-    }
-
-    return d[i];
-}
+int n, k;
+int a[101];
+int d[10001];
 
 int main(){
-    scanf("%d", &t);
-    
-    while(t--){
-        for(int i=0; i<12; i++) d[i] = 0;
-        
-        scanf("%d", &n);
+    scanf("%d %d", &n, &k);
 
-        printf("%d\n", go(n));
+    for(int i=0; i<n; i++){
+        scanf("%d", &a[i]);
     }
+    
+    for(int i=0; i<=k; i++){
+        d[i] = 10001;
+    }
+    
+    d[0] = 0;
+    for(int i=0; i<=k; i++){
+        for(int j=0; j<n; j++){
+            if(i-a[j] >= 0){
+                d[i] = min(d[i], d[i-a[j]]+1);
+            }
+        }
+    }
+
+    
+    if(d[k] == 10001) d[k] = -1;
+    
+    printf("%d\n", d[k]);
 }
