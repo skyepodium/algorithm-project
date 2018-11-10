@@ -2,22 +2,35 @@
 
 using namespace std;
 
-int a, b, c, d, e, f;
+//시간 복잡도: O(nt)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 동적 계획법, Top-Down
+//사용한 자료구조: 1차원 배열
 
-int ccw(int x1, int y1, int x2, int y2, int x3, int y3){
+int t, n;
+int d[12];
+
+int go(int i){
     
-    int temp = x1*y2 + x2*y3 + x3*y1;
-    temp = temp - y1*x2-y2*x3-y3*x1;
+    if(i==0) return 1;
     
-    if(temp > 0) return 1;
-    else if(temp < 0) return -1;
-    else return 0;
+    if(d[i] > 0) return d[i];
+    
+    for(int j=1; j<=3; j++){
+        if(i-j >= 0) d[i] += go(i-j);
+    }
+
+    return d[i];
 }
 
 int main(){
-    scanf("%d %d %d %d %d %d", &a, &b, &c, &d, &e, &f);
+    scanf("%d", &t);
     
-    printf("%d\n", ccw(a, b, c, d, e, f));
-    
-    
+    while(t--){
+        for(int i=0; i<12; i++) d[i] = 0;
+        
+        scanf("%d", &n);
+
+        printf("%d\n", go(n));
+    }
 }
