@@ -1,59 +1,40 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
 
-#define max_int 26
+#define  max_int 1001
 using namespace std;
 
-int n, cnt, total = 0;
+int n, m, a, b, cnt = 0;
+bool check[max_int];
+vector<int> v[max_int];
 
-int d[max_int][max_int];
-bool check[max_int][max_int];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
-
-void dfs(int x, int y){
-    check[x][y] = true;
-    cnt++;
+void dfs(int node){
+    check[node] = true;
     
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        
-        if(nx>=0 && nx<n && ny>=0 && ny<n){
-            if(check[nx][ny] == false && d[nx][ny] == 1){
-                dfs(nx, ny);
-            }
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(check[next] == false){
+            dfs(next);
+            
         }
     }
 }
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            scanf("%1d", &d[i][j]);
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+    
+    for(int i=1; i<=n; i++){
+        if(check[i] == false){
+            dfs(i);
+            cnt++;
         }
     }
     
-    vector<int> v;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(d[i][j] == 1 && check[i][j] == false){
-                cnt = 0;
-                total++;
-                dfs(i, j);
-                v.push_back(cnt);
-            }
-        }
-    }
-
-    sort(v.begin(), v.end());
-    
-    printf("%d\n", total);
-    for(int i=0; i<v.size(); i++){
-        printf("%d\n", v[i]);
-    }
-    
+    printf("%d\n", cnt);
 }
