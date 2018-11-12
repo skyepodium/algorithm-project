@@ -1,40 +1,44 @@
 #include <iostream>
+#include <queue>
 #include <vector>
 
-#define  max_int 1001
+#define max_int 32001
+
 using namespace std;
 
-int n, m, a, b, cnt = 0;
-bool check[max_int];
+int n, m, start_node, end_node;
+int ind[max_int];
 vector<int> v[max_int];
-
-void dfs(int node){
-    check[node] = true;
-    
-    for(int i=0; i<v[node].size(); i++){
-        int next = v[node][i];
-        if(check[next] == false){
-            dfs(next);
-            
-        }
-    }
-}
 
 int main(){
     scanf("%d %d", &n, &m);
     
     for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        v[b].push_back(a);
+        scanf("%d %d", &start_node, &end_node);
+        v[start_node].push_back(end_node);
+        ind[end_node]++;
     }
     
+    queue<int> q;
     for(int i=1; i<=n; i++){
-        if(check[i] == false){
-            dfs(i);
-            cnt++;
+        if(ind[i] == 0) q.push(i);
+    }
+    
+    while(!q.empty()){
+        
+        int node = q.front();
+        printf("%d ", node);
+        q.pop();
+        
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            
+            ind[next]--;
+            if(ind[next] == 0){
+                q.push(next);
+            }
         }
     }
     
-    printf("%d\n", cnt);
+    printf("\n");
 }
