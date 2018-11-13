@@ -1,27 +1,40 @@
 #include <iostream>
 #include <algorithm>
 
-#define max_int 100001
-
+#define max_val 10000001
+#define max_int 101
 using namespace std;
 
-int n;
-int a[max_int];
-int d[max_int];
+int n, m, a, b, c;
+int d[max_int][max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int i=0; i<n; i++){
-        scanf("%d", &a[i]);
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(i!=j) d[i][j] = max_val;
+        }
     }
     
-    d[0] = a[0];
-    int result = d[0];
-    for(int i=1; i<n; i++){
-        d[i] = max(d[i-1]+a[i], a[i]);
-        result = max(result, d[i]);
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        d[a][b] = min(d[a][b], c);
     }
-    printf("%d\n", result);
     
+    for(int k=1; k<=n; k++){
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+            }
+        }
+    }
+    
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(d[i][j] == max_val) printf("0 ");
+            else printf("%d ", d[i][j]);
+        }
+        printf("\n");
+    }
 }
