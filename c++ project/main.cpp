@@ -1,49 +1,58 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <algorithm>
 
-#define max_int 32001
+#define max_int 10001
 using namespace std;
 
-int n, m, a, b;
+int n, cnt, number;
+int cost[max_int];
+int d[max_int];
 int ind[max_int];
 vector<int> v[max_int];
 
-struct cmp{
-    bool operator()(const int &a, const int &b){
-        return a > b;
-    }
-};
-
 int main(){
-    scanf("%d %d", &n, &m);
+    scanf("%d", &n);
     
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        ind[b]++;
-    }
-    
-    priority_queue<int, vector<int>, cmp> pq;
     for(int i=1; i<=n; i++){
-        if(ind[i] == 0){
-            pq.push(i);
+        scanf("%d", &cost[i]);
+        
+        scanf("%d", &cnt);
+        for(int j=0; j<cnt; j++){
+            scanf("%d", &number);
+            v[number].push_back(i);
+            ind[i]++;
         }
     }
     
-    while(!pq.empty()){
-        int node = pq.top();
-        pq.pop();
-        printf("%d ", node);
+    queue<int> q;
+    for(int i=1; i<=n; i++){
+        if(ind[i] == 0) q.push(i);
+        d[i] = cost[i];
+    }
+    
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
         
         for(int i=0; i<v[node].size(); i++){
             int next = v[node][i];
             
+            d[next] = max(d[next], d[node] + cost[next]);
+            
             ind[next]--;
-            if(ind[next] == 0) pq.push(next);
+            if(ind[next] == 0) q.push(next);
+            
         }
-        
     }
     
-    printf("\n");
+    int result = 0;
+    for(int i=1; i<=n; i++){
+        result = max(result, d[i]);
+    }
+    
+    printf("%d\n", result);
+    
+    
 }
