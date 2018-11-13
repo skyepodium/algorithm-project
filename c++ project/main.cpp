@@ -9,6 +9,12 @@ int n, m;
 vector<int> v[max_int];
 int ind[max_int];
 
+struct cmp{
+    bool operator()(const int &a, const int &b){
+        return a > b;
+    }
+};
+
 int main(){
     scanf("%d %d", &n, &m);
     
@@ -19,24 +25,23 @@ int main(){
         ind[b]++;
     }
     
-    queue<int> q;
+    priority_queue<int, vector<int>, cmp> pq;
     for(int i=1; i<=n; i++){
-        if(ind[i] == 0) q.push(i);
+        if(ind[i] == 0) pq.push(i);
     }
     
-    while(!q.empty()){
-        int node = q.front();
+    while(!pq.empty()){
+        int node = pq.top();
         printf("%d ", node);
-        q.pop();
+        pq.pop();
         
         for(int i=0; i<v[node].size(); i++){
             int next = v[node][i];
             
             ind[next]--;
-            if(ind[next] == 0) q.push(next);
+            if(ind[next] == 0) pq.push(next);
         }
     }
     printf("\n");
-    
     
 }
