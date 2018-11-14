@@ -1,56 +1,43 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <algorithm>
 
-#define max_int 501
+#define max_int 1001
 using namespace std;
 
-int n, num;
-int cost[max_int];
+int t, n, m, start_node, end_node;
 int d[max_int];
-int ind[max_int];
-vector<int> v[max_int];
+
+struct info{
+    int start_node;
+    int end_node;
+};
+
+vector<info> v;
+
+int find(int node){
+    if(d[node] == node) return node;
+    else return d[node] = find(d[node]);
+}
 
 int main(){
-    scanf("%d", &n);
-    for(int i=1; i<=n; i++){
-        scanf("%d", &cost[i]);
+    scanf("%d", &t);
+    
+    while(t--){
+        scanf("%d %d", &n, &m);
         
-        while(true){
-            scanf("%d", &num);
-            if(num == -1) break;
-            
-            v[num].push_back(i);
-            ind[i]++;
-        }
-    }
-    
-    queue<int> q;
-    for(int i=1; i<=n; i++){
-        if(ind[i] == 0){
-            q.push(i);
-            d[i] = cost[i];
-        }
-    }
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
+        for(int i=1; i<=n; i++) d[i] = i;
         
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            
-            d[next] = max(d[next], cost[next] + d[node]);
-            
-            ind[next]--;
-            if(ind[next] == 0) q.push(next);
+        for(int i=0; i<m; i++){
+            scanf("%d %d", &start_node, &end_node);
+            v.push_back({start_node, end_node});
         }
+        
+        for(int i=0; i<m; i++){
+            if(find(v[i].start_node) != find(v[i].end_node)){
+                d[find(v[i].start_node)] = find(v[i].end_node);
+            }
+        }
+        
     }
-    
-    for(int i=1; i<=n; i++){
-        printf("%d\n", d[i]);
-    }
-    
     
 }
