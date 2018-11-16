@@ -1,18 +1,11 @@
 #include <iostream>
-#include <vector>
 
-#define max_int 1001
+#define max_int 1000001
+
 using namespace std;
 
-int t, n, m, start_node, end_node;
+int n, m, a, b, c;
 int d[max_int];
-
-struct info{
-    int start_node;
-    int end_node;
-};
-
-vector<info> v;
 
 int find(int node){
     if(d[node] == node) return node;
@@ -20,24 +13,18 @@ int find(int node){
 }
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d", &n, &m);
     
-    while(t--){
-        scanf("%d %d", &n, &m);
-        
-        for(int i=1; i<=n; i++) d[i] = i;
-        
-        for(int i=0; i<m; i++){
-            scanf("%d %d", &start_node, &end_node);
-            v.push_back({start_node, end_node});
+    for(int i=1; i<=n; i++) d[i] = i;
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        if(a == 0){
+            d[find(b)] = find(c);
         }
-        
-        for(int i=0; i<m; i++){
-            if(find(v[i].start_node) != find(v[i].end_node)){
-                d[find(v[i].start_node)] = find(v[i].end_node);
-            }
+        else{
+            if(find(b) == find(c)) printf("YES\n");
+            else printf("NO\n");
         }
-        
     }
-    
 }
