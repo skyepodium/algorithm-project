@@ -1,60 +1,64 @@
 #include <iostream>
-#include <map>
+#include <vector>
+#include <queue>
 
-#define max_int 100001
+#define max_int 1001
 using namespace std;
 
-int t, n;
-int d[max_int*2];
-int num[max_int*2];
-char a[21];
-char b[21];
+//시간 복잡도: O(ElogE)
+//공간 복잡도: O(V)
+//사용한 알고리즘: 프림
+//사용한 자료구조: 우선순위큐
 
-int find(int node){
-    if(d[node] == node) return node;
-    else return d[node] = find(d[node]);
-}
+int n, m, a, b, c;
+bool check[max_int];
 
-int merge(int x, int y){
-    
-    x = find(x);
-    y = find(y);
-    
-    if(x != y){
-        d[x] = y;
-        num[y] += num[x];
-        num[x] = 1;
+struct info{
+    int cur;
+    int cost;
+};
+vector<info> v[max_int];
+
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
     }
-    
-    return num[y];
-}
-
+};
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d", &n, &m);
     
-    while(t--){
-        scanf("%d", &n);
-        
-        for(int i=1; i<=2*n; i++){
-            d[i] = i;
-            num[i] = 1;
-        }
-        
-        int idx = 1;
-        map<string, int> mp;
-        for(int i=0; i<n; i++){
-            scanf("%s %s", a, b);
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+        v[b].push_back({a, c});
+    }
+    
+    check[1] = true;
+    priority_queue<info, vector<info>, cmp> pq;
+    for(int i=0; i<v[1].size(); i++){
+        pq.push({v[1][i].cur, v[1][i].cost});
+    }
+    
+    int ans = 0;
+    for(int i=0; i<n-1; i++){
+        info next;
+        while(!pq.empty()){
+            next = pq.top();
+            pq.pop();
             
-            if(mp.count(a) == 0){
-                mp[a] = idx++;
+            if(check[next.cur] == false){
+                break;
             }
-
-            if(mp.count(b) == 0){
-                mp[b] = idx++;
-            }
-
-            printf("%d\n", merge(mp[a], mp[b]));
+        }
+        check[next.cur] = true;
+        ans += next.cost;
+        int x = next.cur;
+        for(int i=0; i<v[x].size(); i++) {
+            pq.push({v[x][i].cur, v[x][i].cost});
         }
     }
+
+    printf("%d\n", ans);
+    
 }
