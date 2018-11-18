@@ -1,62 +1,54 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <algorithm>
 
-#define max_int 1001
+#define max_int 100001
+
 using namespace std;
 
-int t, n, m, a, b;
 int d[max_int];
-bool check[max_int];
-
+int n, m, a, b, c;
 struct info{
     int cur;
     int next;
+    int cost;
 };
 
+vector<info> v;
+
+bool cmp(const info &a, const info &b){
+    return a.cost < b.cost;
+}
+
+int find(int node){
+    if(d[node] == node) return node;
+    else return d[node] = find(d[node]);
+}
+
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d", &n, &m);
+    for(int i=1; i<=n; i++) d[i] = i;
     
-    while(t--){
-        
-        scanf("%d %d", &n, &m);
-        for(int i=1; i<=n; i++){
-            d[i] = i;
-            check[i] = false;
-        }
-        
-        vector<int> v[max_int];
-        for(int i=0; i<m; i++){
-            scanf("%d %d", &a, &b);
-            v[a].push_back(b);
-            v[b].push_back(a);
-        }
-        
-        check[1] = true;
-        queue<int> q;
-        for(int i=0; i<v[1].size(); i++){
-            q.push(v[1][i]);
-        }
-        
-        int result = 0;
-        for(int i=0; i<n-1; i++){
-            int next;
-            while(!q.empty()){
-                next = q.front();
-                q.pop();
-                
-                if(check[next] == false){
-                    check[next] = true;
-                    result++;
-                    break;
-                }
-            }
-            
-            for(int i=0; i<v[next].size(); i++){
-                q.push(v[next][i]);
-            }
-        }
-        printf("%d\n", result);
-        
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v.push_back({a, b, c});
     }
+    
+    sort(v.begin(), v.end(), cmp);
+    
+    int result = 0;
+    int max_weight = 0;
+    for(int i=0; i<v.size(); i++){
+        int a = find(v[i].cur);
+        int b = find(v[i].next);
+        
+        if(a!=b){
+            d[a] = b;
+            result += v[i].cost;
+            max_weight = max(max_weight, v[i].cost);
+        }
+    }
+    
+    printf("%d\n", result - max_weight);
+    
 }
