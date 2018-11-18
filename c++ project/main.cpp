@@ -1,22 +1,24 @@
 #include <iostream>
 #include <queue>
-#include <stack>
-#include <algorithm>
+#include <vector>
 
-#define max_int 801
+#define max_int 101
 #define max_val 2147483647
 
 using namespace std;
 
-int n, m, a, b, c, start_node, end_node;
-int d[max_int];
-
 struct info{
-    int cur;
+    int x;
+    int y;
     int cost;
 };
 
 vector<info> v[max_int];
+int n, m;
+int a[max_int][max_int];
+int d[max_int][max_int];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
 struct cmp{
     bool operator()(const info &a, const info &b){
@@ -24,81 +26,50 @@ struct cmp{
     }
 };
 
-void dijkstra(int start){
 
+int main(){
+    scanf("%d %d", &m, &n);
+    
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            scanf("%1d", &a[i][j]);
+            d[i][j] = max_val;
+        }
+    }
+    
     priority_queue<info, vector<info>, cmp> pq;
-    d[start] = 0;
-    pq.push({start, d[start]});
+    d[0][0] = 0;
+    pq.push({0, 0, d[0][0]});
+    
     while(!pq.empty()){
         info node = pq.top();
         pq.pop();
+        int x = node.x;
+        int y = node.y;
         
-        for(int i=0; i<v[node.cur].size(); i++){
-            info next = v[node.cur][i];
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
             
-            if(d[next.cur] > d[node.cur] + next.cost){
-                d[next.cur] = d[node.cur] + next.cost;
-                pq.push({next.cur, d[next.cur]});
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                
+                int n_cost = 0;
+                if(a[nx][ny] == 1) n_cost = 1;
+                
+                if(d[nx][ny] > d[x][y] + n_cost){
+                    d[nx][ny] = d[x][y] + n_cost;
+                    pq.push({nx, ny, d[nx][ny]});
+                }
             }
         }
     }
-}
-
-int main(){
-    scanf("%d %d", &n, &m);
     
-    for(int i=1; i<=n; i++) d[i] = max_val;
- 
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        v[b].push_back({a, c});
-    }
+    printf("%d\n", d[n-1][m-1]);
     
-    scanf("%d %d", &start_node, &end_node);
     
-    vector<pair<int, int>> a;
-    a.push_back(make_pair(1, start_node));
-    a.push_back(make_pair(start_node, end_node));
-    a.push_back(make_pair(end_node, n));
     
-    int first_result = 0;
-    bool first_possible = true;
-    for(int i=0; i<a.size(); i++){
-        for(int i=1; i<=n; i++) d[i] = max_val;
-
-        int start = a[i].first;
-        int end = a[i].second;
-        dijkstra(start);
-        if(d[end] == max_val){
-            first_possible = false;
-            break;
-        }
-        first_result += d[end];
-    }
-
-    vector<pair<int, int>> b;
-    b.push_back(make_pair(1, end_node));
-    b.push_back(make_pair(end_node, start_node));
-    b.push_back(make_pair(start_node, n));
     
-    int second_result = 0;
-    bool second_possible = true;
-    for(int i=0; i<a.size(); i++){
-        for(int i=1; i<=n; i++) d[i] = max_val;
-        
-        int start = b[i].first;
-        int end = b[i].second;
-        dijkstra(start);
-        if(d[end] == max_val){
-            second_possible = false;
-            break;
-        }
-        second_result += d[end];
-    }
-
     
-    if(first_possible && second_possible) printf("%d\n", min(first_result, second_result));
-    else printf("-1\n");
-
+    
+    
 }
