@@ -1,59 +1,55 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 
-#define max_int 501
+#define max_int 1001
 #define max_val 2147483647
 
 using namespace std;
 
-int t, n, m, w, a, b, c;
-int dist[max_int];
+int n, m, a, b, c, start_node, end_node;
 
 struct info{
     int cur;
-    int next;
     int cost;
 };
 
+vector<info> v[max_int];
+int dist[max_int];
+
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
+    }
+};
+
 int main(){
-    scanf("%d", &t);
-
-    while(t--){
-        scanf("%d %d %d", &n, &m, &w);
-        for(int i=1; i<=n; i++) dist[i] = max_val;
-        vector<info> v;
-        for(int i=0; i<m; i++){
-            scanf("%d %d %d", &a, &b, &c);
-            v.push_back({a, b, c});
-            v.push_back({b, a, c});
-            
-        }
-        for(int i=0; i<w; i++){
-            scanf("%d %d %d", &a, &b, &c);
-            v.push_back({a, b, -c});
-        }
-        
-        dist[1] = 0;
-        bool negative_cycle = false;
-        for(int i=1; i<=n; i++){
-            for(int j=0; j<v.size(); j++){
-                int cur = v[j].cur;
-                int next = v[j].next;
-                int cost = v[j].cost;
-                
-                if(dist[cur] != max_val && dist[next] > dist[cur] + cost){
-                    dist[next] = dist[cur] + cost;
-                    if(i == n){
-                        negative_cycle = true;
-                    }
-                }
-            }
-        }
-        
-        if(negative_cycle) printf("YES\n");
-        else printf("NO\n");
-
+    scanf("%d %d", &n, &m);
+    
+    for(int i=1; i<=n; i++) dist[i] = max_val;
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
     }
     
+    scanf("%d %d", &start_node, &end_node);
     
+    dist[start_node] = 0;
+    priority_queue<info, vector<info>, cmp> pq;
+    pq.push({start_node, dist[start_node]});
+    while(!pq.empty()){
+        info node = pq.top();
+        pq.pop();
+        
+        for(int i=0; i<v[node.cur].size(); i++){
+            info next = v[node.cur][i];
+            
+            if(dist[next.cur] > dist[node.cur] + next.cost){
+                dist[next.cur] = dist[node.cur] + next.cost;
+                pq.push({next.cur, dist[next.cur]});
+            }
+        }
+    }
+    
+    printf("%d\n", dist[end_node]);
 }
