@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 #include <algorithm>
 
 #define max_int 1001
@@ -16,6 +17,13 @@ struct info{
     int x;
     int y;
     bool use;
+    int cost;
+};
+
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
+    }
 };
 
 int main(){
@@ -29,15 +37,15 @@ int main(){
         }
     }
     
-    queue<info> q;
+    priority_queue<info, vector<info>, cmp> pq;
     check[0][0][0] = 1;
-    q.push({0, 0, false});
-    while(!q.empty()){
-        info node = q.front();
-        q.pop();
+    pq.push({0, 0, false, check[0][0][0]});
+    while(!pq.empty()){
+        info node = pq.top();
         int x = node.x;
         int y = node.y;
         bool use = node.use;
+        pq.pop();
         
         for(int i=0; i<4; i++){
             int nx = x + dx[i];
@@ -47,12 +55,12 @@ int main(){
                 
                 if(a[nx][ny] == 0 && check[nx][ny][use] > check[x][y][use] + 1){
                     check[nx][ny][use] = check[x][y][use] + 1;
-                    q.push({nx, ny, use});
+                    pq.push({nx, ny, use, check[nx][ny][use]});
                 }
                 
                 if(a[nx][ny] == 1 && use == false && check[nx][ny][1] > check[x][y][0] + 1){
                     check[nx][ny][1] = check[x][y][0] + 1;
-                    q.push({nx, ny, 1});
+                    pq.push({nx, ny, 1, check[nx][ny][1]});
                 }
             }
         }
