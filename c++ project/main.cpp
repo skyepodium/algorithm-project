@@ -1,66 +1,56 @@
 #include <iostream>
-#include <queue>
 
-#define max_int 1001
+#define max_int 51
 using namespace std;
 
-int n, m, k;
+int t, m, n, k, a, b;
 int d[max_int][max_int];
-int check[max_int][max_int][11];
+bool check[max_int][max_int];
 int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
 
-struct info{
-    int x;
-    int y;
-    int use;
-};
-
-int bfs(){
-    queue<info> q;
-    check[1][1][0] = 1;
-    q.push({1, 1, 0});
-    while(!q.empty()){
-        info node = q.front();
-        q.pop();
-        int x = node.x;
-        int y = node.y;
-        int use = node.use;
-        
-        if(x == n && y == m){
-            return check[x][y][use];
-        }
-        
-        for(int i=0; i<4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(nx>=1 && nx<=n && ny>=1 && ny<=m){
-                
-                if(check[nx][ny][use] == 0 && d[nx][ny] == 0){
-                    check[nx][ny][use] = check[x][y][use] + 1;
-                    q.push({nx, ny, use});
-                }
-                else{
-                    if(check[nx][ny][use+1] == 0 && use <= k-1){
-                        check[nx][ny][use+1] = check[x][y][use] + 1;
-                        q.push({nx, ny, use+1});
-                    }
-                }
+void dfs(int x, int y){
+    check[x][y] = true;
+    
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(nx>=0 && nx<n && ny>=0 && ny<m){
+            if(check[nx][ny] == false && d[nx][ny] == 1){
+                dfs(nx, ny);
             }
         }
     }
-    return -1;
 }
 
 int main(){
-    scanf("%d %d %d", &n, &m, &k);
+    scanf("%d", &t);
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            scanf("%1d", &d[i][j]);
+    while(t--){
+        scanf("%d %d %d", &m, &n, &k);
+
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                check[i][j] = 0;
+                d[i][j] = 0;
+            }
         }
+        
+        for(int i=0; i<k; i++){
+            scanf("%d %d", &a, &b);
+            d[b][a] = 1;
+        }
+        
+        int cnt = 0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(check[i][j] == false && d[i][j] == 1){
+                    dfs(i, j);
+                    cnt++;
+                }
+            }
+        }
+        
+        printf("%d\n", cnt);
     }
-    
-    printf("%d\n", bfs());
 }
