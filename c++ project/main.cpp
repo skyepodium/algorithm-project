@@ -1,57 +1,56 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 
-#define max_int 51
+#define max_val 2147483647
+#define max_int 20001
 using namespace std;
 
-int t, m, n, k, a, b;
-int d[max_int][max_int];
-bool check[max_int][max_int];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+int n, m, start_node, a, b, c;
+int d[max_int];
+struct info{
+    int cur;
+    int cost;
+};
 
-void dfs(int x, int y){
-    check[x][y] = true;
-    
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        if(nx>=0 && nx<n && ny>=0 && ny<m){
-            if(check[nx][ny] == false && d[nx][ny] == 1){
-                dfs(nx, ny);
-            }
-        }
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
     }
-}
+};
+
+vector<info> v[max_int];
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d %d", &n, &m, &start_node);
     
-    while(t--){
-        scanf("%d %d %d", &m, &n, &k);
-
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                check[i][j] = 0;
-                d[i][j] = 0;
-            }
-        }
-        
-        for(int i=0; i<k; i++){
-            scanf("%d %d", &a, &b);
-            d[b][a] = 1;
-        }
-        
-        int cnt = 0;
-        for(int i=0; i<n; i++){
-            for(int j=0; j<m; j++){
-                if(check[i][j] == false && d[i][j] == 1){
-                    dfs(i, j);
-                    cnt++;
-                }
-            }
-        }
-        
-        printf("%d\n", cnt);
+    for(int i=1; i<=n; i++) d[i] = max_val;
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
     }
+    
+    priority_queue<info, vector<info>, cmp> pq;
+    d[start_node] = 0;
+    pq.push({start_node, d[start_node]});
+    
+    while(!pq.empty()){
+        info node = pq.top();
+        pq.pop();
+        
+        for(int i=0; i<v[node.cur].size(); i++){
+            info next = v[node.cur][i];
+            
+            if(d[next.cur] > d[node.cur] + next.cost){
+                d[next.cur] = d[node.cur] + next.cost;
+                pq.push({next.cur, d[next.cur]});
+            }
+        }
+    }
+    for(int i=1; i<=n; i++){
+        if(d[i] != max_val) printf("%d\n", d[i]);
+        else printf("INF\n");
+    }
+    
 }
