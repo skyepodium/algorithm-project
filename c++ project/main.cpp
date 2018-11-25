@@ -1,45 +1,48 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
 
-#define max_int 501
 #define max_val 2147483647
+#define max_int 1001
 using namespace std;
 
-int n, m, start_node, end_node, a, b, c;
-
-bool check[max_int][max_int];
-int d[max_int];
-struct edge{
+int n, m, a, b, c;
+struct info{
     int cur;
     int cost;
 };
 
-vector<edge> v[max_int];
-vector<edge> rv[max_int];
+int d[max_int];
+int p[max_int];
+vector<info> v[max_int];
+vector<pair<int, int>> result;
 struct cmp{
-    bool operator()(const edge &a, const edge &b){
+    bool operator()(const info &a, const info &b){
         return a.cost > b.cost;
     }
 };
 
+int find(int node){
+    if(p[node] == node) return node;
+    else return p[node] = find(p[node]);
+}
 
-void dijkstra(){
-    d[start_node] = 0;
-    priority_queue<edge, vector<edge>, cmp> pq;
-    pq.push({start_node, d[start_node]});
+void first_dijkstra(){
+    d[1] = 0;
+    priority_queue<info, vector<info>, cmp> pq;
+    pq.push({1, d[1]});
     
     while(!pq.empty()){
-        edge node = pq.top();
-        int c_node = node.cur;
+        info node = pq.top();
         pq.pop();
+        int c_node = node.cur;
         
         for(int i=0; i<v[c_node].size(); i++){
-            edge next = v[c_node][i];
+            info next = v[c_node][i];
             int n_node = next.cur;
             int n_cost = next.cost;
             
-            if(check[c_node][n_node] == false && d[n_node] > d[c_node] + n_cost){
+            if(d[n_node] > d[c_node] + n_cost){
                 d[n_node] = d[c_node] + n_cost;
                 pq.push({n_node, d[n_node]});
             }
@@ -47,56 +50,51 @@ void dijkstra(){
     }
 }
 
-void reverse_dijkstra(){
-    priority_queue<edge, vector<edge>, cmp> pq;
-    pq.push({end_node, d[end_node]});
+void second_dijkstra(){
+    priority_queue<info, vector<info>, cmp> pq;
+    pq.push({1, d[1]});
     
     while(!pq.empty()){
-        edge node = pq.top();
-        int c_node = node.cur;
+        info node = pq.top();
         pq.pop();
+        int c_node = node.cur;
         
-        for(int i=0; i<rv[c_node].size(); i++){
-            edge next = rv[c_node][i];
+        for(int i=0; i<v[c_node].size(); i++){
+            info next = v[c_node][i];
             int n_node = next.cur;
             int n_cost = next.cost;
             
-            if(d[n_node] == d[c_node] - n_cost){
-                check[n_node][c_node] = true;
+            if(d[n_node] == d[c_node] + n_cost){
+                if(find(n_node) != find(c_node)){
+                    p[find(n_node)] = find(c_node);
+                    result.push_back(make_pair(c_node, n_node));
+                }
                 pq.push({n_node, d[n_node]});
             }
         }
     }
 }
-
-
 int main(){
-    while(true){
-        scanf("%d %d", &n, &m);
-        if(n==0 && m==0) break;
-        scanf("%d %d", &start_node, &end_node);
-        
-        for(int i=0; i<=n-1; i++){
-            d[i] = max_val;
-            v[i].clear();
-            rv[i].clear();
-            for(int j=0; j<=n-1; j++){
-                check[i][j] = false;
-            }
-        }
-        
-        for(int i=0; i<m; i++){
-            scanf("%d %d %d", &a, &b, &c);
-            v[a].push_back({b, c});
-            rv[b].push_back({a, c});
-        }
+    scanf("%d %d", &n, &m);
     
-    
-        dijkstra();
-        reverse_dijkstra();
-        for(int i=0; i<=n-1; i++) d[i] = max_val;
-        dijkstra();
-        if(d[end_node] == max_val) printf("-1\n");
-        else printf("%d\n", d[end_node]);
+    for(int i=1; i<=n; i++){
+        d[i] = max_val;
+        p[i] = i;
     }
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+        v[b].push_back({a, c});
+    }
+    
+    first_dijkstra();
+    second_dijkstra();
+    
+    printf("%d\n", (int)result.size());
+    for(int i=0; i<(int)result.size(); i++){
+        printf("%d %d\n", result[i].first, result[i].second);
+    }
+    
+    
 }
