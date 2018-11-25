@@ -1,100 +1,115 @@
 #include <iostream>
-#include <vector>
 #include <queue>
+#include <algorithm>
 
 #define max_val 2147483647
-#define max_int 1001
+#define max_int 101
 using namespace std;
 
-int n, m, a, b, c;
-struct info{
-    int cur;
-    int cost;
-};
+int n, m, a1, a2, b1, b2, c1, c2;
+int d[max_int][max_int];
+int a[max_int][max_int];
+int b[max_int][max_int];
+int check[max_int][max_int];
+int result = max_val;
+int cnt = 0;
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-int d[max_int];
-int p[max_int];
-vector<info> v[max_int];
-vector<pair<int, int>> result;
-struct cmp{
-    bool operator()(const info &a, const info &b){
-        return a.cost > b.cost;
-    }
-};
-
-int find(int node){
-    if(p[node] == node) return node;
-    else return p[node] = find(p[node]);
-}
-
-void first_dijkstra(){
-    d[1] = 0;
-    priority_queue<info, vector<info>, cmp> pq;
-    pq.push({1, d[1]});
+void bfs(int x, int y){
+    queue<pair<int, int>> q;
+    q.push(make_pair(x, y));
+    check[x][y] = 1;
     
-    while(!pq.empty()){
-        info node = pq.top();
-        pq.pop();
-        int c_node = node.cur;
+    while(!q.empty()){
+        x = q.front().first;
+        y = q.front().second;
+        q.pop();
         
-        for(int i=0; i<v[c_node].size(); i++){
-            info next = v[c_node][i];
-            int n_node = next.cur;
-            int n_cost = next.cost;
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
             
-            if(d[n_node] > d[c_node] + n_cost){
-                d[n_node] = d[c_node] + n_cost;
-                pq.push({n_node, d[n_node]});
-            }
-        }
-    }
-}
-
-void second_dijkstra(){
-    priority_queue<info, vector<info>, cmp> pq;
-    pq.push({1, d[1]});
-    
-    while(!pq.empty()){
-        info node = pq.top();
-        pq.pop();
-        int c_node = node.cur;
-        
-        for(int i=0; i<v[c_node].size(); i++){
-            info next = v[c_node][i];
-            int n_node = next.cur;
-            int n_cost = next.cost;
-            
-            if(d[n_node] == d[c_node] + n_cost){
-                if(find(n_node) != find(c_node)){
-                    p[find(n_node)] = find(c_node);
-                    result.push_back(make_pair(c_node, n_node));
+            if(nx>=1 && nx<=n && ny>=1 && ny<=m){
+                if(check[nx][ny] == 0 && d[nx][ny] != 1){
+                    check[nx][ny] = check[x][y] + 1;
+                    q.push(make_pair(nx, ny));
                 }
-                pq.push({n_node, d[n_node]});
             }
         }
     }
 }
+
+
 int main(){
     scanf("%d %d", &n, &m);
     
     for(int i=1; i<=n; i++){
-        d[i] = max_val;
-        p[i] = i;
+        for(int j=1; j<=m; j++){
+            scanf("%1d", &d[i][j]);
+        }
     }
     
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        v[b].push_back({a, c});
+    vector<pair<int, int>> p(3);
+    for(int i=0; i<3; i++){
+        scanf("%d %d", &p[i].first, &p[i].second);
     }
     
-    first_dijkstra();
-    second_dijkstra();
-    
-    printf("%d\n", (int)result.size());
-    for(int i=0; i<(int)result.size(); i++){
-        printf("%d %d\n", result[i].first, result[i].second);
+    for(int i=0; i<3; i++){
+        
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                check[i][j] = 0;
+            }
+        }
+        
+        bfs(p[i].first, p[i].second);
+
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=m; j++){
+                
+                if(d[i][j] != 1 && check[i][j] != 0){
+                    a[i][j] = max(a[i][j], check[i][j]);
+                    b[i][j]++;
+                }
+                
+            }
+        }
+
     }
+    /*
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            
+            printf("%d ", a[i][j]);
+            
+        }
+        printf("\n");
+    }
+    */
+    
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            
+            if(d[i][j] == 0 && b[i][j] == 3 && a[i][j] < result){
+                cnt = 1;
+                result = a[i][j];
+            }
+            else if(a[i][j] == result){
+                cnt++;
+            }
+            
+        }
+    }
+
+    if(result == max_val){
+        printf("-1\n");
+    }
+    else{
+        printf("%d\n", result-1);
+        printf("%d\n", cnt);
+    }
+
     
     
 }
