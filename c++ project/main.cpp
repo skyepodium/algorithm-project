@@ -1,121 +1,43 @@
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
-#define lld long long int
-#define max_int 41
+#define max_val 10000001
+#define max_int 101
 using namespace std;
 
-int n, idx1, idx2;
-lld s;
-int a[max_int];
-int b[max_int];
-bool check1[1000001];
-bool check2[1000001];
-vector<lld> v;
-vector<lld> w;
-
-void go1(int index, lld sum){
-    if(index == idx1+1){
-        
-        if(sum > 0){
-            if(check1[sum] == false){
-                check1[sum] = true;
-                v.push_back(sum);
-            }
-        }
-        else{
-            if(sum != 0 && check2[sum*-1] == false){
-                check2[sum*-1] = true;
-                v.push_back(sum);
-            }
-        }
-        
-        return;
-    }
-    
-    sum = sum + a[index];
-    go1(index+1, sum);
-    sum = sum - a[index];
-    go1(index+1, sum);
-}
-
-void go2(int index, lld sum){
-    if(index == idx2+1){
-        
-        if(sum > 0){
-            if(check1[sum] == false){
-                check1[sum] = true;
-                w.push_back(sum);
-            }
-        }
-        else{
-            if(sum != 0 && check2[sum*-1] == false){
-                check2[sum*-1] = true;
-                w.push_back(sum);
-            }
-        }
-        
-        return;
-    }
-    
-    sum = sum + b[index];
-    go2(index+1, sum);
-    sum = sum - b[index];
-    go2(index+1, sum);
-}
-
-int binary_search(int num){
-    int cnt = 0;
-    int start = 0;
-    int end = (int)w.size()-1;
-    int mid = 0;
-    
-    while(start <= end){
-        mid = (start+end)/2;
-        
-        if(w[mid] < num){
-            start = mid + 1;
-        }
-        else if(w[mid] > num){
-            end = mid - 1;
-        }
-        else{
-            cnt++;
-            start = mid + 1;
-        }
-    }
-    
-    return cnt;
-}
+int n, m, a, b, c;
+int d[max_int][max_int];
 
 int main(){
-    scanf("%d %lld", &n, &s);
+    scanf("%d %d", &n, &m);
     
-    idx1 = n/2;
-    idx2 = n/2;
-    if(n%2 == 1){
-        idx1 = n/2;
-        idx2 = n/2+1;
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(i!=j) d[i][j] = max_val;
+        }
     }
-    for(int i=0; i<idx1; i++) scanf("%d", &a[i]);
-    for(int i=0; i<idx2; i++) scanf("%d", &b[i]);
     
-    go1(0, 0);
-    for(int i=0; i<=n; i++){
-        check1[i] = false;
-        check2[i] = false;
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        d[a][b] = min(d[a][b], c);
     }
-    go2(0, 0);
     
-    sort(v.begin(), v.end());
-    sort(w.begin(), w.end());
-    
-    int result = 0;
-    for(int i=0; i<(int)v.size(); i++){
-        result += binary_search(s-v[i]);
-        result += binary_search(v[i]-s);
+    for(int k=1; k<=n; k++){
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                if(d[i][j] > d[i][k] + d[k][j]){
+                    d[i][j] = d[i][k] + d[k][j];
+                }
+            }
+        }
     }
-    printf("%d\n", result);
+    
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            if(d[i][j] == max_val) printf("0 ");
+            else printf("%d ", d[i][j]);
+        }
+        printf("\n");
+    }
+    
 }
-
