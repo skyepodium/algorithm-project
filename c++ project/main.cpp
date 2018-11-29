@@ -1,74 +1,72 @@
 #include <iostream>
-#include <algorithm>
-#include <vector>
+#include <queue>
 
-#define max_val 10000001
-#define max_int 51
+#define lld long long int
+#define max_val 2147483641
+#define max_int 101
 using namespace std;
 
-int n, m, a, b, c;
-int d[max_int][max_int];
+int n, m, start_node, end_node, a, b, c;
+lld d[max_int];
+bool check[max_int];
 
 struct info{
-    int idx;
-    int cost;
+    int cur;
+    int next;
+    lld cost;
 };
 
-bool cmp(const info &a, const info &b){
-    if(a.cost == b.cost) return a.idx < b.idx;
-    else return a.cost < b.cost;
-}
+info edge[max_int];
+lld plus_money[max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d %d %d", &n, &start_node, &end_node, &m);
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            if(i!=j) d[i][j] = max_val;
-        }
+    for(int i=0; i<n; i++){
+        d[i] = -max_val;
     }
     
-    while(true){
-        scanf("%d %d", &a, &b);
-        if(a==-1 && b==-1) break;
-        
-        d[a][b] = 1;
-        d[b][a] = 1;
+    for(int i=0; i<m; i++){
+        scanf("%d %d %lld", &edge[i].cur, &edge[i].next, &edge[i].cost);
+        edge[i].cost *= -1;
     }
     
-    for(int k=1; k<=n; k++){
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                if(d[i][j] > d[i][k] + d[k][j]){
-                    d[i][j] = d[i][k] + d[k][j];
-                }
+    for(int i=0; i<n; i++){
+        scanf("%lld", &plus_money[i]);
+    }
+    
+    for(int i=0; i<m; i++){
+        edge[i].cost = edge[i].cost + plus_money[edge[i].next];
+    }
+    
+    d[start_node] = plus_money[start_node];
+    
+    bool negative_cycle = false;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            int cur = edge[j].cur;
+            int next = edge[j].next;
+            lld cost = edge[j].cost;
+            
+            if(d[next] <= d[cur] + cost){
+                d[next] = d[cur] + cost;
+                if(i==n-1) negative_cycle = true;
+                check[next] = true;
             }
         }
     }
     
-    vector<info> v;
-    
-    for(int i=1; i<=n; i++){
-        int score = 0;
-        for(int j=1; j<=n; j++){
-            score = max(score, d[i][j]);
-        }
-        v.push_back({i, score});
+    if(check[end_node] == false){
+        printf("gg\n");
     }
-    sort(v.begin(), v.end(), cmp);
-    
-    int max_score = v[0].cost;
-    int cnt = 1;
-    for(int i=1; i<v.size(); i++){
-        if(v[i].cost == max_score) cnt++;
-        else break;
+    else{
+        if(negative_cycle){
+            printf("Gee\n");
+        }
+        else{
+            printf("%lld\n", d[end_node]);
+        }
     }
 
-    printf("%d %d\n", max_score, cnt);
-    for(int i=0; i<cnt; i++){
-        printf("%d ", v[i].idx);
-    }
-    printf("\n");
-    
     
 }
