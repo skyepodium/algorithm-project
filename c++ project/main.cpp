@@ -1,72 +1,53 @@
 #include <iostream>
-#include <queue>
+#include <algorithm>
 
-#define lld long long int
-#define max_val 2147483641
-#define max_int 101
+#define max_val 4000001
+#define max_int 401
 using namespace std;
 
-int n, m, start_node, end_node, a, b, c;
-lld d[max_int];
-bool check[max_int];
+int t, n, m, a, b, c;
 
-struct info{
-    int cur;
-    int next;
-    lld cost;
-};
+int d[max_int][max_int];
 
-info edge[max_int];
-lld plus_money[max_int];
-
-int main(){
-    scanf("%d %d %d %d", &n, &start_node, &end_node, &m);
+int main(int argc, char** argv)
+{
+    scanf("%d", &t);
     
-    for(int i=0; i<n; i++){
-        d[i] = -max_val;
-    }
-    
-    for(int i=0; i<m; i++){
-        scanf("%d %d %lld", &edge[i].cur, &edge[i].next, &edge[i].cost);
-        edge[i].cost *= -1;
-    }
-    
-    for(int i=0; i<n; i++){
-        scanf("%lld", &plus_money[i]);
-    }
-    
-    for(int i=0; i<m; i++){
-        edge[i].cost = edge[i].cost + plus_money[edge[i].next];
-    }
-    
-    d[start_node] = plus_money[start_node];
-    
-    bool negative_cycle = false;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            int cur = edge[j].cur;
-            int next = edge[j].next;
-            lld cost = edge[j].cost;
-            
-            if(d[next] <= d[cur] + cost){
-                d[next] = d[cur] + cost;
-                if(i==n-1) negative_cycle = true;
-                check[next] = true;
+    for(int test_case = 1; test_case <= t; ++test_case)
+    {
+        scanf("%d %d", &n, &m);
+        
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                d[i][j] = max_val;
             }
         }
+        
+        for(int i=0; i<m; i++){
+            scanf("%d %d %d", &a, &b, &c);
+            d[a][b] = min(c, d[a][b]);
+        }
+        
+        for(int k=1; k<=n; k++){
+            for(int i=1; i<=n; i++){
+                for(int j=1; j<=n; j++){
+                    if(d[i][j] > d[i][k] + d[k][j]){
+                        d[i][j] = d[i][k] + d[k][j];
+                    }
+                }
+            }
+        }
+        
+        int result = max_val;
+        for(int i=1; i<=n; i++){
+            result = min(result, d[i][i]);
+        }
+        
+        
+        if(result == max_val) result = -1;
+        printf("#%d %d\n", test_case, result);
+        
     }
     
-    if(check[end_node] == false){
-        printf("gg\n");
-    }
-    else{
-        if(negative_cycle){
-            printf("Gee\n");
-        }
-        else{
-            printf("%lld\n", d[end_node]);
-        }
-    }
-
-    
+    return 0;
 }
