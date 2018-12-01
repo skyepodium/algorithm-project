@@ -1,33 +1,70 @@
 #include <iostream>
+#include <queue>
+#include <vector>
 #include <algorithm>
 
-#define max_int 101
+#define max_int 50001
 using namespace std;
 
-int n, k;
-int w[max_int];
-int v[max_int];
-int d[max_int][100001];
+int n, m, a, b;
+int parent[max_int];
+int depth[max_int];
+bool check[max_int];
+vector<int> v[max_int];
+
+int lca(int first, int second){
+    
+    if(depth[first] < depth[second]){
+        swap(first, second);
+    }
+    
+    while(depth[first] != depth[second]){
+        first = parent[first];
+    }
+    
+    while(first != second){
+        first = parent[first];
+        second = parent[second];
+    }
+    
+    return first;
+}
+
 
 int main(){
-    scanf("%d %d", &n, &k);
+    scanf("%d", &n);
     
-    for(int i=1; i<=n; i++) scanf("%d %d", &w[i], &v[i]);
-
-    if(k-w[1] >=0) d[1][k-w[1]] = v[1];
+    for(int i=0; i<n-1; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
     
-    for(int i=2; i<=n; i++){
-        for(int j=0; j<=k; j++){
-            
-            if(j+w[i] <= k) d[i][j] = max(d[i-1][j], d[i-1][j+w[i]] + v[i]);
-            else d[i][j] = max(d[i-1][j], d[i][j]);
-            
+    check[1] = true;
+    parent[1] = 0;
+    depth[1] = 0;
+    queue<int> q;
+    q.push(1);
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+        
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                parent[next] = node;
+                depth[next] = depth[node] + 1;
+                q.push(next);
+            }
         }
     }
-    
-    int result = 0;
-    for(int j=0; j<=k; j++){
-        result=max(result, d[n][j]);
+    scanf("%d", &m);
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        printf("%d\n", lca(a, b));
     }
-    printf("%d\n", result);
+    
+    
+    
 }
