@@ -1,30 +1,33 @@
 #include <iostream>
+#include <algorithm>
 
 #define max_int 101
-#define lld long long int
 using namespace std;
 
-int n;
-int a[max_int];
-lld d[max_int][21];
-int end_num;
+int n, k;
+int w[max_int];
+int v[max_int];
+int d[max_int][100001];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &k);
     
-    for(int i=1; i<=n; i++) scanf("%d", &a[i]);
-    end_num = a[n];
+    for(int i=1; i<=n; i++) scanf("%d %d", &w[i], &v[i]);
+
+    if(k-w[1] >=0) d[1][k-w[1]] = v[1];
     
-    d[1][a[1]] = 1;
-    
-    for(int i=2; i<n; i++){
-        for(int j=0; j<=20; j++){
-            if(j+a[i] <= 20) d[i][j] += d[i-1][j+a[i]];
+    for(int i=2; i<=n; i++){
+        for(int j=0; j<=k; j++){
             
-            if(j-a[i] >= 0) d[i][j] += d[i-1][j-a[i]];
+            if(j+w[i] <= k) d[i][j] = max(d[i-1][j], d[i-1][j+w[i]] + v[i]);
+            else d[i][j] = max(d[i-1][j], d[i][j]);
+            
         }
     }
     
-    printf("%lld\n", d[n-1][end_num]);
-    
+    int result = 0;
+    for(int j=0; j<=k; j++){
+        result=max(result, d[n][j]);
+    }
+    printf("%d\n", result);
 }
