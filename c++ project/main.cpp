@@ -1,53 +1,40 @@
 #include <iostream>
 #include <algorithm>
 
-#define max_val 4000001
-#define max_int 401
+#define max_int 21
+#define health 101
 using namespace std;
 
-int t, n, m, a, b, c;
+int n;
+int d[max_int][health];
+int h[max_int];
+int p[max_int];
 
-int d[max_int][max_int];
-
-int main(int argc, char** argv)
-{
-    scanf("%d", &t);
+int main(){
+    scanf("%d", &n);
     
-    for(int test_case = 1; test_case <= t; ++test_case)
-    {
-        scanf("%d %d", &n, &m);
-        
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                d[i][j] = max_val;
+    for(int i=1; i<=n; i++) scanf("%d", &h[i]);
+    for(int i=1; i<=n; i++) scanf("%d", &p[i]);
+
+    d[1][100 - h[1]] = p[1];
+    
+    for(int i=2; i<=n; i++){
+        for(int j=1; j<=100; j++){
+            
+            if(100 - h[i] >= j){
+                d[i][j] = max(d[i-1][j], d[i-1][j+h[i]] + p[i]);
             }
-        }
-        
-        for(int i=0; i<m; i++){
-            scanf("%d %d %d", &a, &b, &c);
-            d[a][b] = min(c, d[a][b]);
-        }
-        
-        for(int k=1; k<=n; k++){
-            for(int i=1; i<=n; i++){
-                for(int j=1; j<=n; j++){
-                    if(d[i][j] > d[i][k] + d[k][j]){
-                        d[i][j] = d[i][k] + d[k][j];
-                    }
-                }
+            else{
+                d[i][j] = max(d[i-1][j], d[i][j]);
             }
+            
         }
-        
-        int result = max_val;
-        for(int i=1; i<=n; i++){
-            result = min(result, d[i][i]);
-        }
-        
-        
-        if(result == max_val) result = -1;
-        printf("#%d %d\n", test_case, result);
-        
     }
     
-    return 0;
+    int result = 0;
+    for(int j=1; j<=100; j++){
+        result = max(result, d[n][j]);
+    }
+    printf("%d\n", result);
+    
 }
