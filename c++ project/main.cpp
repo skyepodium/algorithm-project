@@ -1,39 +1,30 @@
 #include <iostream>
 
 #define max_int 101
+#define lld long long int
 using namespace std;
 
-int n, s, m;
-int v[max_int];
-bool d[max_int][1001];
+int n;
+int a[max_int];
+lld d[max_int][21];
+int end_num;
 
 int main(){
-    scanf("%d %d %d", &n, &s, &m);
+    scanf("%d", &n);
     
-    for(int i=1; i<=n; i++) scanf("%d", &v[i]);
+    for(int i=1; i<=n; i++) scanf("%d", &a[i]);
+    end_num = a[n];
     
-    if(s+v[1] <= m) d[1][s+v[1]] = true;
-    if(s-v[1] >= 0) d[1][s-v[1]] = true;
+    d[1][a[1]] = 1;
     
-    for(int i=2; i<=n; i++){
-        for(int j=0; j<=m; j++){
+    for(int i=2; i<n; i++){
+        for(int j=0; j<=20; j++){
+            if(j+a[i] <= 20) d[i][j] += d[i-1][j+a[i]];
             
-            if(j+v[i] <= m && d[i-1][j+v[i]] != false){
-                d[i][j] = d[i-1][j+v[i]];
-            }
-            if(j-v[i] >= 0 && d[i-1][j-v[i]] != false){
-                d[i][j] = d[i-1][j-v[i]];
-            }
-            
+            if(j-a[i] >= 0) d[i][j] += d[i-1][j-a[i]];
         }
     }
-    int result = -1;
-    for(int j=m; j>=0; j--){
-        if(d[n][j]){
-            result = j;
-            break;
-        }
-    }
-    printf("%d\n", result);
+    
+    printf("%lld\n", d[n-1][end_num]);
     
 }
