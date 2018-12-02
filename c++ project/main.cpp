@@ -3,47 +3,53 @@
 #include <vector>
 #include <algorithm>
 
-#define max_int 50001
+#define max_int 40001
 using namespace std;
 
 int n, m, a, b, c;
+bool check[max_int];
 int parent[max_int];
 int depth[max_int];
-bool check[max_int];
 int dist[max_int];
-
+int p[max_int][18];
 struct info{
     int cur;
     int cost;
 };
-
 vector<info> v[max_int];
 
 int lca(int first, int second){
-    int result = 0;
     if(depth[first] < depth[second]){
         swap(first, second);
     }
     
-    while(depth[first] != depth[second]){
-        result += dist[first];
-        first = parent[first];
+    int log = 1;
+    for(log=1; (1<<log) <= depth[first]; log++);
+    log--;
+    
+    for(int i=log; i>=0; i--){
+        if(depth[first] - (1<<i) >= depth[second]){
+            first = p[first][i];
+        }
     }
     
-    while(first != second){
-        result += dist[first];
-        result += dist[second];
-        first = parent[first];
-        second = parent[second];
+    if(first == second){
+        return first;
     }
-    
-    return result;
+    else{
+        for(int i=log; i>=0; i--){
+            if(p[first][i] !=0 && p[first][i] != p[second][i]){
+                first = p[first][i];
+                second = p[second][i];
+            }
+        }
+        return parent[first];
+    }
 }
 
 
 int main(){
     scanf("%d", &n);
-    
     for(int i=0; i<n-1; i++){
         scanf("%d %d %d", &a, &b, &c);
         v[a].push_back({b, c});
@@ -53,29 +59,43 @@ int main(){
     check[1] = true;
     parent[1] = 0;
     depth[1] = 0;
+    dist[1] = 0;
     queue<int> q;
     q.push(1);
     while(!q.empty()){
-        int c_node = q.front();
+        int node = q.front();
         q.pop();
         
-        for(int i=0; i<v[c_node].size(); i++){
-            info next = v[c_node][i];
-            int n_node = next.cur;
-            int n_cost = next.cost;
-            if(check[n_node] == false){
-                check[n_node] = true;
-                parent[n_node] = c_node;
-                depth[n_node] = depth[c_node] + 1;
-                dist[n_node] = n_cost;
-                q.push(n_node);
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i].cur;
+            int cost = v[node][i].cost;
+            
+            if(check[next] == false){
+                check[next] = true;
+                parent[next] = node;
+                depth[next] = depth[node] + 1;
+                dist[next] = dist[node] + cost;
+                q.push(next);
             }
         }
     }
+    
+    for(int i=1; i<=n; i++){
+        p[i][0] = parent[i];
+    }
+    
+    for(int j=1; (1<<j) < n; j++){
+        for(int i=1; i<=n; i++){
+            if(p[i][j-1] != 0){
+                p[i][j] = p[p[i][j-1]][j-1];
+            }
+        }
+    }
+    
     scanf("%d", &m);
     for(int i=0; i<m; i++){
         scanf("%d %d", &a, &b);
-        printf("%d\n", lca(a, b));
+        printf("%d\n", dist[a] + dist[b] - 2*dist[lca(a, b)]);
     }
     
     
