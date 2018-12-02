@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-#define max_int 40001
+#define max_int 30001
 using namespace std;
 
 int n, m, a, b, c;
@@ -12,11 +12,7 @@ int parent[max_int];
 int depth[max_int];
 int dist[max_int];
 int p[max_int][18];
-struct info{
-    int cur;
-    int cost;
-};
-vector<info> v[max_int];
+vector<int> v[max_int];
 
 int lca(int first, int second){
     if(depth[first] < depth[second]){
@@ -51,9 +47,9 @@ int lca(int first, int second){
 int main(){
     scanf("%d", &n);
     for(int i=0; i<n-1; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        v[b].push_back({a, c});
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
     }
     
     check[1] = true;
@@ -67,14 +63,13 @@ int main(){
         q.pop();
         
         for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i].cur;
-            int cost = v[node][i].cost;
+            int next = v[node][i];
             
             if(check[next] == false){
                 check[next] = true;
                 parent[next] = node;
                 depth[next] = depth[node] + 1;
-                dist[next] = dist[node] + cost;
+                dist[next] = dist[node] + 1;
                 q.push(next);
             }
         }
@@ -92,12 +87,16 @@ int main(){
         }
     }
     
+    int result = 0;
+    int c_node = 1;
+    int n_node = 0;
     scanf("%d", &m);
     for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        printf("%d\n", dist[a] + dist[b] - 2*dist[lca(a, b)]);
+        scanf("%d", &n_node);
+        result += dist[c_node] + dist[n_node] - 2*dist[lca(c_node, n_node)];
+        c_node = n_node;
     }
-    
+    printf("%d\n", result);
     
     
 }
