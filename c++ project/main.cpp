@@ -1,85 +1,61 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 
-#define max_int 10001
+#define max_int 126
+#define max_val 2147483647
 using namespace std;
 
-int n, m, a, b, first_node, second_node;
-int p[max_int][18];
-int log;
-int timer;
-int tin[max_int];
-int tout[max_int];
-vector<int> v[max_int];
-int t;
+int n, t;
+int d[max_int][max_int];
+int a[max_int][max_int];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+struct info{
+    int x;
+    int y;
+    int cost;
+};
 
-void dfs(int node, int parent){
-    tin[node] = ++timer;
-    p[node][0] = parent;
-    for(int i=1; i<=log; i++){
-        p[node][i] = p[p[node][i-1]][i-1];
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
     }
-    for(int i=0; i<v[node].size(); i++){
-        int next = v[node][i];
-        if(next != parent){
-            dfs(next, node);
-        }
-    }
-    tout[node] = ++timer;
-}
+};
 
-int upper(int first, int second){
-    return (tin[first] <= tin[second] && tout[first] >= tout[second]);
-}
-
-int lca(int first, int second){
-    if(upper(first, second)) return first;
-    if(upper(second, first)) return second;
-    
-    for(int i=log; i>=0; i--){
-        if(!upper(p[first][i], second)){
-            first = p[first][i];
-        }
-    }
-    return p[first][0];
-}
-
-void init(){
-    for(int i=0; i<=n; i++){
-        tin[i] = 0;
-        tout[i] = 0;
-        log = 0;
-        timer = 0;
-        v[i].clear();
-        for(int j=0; j<18; j++){
-            p[i][j] = 0;
-        }
-    }
-}
-
-int main(int argc, char** argv)
-{
+int main(){
     scanf("%d", &t);
-    
-    for(int test_case = 1; test_case <= t; ++test_case)
-    {
-        scanf("%d %d %d %d", &n, &m, &first_node, &second_node);
-        init();
-        
-        for(int i=0; i<m; i++){
-            scanf("%d %d", &a, &b);
-            v[a].push_back(b);
-            v[b].push_back(a);
+    for(int test_case = 1;  test_case<=t; test_case++){
+        scanf("%d", &n);
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                scanf("%1d", &a[i][j]);
+                d[i][j] = max_val;
+            }
         }
-        
-        for(log = 1; (1<<log) < n; log++);
-        log--;
-        dfs(1, 1);
-        
-        int lca_node = lca(first_node, second_node);
-        printf("#%d %d %d\n", test_case, lca_node, (tout[lca_node]-1-tin[lca_node])/2 + 1);
-    }
+        d[0][0] = a[0][0];
+        priority_queue<info, vector<info>, cmp> pq;
+        pq.push({0, 0, d[0][0]});
+        while(!pq.empty()){
+            info node = pq.top();
+            pq.pop();
+            
+            int x = node.x;
+            int y = node.y;
+            
+            for(int i=0; i<4; i++){
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+                
+                if(nx>=0 && nx<n && ny>=0 && ny<n){
+                    if(d[nx][ny] > d[x][y] + a[nx][ny]){
+                        d[nx][ny] = d[x][y] + a[nx][ny];
+                        pq.push({nx, ny, d[nx][ny]});
+                    }
+                }
+            }
+        }
     
-    return 0;
+        printf("#%d %d\n", test_case, d[n-1][n-1]);
+    }
 }
 
