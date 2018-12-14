@@ -1,45 +1,31 @@
 #include <iostream>
-#include <cstring>
 #include <algorithm>
 
-#define max_int 2501
+#define max_int 1000001
 using namespace std;
 
 int n;
-char a[max_int];
-bool d[max_int][max_int];
-int r[max_int];
+int d[max_int];
+
+int go(int i){
+    
+    if(i < 4) return d[i];
+    
+    if(d[i] > 0) return d[i];
+    d[i] = n;
+    if(i%3 == 0) d[i] = min(d[i], go(i/3) + 1);
+    if(i%2 == 0) d[i] = min(d[i], go(i/2) + 1);
+    
+    d[i] = min(d[i], go(i-1) + 1);
+    
+    return d[i];
+}
 
 int main(){
-    scanf("%s", a);
-    n = (int)strlen(a);
+    scanf("%d", &n);
+    d[1] = 0;
+    d[2] = 1;
+    d[3] = 1;
     
-    for(int i=0; i<n; i++) d[i][i] = true;
-    
-    for(int i=0; i<n-1; i++){
-        if(a[i] == a[i+1]) d[i][i+1] = true;
-    }
-    
-    for(int k=2; k<n; k++){
-        for(int i=0; i<n-k; i++){
-            int j = i+k;
-            if(a[i] == a[j] && d[i+1][j-1]){
-                d[i][j] = true;
-            }
-        }
-    }
-    
-    
-    r[0] = 1;
-    for(int i=0; i<n; i++){
-        r[i] = n;
-        for(int j=0; j<=i; j++){
-            if(d[j][i] == true){
-                r[i] = min(r[i], r[j-1] + 1);
-            }
-        }
-    }
-    
-    printf("%d\n", r[n-1]);
-    
+    printf("%d\n", go(n));
 }
