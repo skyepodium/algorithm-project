@@ -1,44 +1,42 @@
 #include <iostream>
+#include <vector>
 #include <queue>
 
-#define max_int 1001
+#define max_int 32001
 using namespace std;
 
-int n;
-int a[max_int];
-int check[max_int];
+int n, m, a, b;
+int ind[max_int];
+vector<int> v[max_int];
 
-void bfs(int start){
-    check[start] = 0;
+int main(){
+    scanf("%d %d", &n, &m);
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        ind[b]++;
+    }
+    
     queue<int> q;
-    q.push(start);
+    for(int i=1; i<=n; i++){
+        if(ind[i] == 0){
+            q.push(i);
+        }
+    }
+    
     while(!q.empty()){
         int node = q.front();
+        printf("%d ", node);
         q.pop();
         
-        int cur_val = a[node];
-        for(int i=1; i<=cur_val; i++){
-            int next = node + i;
-            if(next <= n && check[next] == 0){
-                check[next] = check[node] + 1;
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            ind[next]--;
+            
+            if(ind[next] == 0){
                 q.push(next);
             }
         }
-
     }
-    
-}
-
-int main(){
-    scanf("%d", &n);
-    
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
-    }
-    
-    bfs(1);
-    if(check[n] == 0 && n!=1) check[n] = -1;
-    printf("%d\n", check[n]);
-
-    
+    printf("\n");
 }
