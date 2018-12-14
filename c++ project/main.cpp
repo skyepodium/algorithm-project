@@ -1,34 +1,45 @@
 #include <iostream>
+#include <cstring>
+#include <algorithm>
 
-#define max_int 2001
+#define max_int 2501
 using namespace std;
 
-int n, m, s, e;
-int a[max_int];
-int d[max_int][max_int];
+int n;
+char a[max_int];
+bool d[max_int][max_int];
+int r[max_int];
 
 int main(){
-    scanf("%d", &n);
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
-    }
+    scanf("%s", a);
+    n = (int)strlen(a);
     
-    for(int i=1; i<=n; i++) d[i][i] = 1;
+    for(int i=0; i<n; i++) d[i][i] = true;
     
-    for(int i=1; i<=n-1; i++){
-        if(a[i] == a[i+1]) d[i][i+1] = 1;
+    for(int i=0; i<n-1; i++){
+        if(a[i] == a[i+1]) d[i][i+1] = true;
     }
     
     for(int k=2; k<n; k++){
-        for(int i=0; i<=n-k; i++){
+        for(int i=0; i<n-k; i++){
             int j = i+k;
-            if(a[i] == a[j] && d[i+1][j-1] == 1) d[i][j] = 1;
+            if(a[i] == a[j] && d[i+1][j-1]){
+                d[i][j] = true;
+            }
         }
     }
     
-    scanf("%d", &m);
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &s, &e);
-        printf("%d\n", d[s][e]);
+    
+    r[0] = 1;
+    for(int i=0; i<n; i++){
+        r[i] = n;
+        for(int j=0; j<=i; j++){
+            if(d[j][i] == true){
+                r[i] = min(r[i], r[j-1] + 1);
+            }
+        }
     }
+    
+    printf("%d\n", r[n-1]);
+    
 }
