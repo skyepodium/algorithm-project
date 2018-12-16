@@ -11,8 +11,7 @@ bool check[36];
 string sdate;
 string stime;
 int month, day, hour, minute, second;
-int start_index, last_index, number_min, upper_num;
-
+int start_index, last_index, number_min, upper_cnt;
 vector<int> v[36];
 
 int to_int(char first, char second){
@@ -25,28 +24,35 @@ int to_int(char first, char second){
 void dfs(int node){
     if(cnt == 10){
         if(node == last_index){
+            
             int number_cnt = 0;
             for(int i=0; i<10; i++){
                 if(pick[i] < 10) number_cnt++;
             }
+            
             if(number_cnt >= number_min){
+                
                 int char_cnt = 10 - number_cnt;
-                result = result + pascal[char_cnt][upper_num];
+                if(char_cnt >= upper_cnt){
+                    result = result + pascal[char_cnt][upper_cnt];
+                }
             }
         }
         return;
     }
     
-    for(int i=0; i<v[node].size(); i++){
+    for(int i=0; i<(int)v[node].size(); i++){
         int next = v[node][i];
         if(check[next] == false){
-            cnt+=1;
+            cnt++;
             pick.push_back(next);
             check[next] = true;
+            
             dfs(next);
-            check[next] = false;
+
+            cnt--;
             pick.pop_back();
-            cnt-=1;
+            check[next] = false;
         }
     }
 }
@@ -86,6 +92,16 @@ void init(){
     result = 0;
     pick.clear();
     for(int i=0; i<36; i++) check[i] = false;
+    
+    month = 0;
+    day = 0;
+    hour = 0;
+    minute = 0;
+    second = 0;
+    start_index = 0;
+    last_index = 0;
+    number_min = 0;
+    upper_cnt = 0;
 }
 
 
@@ -99,7 +115,7 @@ void make_time(){
     start_index = (day + second)%36;
     last_index = (month + hour + minute)%36;
     number_min = minute/10;
-    upper_num = second/10;
+    upper_cnt = second/10;
 }
 
 void make_graph(){
