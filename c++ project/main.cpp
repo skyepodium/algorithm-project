@@ -4,10 +4,9 @@
 
 using namespace std;
 
-int t, cnt, result;
-vector<int> pick;
+int t, result, pick_cnt, char_cnt, number_cnt, duple_cnt;
 int pascal[11][11];
-bool check[36];
+int check[36];
 string sdate;
 string stime;
 int month, day, hour, minute, second;
@@ -22,20 +21,12 @@ int to_int(char first, char second){
 }
 
 void dfs(int node){
-    if(cnt == 10){
+    if(10 - pick_cnt + char_cnt < upper_cnt) return;
+    
+    if(pick_cnt == 10){
         if(node == last_index){
-            
-            int number_cnt = 0;
-            for(int i=0; i<10; i++){
-                if(pick[i] < 10) number_cnt++;
-            }
-            
-            if(number_cnt >= number_min){
-                
-                int char_cnt = 10 - number_cnt;
-                if(char_cnt >= upper_cnt){
-                    result = result + pascal[char_cnt][upper_cnt];
-                }
+            if(number_cnt >= number_min && upper_cnt - (duple_cnt/2) >= 0 && (duple_cnt/2) <= upper_cnt){
+                result = result + pascal[char_cnt - duple_cnt][upper_cnt - (duple_cnt/2)];
             }
         }
         return;
@@ -43,16 +34,32 @@ void dfs(int node){
     
     for(int i=0; i<(int)v[node].size(); i++){
         int next = v[node][i];
-        if(check[next] == false){
-            cnt++;
-            pick.push_back(next);
-            check[next] = true;
+
+        if(check[next] == 0){
+            pick_cnt++;
+            check[next] = 1;
+            if(next < 10) number_cnt++;
+            else char_cnt++;
             
             dfs(next);
-
-            cnt--;
-            pick.pop_back();
-            check[next] = false;
+            
+            pick_cnt--;
+            check[next] = 0;
+            if(next < 10) number_cnt--;
+            else char_cnt--;
+        }
+        else if(check[next] == 1 && next > 10 && next != node){
+            pick_cnt++;
+            check[next] = 2;
+            char_cnt++;
+            duple_cnt += 2;
+            
+            dfs(next);
+            
+            pick_cnt--;
+            check[next] = 1;
+            char_cnt--;
+            duple_cnt -= 2;
         }
     }
 }
@@ -78,9 +85,10 @@ int main(){
         make_time();
         
         //4. 탐색 시작
-        check[start_index] = true;
-        pick.push_back(start_index);
-        cnt++;
+        check[start_index] = 1;
+        if(start_index < 10) number_cnt++;
+        else char_cnt++;
+        pick_cnt++;
         dfs(start_index);
         
         printf("#%d %d\n", test_case, result);
@@ -88,10 +96,13 @@ int main(){
 }
 
 void init(){
-    cnt = 0;
+    pick_cnt = 0;
+    char_cnt = 0;
+    number_cnt = 0;
+    duple_cnt = 0;
+    
     result = 0;
-    pick.clear();
-    for(int i=0; i<36; i++) check[i] = false;
+    for(int i=0; i<36; i++) check[i] = 0;
     
     month = 0;
     day = 0;
