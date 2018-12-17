@@ -1,49 +1,35 @@
 #include <iostream>
+#include <vector>
 
+#define max_int 100001
 using namespace std;
 
-int n;
-int tree[26][2];
+int n, a, b;
+vector<int> v[max_int];
+bool check[max_int];
+int parent[max_int];
 
-void pre_order(char node){
-    if(node == '.') return;
-    
-    cout << node;
-    pre_order(tree[node-'A'][0]);
-    pre_order(tree[node-'A'][1]);
-}
-
-void in_order(char node){
-    if(node == '.') return;
-    
-    in_order(tree[node-'A'][0]);
-    cout << node;
-    in_order(tree[node-'A'][1]);
-}
-
-void post_order(char node){
-    if(node == '.') return;
-    
-    post_order(tree[node-'A'][0]);
-    post_order(tree[node-'A'][1]);
-    cout << node;
+void dfs(int node){
+    check[node] = true;
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(check[next] == false){
+            parent[next] = node;
+            dfs(next);
+        }
+    }
 }
 
 int main(){
     scanf("%d", &n);
-    
-    for(int i=0; i<n; i++){
-        char a, b, c;
-        cin >> a >> b >> c;
-        tree[a-'A'][0] = b;
-        tree[a-'A'][1] = c;
+    for(int i=0; i<n-1; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
     }
     
-    pre_order('A');
-    cout << endl;
-    in_order('A');
-    cout << endl;
-    post_order('A');
-    cout << endl;
-
+    dfs(1);
+    for(int i=2; i<=n; i++){
+        printf("%d\n", parent[i]);
+    }
 }
