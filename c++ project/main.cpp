@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-#define max_int 100001
+#define max_int 10001
 using namespace std;
 
 int n;
@@ -32,18 +32,11 @@ void dfs(info node){
 
 int main(){
     scanf("%d", &n);
-    for(int i=0; i<n; i++){
-        int node;
-        scanf("%d", &node);
-        
-        while(true){
-            int next;
-            scanf("%d", &next);
-            if(next == -1) break;
-            int cost;
-            scanf("%d", &cost);
-            v[node].push_back({next, cost});
-        }
+    for(int i=0; i<n-1; i++){
+        int a, b, c;
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+        v[b].push_back({a, c});
     }
     
     dist[1] = 0;
