@@ -1,65 +1,37 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
-#define max_int 10001
+#define max_int 21
 using namespace std;
 
-int n;
-struct info{
-    int cur;
-    int cost;
-};
-vector<info> v[max_int];
-bool check[max_int];
-int dist[max_int];
+int n, s;
+int cnt = 0;
+int sub = 0;
+int pick = 0;
+int a[max_int];
 
-void dfs(info node){
-    int c_node = node.cur;
-    check[c_node] = true;
+void go(int index){
     
-    for(int i=0; i<v[c_node].size(); i++){
-        info next = v[c_node][i];
-        int n_node = next.cur;
-        int n_cost = next.cost;
-        
-        if(check[n_node] == false){
-            dist[n_node] = dist[c_node] + n_cost;
-            dfs({n_node, dist[n_node]});
-        }
+    if(index == n){
+        if(sub == s && pick > 0) cnt++;
+        return;
     }
+    
+    pick += 1;
+    sub += a[index];
+    go(index + 1);
+    pick -= 1;
+    sub -= a[index];
+
+    go(index + 1);
 }
 
 int main(){
-    scanf("%d", &n);
-    for(int i=0; i<n-1; i++){
-        int a, b, c;
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        v[b].push_back({a, c});
+    scanf("%d %d", &n, &s);
+    
+    for(int i=0; i<n; i++){
+        scanf("%d", &a[i]);
     }
     
-    dist[1] = 0;
-    dfs({1, dist[1]});
-    int max_idx = 1;
-    int max_length = 0;
-    for(int i=2; i<=n; i++){
-        if(dist[i] > max_length){
-            max_length = dist[i];
-            max_idx = i;
-        }
-    }
-    for(int i=1; i<=n; i++){
-        dist[i] = 0;
-        check[i] = false;
-    }
-    dist[max_idx] = 0;
-    dfs({max_idx, dist[max_idx]});
-
-    int result = 0;
-    for(int i=1; i<=n; i++){
-        result = max(result, dist[i]);
-    }
-    printf("%d\n", result);
-    
+    go(0);
+    printf("%d\n", cnt);
 }
