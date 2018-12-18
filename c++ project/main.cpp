@@ -1,46 +1,53 @@
 #include <iostream>
-#include <vector>
+#include <string>
 #include <algorithm>
 
-#define max_int 16
 using namespace std;
 
-int l, c;
-char a[max_int];
-int vowel = 0;
-int consonant = 0;
-vector<char> pick;
+int cnt = 1;
+int result = 1;
+int r, c;
+bool a[26];
+bool check[21][21];
+char d[21][21];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+string word;
 
-void go(int index){
+void dfs(int x, int y){
+    check[x][y] = true;
+    a[d[x][y] - 'A'] = true;
     
-    if(index == c){
-        if((int)pick.size() == l && vowel >= 1 && consonant >= 2){
-            for(int i=0; i<(int)pick.size(); i++){
-                printf("%c", pick[i]);
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(nx>=0 && nx<r && ny>=0 && ny<c){
+            if(check[nx][ny] == false && a[d[nx][ny]-'A'] == false){
+                cnt++;
+                result = max(result, cnt);
+                dfs(nx, ny);
+                cnt--;
             }
-            printf("\n");
         }
-        return;
     }
     
-    pick.push_back(a[index]);
-    if(a[index] == 'a' || a[index] == 'e' || a[index] == 'i' || a[index] == 'o' || a[index] == 'u') vowel++;
-    if(a[index] != 'a' && a[index] != 'e' && a[index] != 'i' && a[index] != 'o' && a[index] != 'u') consonant++;
-    go(index + 1);
-    pick.pop_back();
-    if(a[index] == 'a' || a[index] == 'e' || a[index] == 'i' || a[index] == 'o' || a[index] == 'u') vowel--;
-    if(a[index] != 'a' && a[index] != 'e' && a[index] != 'i' && a[index] != 'o' && a[index] != 'u') consonant--;
+    check[x][y] = false;
+    a[d[x][y] - 'A'] = false;
 
-    go(index + 1);
 }
 
 int main(){
-    scanf("%d %d", &l, &c);
+    scanf("%d %d", &r, &c);
     
-    for(int i=0; i<c; i++){
-        cin >> a[i];
+    for(int i=0; i<r; i++){
+        cin >> word;
+        for(int j=0; j<c; j++){
+            d[i][j] = word[j];
+        }
     }
-    sort(a, a+c);
     
-    go(0);
+    dfs(0, 0);
+
+    
+    printf("%d\n", result);
 }
