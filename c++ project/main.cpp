@@ -88,11 +88,6 @@ int main(){
 }
 
 void init(){
-//    pick_cnt = 0;
-//    char_cnt = 0;
-//    number_cnt = 0;
-//    duple_cnt = 0;
-    
     result = 0;
     for(int i=0; i<36; i++) check[i] = 0;
     
