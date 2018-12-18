@@ -1,37 +1,46 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
-#define max_int 21
+#define max_int 16
 using namespace std;
 
-int n, s;
-int cnt = 0;
-int sub = 0;
-int pick = 0;
-int a[max_int];
+int l, c;
+char a[max_int];
+int vowel = 0;
+int consonant = 0;
+vector<char> pick;
 
 void go(int index){
     
-    if(index == n){
-        if(sub == s && pick > 0) cnt++;
+    if(index == c){
+        if((int)pick.size() == l && vowel >= 1 && consonant >= 2){
+            for(int i=0; i<(int)pick.size(); i++){
+                printf("%c", pick[i]);
+            }
+            printf("\n");
+        }
         return;
     }
     
-    pick += 1;
-    sub += a[index];
+    pick.push_back(a[index]);
+    if(a[index] == 'a' || a[index] == 'e' || a[index] == 'i' || a[index] == 'o' || a[index] == 'u') vowel++;
+    if(a[index] != 'a' && a[index] != 'e' && a[index] != 'i' && a[index] != 'o' && a[index] != 'u') consonant++;
     go(index + 1);
-    pick -= 1;
-    sub -= a[index];
+    pick.pop_back();
+    if(a[index] == 'a' || a[index] == 'e' || a[index] == 'i' || a[index] == 'o' || a[index] == 'u') vowel--;
+    if(a[index] != 'a' && a[index] != 'e' && a[index] != 'i' && a[index] != 'o' && a[index] != 'u') consonant--;
 
     go(index + 1);
 }
 
 int main(){
-    scanf("%d %d", &n, &s);
+    scanf("%d %d", &l, &c);
     
-    for(int i=0; i<n; i++){
-        scanf("%d", &a[i]);
+    for(int i=0; i<c; i++){
+        cin >> a[i];
     }
+    sort(a, a+c);
     
     go(0);
-    printf("%d\n", cnt);
 }
