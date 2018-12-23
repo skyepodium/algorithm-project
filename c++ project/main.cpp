@@ -1,42 +1,20 @@
 #include <iostream>
 
-#define max_int 100001
+#define max_int 1001
 using namespace std;
 
-string word;
+int n;
+int d[max_int];
+int mod = 10007;
 
 int main(){
-    cin >> word;
-    int result = 0;
-    int cnt = 0;
-    int prev = 0;
-    
-    for(int i=0; i<(int)word.size(); i++){
-        if(word[i] == '('){
-            prev = 1;
-            cnt++;
-        }
-        else{
-            if(prev == 1){
-                prev = 0;
-                if(cnt != 1){
-                    result += (cnt - 1);
-                    cnt--;
-                }
-                else{
-                    cnt = 0;
-                }
-            }
-            else{
-                prev = 0;
-                cnt--;
-                result += 1;
-            }
-        }
-
+    scanf("%d", &n);
+    d[0] = 1;
+    d[1] = 1;
+    for(int i=2; i<=n; i++){
+        d[i] = d[i-1]%mod + d[i-2]%mod;
+        d[i] %= mod;
     }
     
-    printf("%d\n", result);
-    
-    
+    printf("%d\n", d[n]%mod);
 }
