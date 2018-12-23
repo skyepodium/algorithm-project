@@ -1,21 +1,42 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
+#define max_int 100001
 using namespace std;
-vector<string> result;
+
 string word;
+
 int main(){
     cin >> word;
+    int result = 0;
+    int cnt = 0;
+    int prev = 0;
+    
     for(int i=0; i<(int)word.size(); i++){
-        string temp;
-        for(int j=i; j<(int)word.size(); j++){
-            temp += word[j];
+        if(word[i] == '('){
+            prev = 1;
+            cnt++;
         }
-        result.push_back(temp);
+        else{
+            if(prev == 1){
+                prev = 0;
+                if(cnt != 1){
+                    result += (cnt - 1);
+                    cnt--;
+                }
+                else{
+                    cnt = 0;
+                }
+            }
+            else{
+                prev = 0;
+                cnt--;
+                result += 1;
+            }
+        }
+
     }
-    sort(result.begin(), result.end());
-    for(int i=0; i<(int)result.size(); i++){
-        printf("%s\n", result[i].c_str());
-    }
+    
+    printf("%d\n", result);
+    
+    
 }
