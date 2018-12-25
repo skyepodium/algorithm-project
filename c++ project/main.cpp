@@ -1,26 +1,55 @@
 #include <iostream>
+#include <stack>
 
-#define lld long long int
-#define max_int 1001
 using namespace std;
 
-int n, k;
-lld d[max_int][max_int];
-lld mod = 10007;
+int n;
+char cmd;
+string word;
+stack<char> first;
+stack<char> second;
 
 int main(){
-    scanf("%d %d", &n, &k);
+    cin >> word;
+    for(int i=0; i<(int)word.size(); i++){
+        first.push(word[i]);
+    }
 
-    d[0][0] = 1;
-    for(int i=1; i<=n; i++){
-        for(int j=0; j<=i; j++){
-            if(j==0) d[i][j] = 1;
-            else d[i][j] = (d[i-1][j-1] + d[i-1][j])%mod;
-            d[i][j] %= mod;
+    scanf("%d", &n);
+    for(int i=0; i<n; i++){
+        cin >> cmd;
+        if(cmd == 'P'){
+            cin >> cmd;
+            first.push(cmd);
+        }
+        else if(cmd == 'L'){
+            if(first.size()>0){
+                char temp;
+                temp = first.top();
+                first.pop();
+                second.push(temp);
+            }
+        }
+        else if(cmd == 'D'){
+            if(second.size()>0){
+                char temp;
+                temp = second.top();
+                second.pop();
+                first.push(temp);
+            }
+        }
+        else{
+            if(first.size()>0) first.pop();
         }
     }
 
-    printf("%lld\n", d[n][k]);
+    while(!first.empty()){
+        second.push(first.top());
+        first.pop();
+    }
+    while(!second.empty()){
+        cout << second.top();
+        second.pop();
+    }
+    printf("\n");
 }
-
-
