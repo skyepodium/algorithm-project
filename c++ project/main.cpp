@@ -1,25 +1,26 @@
 #include <iostream>
-#include <algorithm>
 
-#define max_int 10001
+#define lld long long int
+#define max_int 1001
 using namespace std;
 
-int n;
-int a[max_int];
-int d[max_int][3];
+int n, k;
+lld d[max_int][max_int];
+lld mod = 10007;
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &k);
+
+    d[0][0] = 1;
     for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
+        for(int j=0; j<=i; j++){
+            if(j==0) d[i][j] = 1;
+            else d[i][j] = (d[i-1][j-1] + d[i-1][j])%mod;
+            d[i][j] %= mod;
+        }
     }
 
-    d[1][1] = a[1];
-    for(int i=2; i<=n; i++){
-        d[i][0] = max(d[i-1][0], max(d[i-1][1], d[i-1][2]));
-        d[i][1] = d[i-1][0] + a[i];
-        d[i][2] = d[i-1][1] + a[i];
-    }
-
-    printf("%d\n", max(d[n][0], max(d[n][1], d[n][2])));
+    printf("%lld\n", d[n][k]);
 }
+
+

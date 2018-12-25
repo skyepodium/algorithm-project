@@ -12,7 +12,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cfed03dd-d33d-4b58-ab1c-d4c605583a19" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/c++ project.xcodeproj/project.xcworkspace/xcuserdata/skyepodium.xcuserdatad/UserInterfaceState.xcuserstate" beforeDir="false" afterPath="$PROJECT_DIR$/c++ project.xcodeproj/project.xcworkspace/xcuserdata/skyepodium.xcuserdatad/UserInterfaceState.xcuserstate" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++ project/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++ project/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -28,11 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="208">
+              <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -50,7 +46,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="589" />
+    <option name="x" value="406" />
     <option name="y" value="23" />
     <option name="width" value="1400" />
     <option name="height" value="783" />
@@ -111,16 +107,15 @@
       <workItem from="1545578046875" duration="323000" />
       <workItem from="1545578491933" duration="259000" />
       <workItem from="1545579720996" duration="69000" />
-      <workItem from="1545579889973" duration="1378000" />
+      <workItem from="1545579889973" duration="2066000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4805000" />
+    <option name="totallyTimeSpent" value="5493000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="589" y="23" width="1400" height="783" extended-state="0" />
-    <editor active="true" />
+    <frame x="428" y="29" width="1400" height="783" extended-state="0" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.30071428" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -157,11 +152,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="208">
+          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
         </state>
       </provider>
     </entry>
