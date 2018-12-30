@@ -1,32 +1,54 @@
-#include<iostream>
+#include <iostream>
+#include <algorithm>
+#include <vector>
 
-#define max_int 101
+#define lld long long int
+#define max_int 1001
 using namespace std;
 
-int t, n, max_up, max_down;
+int t, n, temp;
 int a[max_int];
+int result;
+
+bool cal_num(int num){
+    int cur = 10;
+    int sub;
+    while(num > 0){
+        sub = num%10;
+        num /= 10;
+        if(cur < sub){
+            return false;
+            break;
+        }
+        cur = sub;
+    }
+    return true;
+}
 
 int main(){
     scanf("%d", &t);
 
     for(int test_case = 1; test_case<=t; test_case++){
         scanf("%d", &n);
-        max_up = 0;
-        max_down = 0;
-
+        result = -1;
         for(int i=0; i<n; i++){
             scanf("%d", &a[i]);
         }
-        int cur = a[0];
-        for(int i=1; i<n; i++){
-            if(a[i] > cur){
-                max_up = max(max_up, a[i]-cur);
+
+        sort(a, a+n, greater<int>());
+
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                temp = a[i]*a[j];
+                if(cal_num(temp)){
+                    if(temp > result){
+                        result = temp;
+                        break;
+                    }
+                };
             }
-            else{
-                max_down = max(max_down, cur-a[i]);
-            }
-            cur = a[i];
         }
-        printf("#%d %d %d\n", test_case, max_up, max_down);
+
+        printf("#%d %d\n", test_case, result);
     }
 }
