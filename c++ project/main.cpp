@@ -3,25 +3,37 @@
 #include <vector>
 #include <algorithm>
 
-
+#define lld long long int
 using namespace std;
 
-int n, num;
-int a[10001];
+lld n;
+lld a[1000001];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%lld", &n);
 
-    for(int i=1; i<=n; i++){
-        scanf("%d", &num);
-        a[num]++;
+    for(int i=0; i<n; i++){
+        scanf("%lld", &a[i]);
     }
 
-    for(int i=1; i<=10000; i++){
-        if(a[i] > 0){
-            for(int j=1; j<=a[i]; j++){
-                printf("%d\n", i);
-            }
+    sort(a, a+n);
+
+    lld result = a[0];
+    lld max_cnt = 1;
+    lld cur_cnt = 1;
+    for(int i=1; i<n; i++){
+        if(a[i] != a[i-1]){
+            cur_cnt = 1;
+        }
+        else{
+            cur_cnt++;
+        }
+        if(cur_cnt > max_cnt){
+            max_cnt = cur_cnt;
+            result = a[i];
         }
     }
+
+
+    printf("%lld\n", result);
 }
