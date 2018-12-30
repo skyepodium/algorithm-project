@@ -1,43 +1,32 @@
-#include <iostream>
-#include <string>
-#include <vector>
+#include<iostream>
 
+#define max_int 101
 using namespace std;
 
-string n;
-vector<int> result;
-
-void cal_num(int num){
-    int cnt = 0;
-    while(num > 0){
-        result.push_back(num%2);
-        cnt++;
-        num /= 2;
-    }
-    if(cnt != 3){
-        for(int i=0; i<3-cnt; i++){
-            result.push_back(0);
-        }
-    }
-}
+int t, n, max_up, max_down;
+int a[max_int];
 
 int main(){
-    cin >> n;
-    int size = (int)n.size();
-    for(int i=size - 1; i>=0; i--){
-        cal_num(n[i] - '0');
-    }
+    scanf("%d", &t);
 
-    bool startZero = true;
-    for(int i=(int)result.size()-1; i>=0; i--){
-        if(result[i] == 1){
-            startZero = false;
+    for(int test_case = 1; test_case<=t; test_case++){
+        scanf("%d", &n);
+        max_up = 0;
+        max_down = 0;
+
+        for(int i=0; i<n; i++){
+            scanf("%d", &a[i]);
         }
-        if(startZero == false){
-            printf("%d", result[i]);
+        int cur = a[0];
+        for(int i=1; i<n; i++){
+            if(a[i] > cur){
+                max_up = max(max_up, a[i]-cur);
+            }
+            else{
+                max_down = max(max_down, cur-a[i]);
+            }
+            cur = a[i];
         }
-    }
-    if(result.size() == 3 && result[0] == 0 && result[1] == 0 && result[2] == 0){
-        printf("0\n");
+        printf("#%d %d %d\n", test_case, max_up, max_down);
     }
 }
