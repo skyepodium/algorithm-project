@@ -1,54 +1,54 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
 
-#define lld long long int
-#define max_int 1001
+#define max_int 300
 using namespace std;
 
-int t, n, temp;
-int a[max_int];
-int result;
-
-bool cal_num(int num){
-    int cur = 10;
-    int sub;
-    while(num > 0){
-        sub = num%10;
-        num /= 10;
-        if(cur < sub){
-            return false;
-            break;
-        }
-        cur = sub;
-    }
-    return true;
-}
+int t, n;
+int a[max_int][max_int];
+int d[max_int][max_int];
 
 int main(){
     scanf("%d", &t);
-
-    for(int test_case = 1; test_case<=t; test_case++){
+    for(int test_case=1; test_case<=t; test_case++){
         scanf("%d", &n);
-        result = -1;
-        for(int i=0; i<n; i++){
-            scanf("%d", &a[i]);
+        for(int i=0; i<=n; i++){
+            for(int j=0; j<=n; j++){
+                a[i][j] = 0;
+                d[i][j] = 0;
+            }
         }
-
-        sort(a, a+n, greater<int>());
-
-        for(int i=0; i<n; i++){
-            for(int j=i+1; j<n; j++){
-                temp = a[i]*a[j];
-                if(cal_num(temp)){
-                    if(temp > result){
-                        result = temp;
-                        break;
-                    }
-                };
+        for(int i=1; i<=2*n-1; i++){
+            if(i <= n){
+                for(int j=1; j<=i; j++){
+                    scanf("%d", &a[i][j]);
+                }
+            }
+            else{
+                for(int j=1; j<=2*n-i; j++){
+                    scanf("%d", &a[i][j]);
+                }
             }
         }
 
-        printf("#%d %d\n", test_case, result);
+        d[1][1] = a[1][1];
+        for(int i=2; i<=2*n-1; i++){
+            if(i <= n){
+                for(int j=1; j<=i; j++){
+                    if(j==1){
+                        d[i][j] = d[i-1][j] + a[i][j];
+                    }
+                    else{
+                        d[i][j] = max(d[i-1][j-1], d[i-1][j]) + a[i][j];
+                    }
+                }
+            }
+            else{
+                for(int j=1; j<=2*n-i; j++){
+                    d[i][j] = max(d[i-1][j], d[i-1][j+1]) + a[i][j];
+                }
+            }
+        }
+        printf("%d\n", d[2*n-1][1]);
     }
 }
