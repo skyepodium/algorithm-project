@@ -1,39 +1,37 @@
 #include <iostream>
-#include <string>
 #include <vector>
 #include <algorithm>
 
-#define lld long long int
+#define max_int 500001
 using namespace std;
 
-lld n;
-lld a[1000001];
+int n, num;
+struct info{
+    int num;
+    int idx;
+};
+info a[max_int];
+bool cmp(const info &a, const info &b){
+    return a.num < b.num;
+}
+
 
 int main(){
-    scanf("%lld", &n);
+    scanf("%d", &n);
 
-    for(int i=0; i<n; i++){
-        scanf("%lld", &a[i]);
+    for(int i=1; i<=n; i++){
+        scanf("%d", &num);
+        a[i].num = num;
+        a[i].idx = i;
     }
 
-    sort(a, a+n);
+    stable_sort(a+1, a+n+1, cmp);
 
-    lld result = a[0];
-    lld max_cnt = 1;
-    lld cur_cnt = 1;
-    for(int i=1; i<n; i++){
-        if(a[i] != a[i-1]){
-            cur_cnt = 1;
-        }
-        else{
-            cur_cnt++;
-        }
-        if(cur_cnt > max_cnt){
-            max_cnt = cur_cnt;
-            result = a[i];
-        }
+    int result = 0;
+    for(int i=1; i<=n; i++){
+        result = max(result, a[i].idx - i);
     }
+    printf("%d\n", result + 1);
 
-
-    printf("%lld\n", result);
 }
+
