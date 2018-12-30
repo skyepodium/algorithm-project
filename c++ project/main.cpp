@@ -1,64 +1,58 @@
 #include <iostream>
-#include <algorithm>
+#include <queue>
+#include <vector>
 
-#define max_int 21
+#define max_int 20001
+#define max_val 1000001
 using namespace std;
 
-int n;
-int lose[max_int];
-int joy[max_int];
-int d[max_int][101];
+int n, m, start_node, a, b, c;
+int d[max_int];
+struct info{
+    int cur;
+    int cost;
+};
 
-int from_health[max_int][101];
-int from_joy[max_int][101];
+vector<info> v[max_int];
+
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
+    }
+};
 
 int main(){
-    scanf("%d", &n);
-    for(int i=1; i<=n; i++) scanf("%d", &lose[i]);
-    for(int i=1; i<=n; i++) scanf("%d", &joy[i]);
+    scanf("%d %d %d", &n, &m, &start_node);
 
-    if(100-lose[1] > 0) d[1][100-lose[1]] = joy[1];
-    for(int i=2; i<=n; i++){
-        for(int j=1; j<=100; j++){
-            d[i][j] = d[i-1][j];
-            from_health[i][j] = j;
-            from_joy[i][j] = d[i-1][j];
+    for(int i=1; i<=n; i++) d[i] = max_val;
 
-            if(j+lose[i] <= 100){
-                d[i][j] = max(d[i-1][j], d[i-1][j+lose[i]] + joy[i]);
-                if(d[i-1][j] >  d[i-1][j+lose[i]] + joy[i]){
-                    d[i][j] = d[i-1][j];
-                    from_health[i][j] = j;
-                    from_joy[i][j] = d[i-1][j];
-                }
-                else{
-                    d[i][j] = d[i-1][j+lose[i]] + joy[i];
-                    from_health[i][j] = j+lose[i];
-                    from_joy[i][j] = d[i-1][j+lose[i]];
-                }
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+    }
+
+    d[start_node] = 0;
+    priority_queue<info, vector<info>, cmp> pq;
+    pq.push({start_node, d[start_node]});
+    while(!pq.empty()){
+        info cur = pq.top();
+        pq.pop();
+        int c_node = cur.cur;
+
+        for(int i=0; i<v[c_node].size(); i++){
+            info next = v[c_node][i];
+            int n_node = next.cur;
+            int n_cost = next.cost;
+
+            if(d[n_node] > d[c_node] + n_cost){
+                d[n_node] = d[c_node] + n_cost;
+                pq.push({n_node, d[n_node]});
             }
         }
     }
 
-    int last_health = 0;
-    int last_joy = 0;
-    int result = 0;
-    for(int j=1; j<=100; j++){
-        if(result < d[n][j]){
-            result = d[n][j];
-            last_health = j;
-            last_joy = d[n][j];
-        }
+    for(int i=1; i<=n; i++){
+        if(d[i] == max_val) printf("INF\n");
+        else printf("%d\n", d[i]);
     }
-    printf("%d\n", result);
-
-    cout << last_health << " " << last_joy << endl;
-    int idx = n;
-    while(idx != 0){
-        cout << from_health[idx][last_health] << " " << from_joy[idx][last_health] << endl;
-        last_health = from_health[idx][last_health];
-        idx--;
-    }
-
-
 }
