@@ -1,23 +1,32 @@
 #include <iostream>
 #include <string>
+#include <vector>
 #include <cmath>
 
-#define lld long long int
 using namespace std;
 
 string n;
-int b;
-lld result;
+vector<int> result;
 
 int main(){
-    cin >> n >> b;
+    cin >> n;
 
-    result = 0;
     int size = (int)n.size();
-    for(int i=size - 1; i>=0; i--){
-        if(n[i] >= 65) n[i] = n[i] - 55;
-        else n[i] = n[i] - 48;
-        result += n[i] * pow(b, size - i - 1);
+
+    int idx = 0;
+    int temp = 0;
+    for(int i=size-1; i>=0; i--){
+        if(idx==3){
+            result.push_back(temp);
+            temp = 0;
+            idx = 0;
+        }
+        temp = temp + (n[i] - '0') * pow(2, idx);
+        idx++;
     }
-    printf("%lld\n", result);
+    result.push_back(temp);
+    for(int i=(int)result.size() - 1; i>=0; i--){
+        printf("%d", result[i]);
+    }
+    printf("\n");
 }
