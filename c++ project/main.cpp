@@ -12,10 +12,10 @@ struct info{
 info a[max_int];
 
 bool cmp(const info &a, const info &b){
-    if(a.x == b.x){
-        return a.y < b.y;
-    } else{
+    if(a.y == b.y){
         return a.x < b.x;
+    } else{
+        return a.y < b.y;
     }
 }
 
