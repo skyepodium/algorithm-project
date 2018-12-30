@@ -3,34 +3,25 @@
 #include <vector>
 #include <algorithm>
 
+
 using namespace std;
 
-int n;
-int age;
-string name;
-
-struct info{
-    int age;
-    string name;
-};
-
-vector<info> v;
-
-bool cmp(const info &a, const info &b){
-    return a.age < b.age;
-}
+int n, num;
+int a[10001];
 
 int main(){
     scanf("%d", &n);
-    for(int i=0; i<n; i++){
-        cin >> age >> name;
-        v.push_back({age, name});
+
+    for(int i=1; i<=n; i++){
+        scanf("%d", &num);
+        a[num]++;
     }
 
-    stable_sort(v.begin(), v.end(), cmp);
-
-    for(int i=0; i<n; i++){
-        cout << v[i].age << " " << v[i].name << '\n';
+    for(int i=1; i<=10000; i++){
+        if(a[i] > 0){
+            for(int j=1; j<=a[i]; j++){
+                printf("%d\n", i);
+            }
+        }
     }
-
 }
