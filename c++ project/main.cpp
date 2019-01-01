@@ -1,33 +1,31 @@
 #include <iostream>
+#include <vector>
 
-#define max_int 1000001
+#define max_int 10000001
 
 using namespace std;
-int num;
+int n;
+vector<int> v;
 bool check[max_int];
 void eratos(){
-    for(int i=2; i*i<=1000000; i++){
-        for(int j=i*i; j<=1000000; j=j+i){
+    for(int i=2; i*i<=n; i++){
+        for(int j=i*i; j<=n; j=j+i){
             check[j] = true;
         }
     }
 }
 int main(){
+    scanf("%d", &n);
     eratos();
-    while(true){
-        scanf("%d", &num);
-        if(num == 0) break;
-
-        bool find = false;
-        for(int i=2; i<=num/2; i++){
-            int a = i;
-            int b = num-i;
-            if(check[a] == false && check[b] == false){
-                printf("%d = %d + %d\n", num, a, b);
-                find=true;
-                break;
-            }
-        }
-        if(!find) printf("Goldbach's conjecture is wrong.\n");
+    for(int i=2; i<=n; i++){
+        if(!check[i]) v.push_back(i);
     }
+
+    for(int i=0; i<v.size(); i++){
+        while(n%v[i] == 0){
+            n /= v[i];
+            printf("%d\n", v[i]);
+        }
+    }
+
 }
