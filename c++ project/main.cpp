@@ -1,26 +1,22 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
-int a, b, n, temp, num;
+int n, num, cnt=0;
 
 int main(){
-    scanf("%d %d %d", &a, &b, &n);
-
-    num = 0;
+    scanf("%d", &n);
     for(int i=0; i<n; i++){
-        scanf("%d", &temp);
-        num = num * a + temp;
+        scanf("%d", &num);
+        if(num==1) continue;
+        bool isPrime = true;
+        for(int j=2; j*j<=num; j++){
+            if(num%j==0){
+                isPrime = false;
+                break;
+            }
+        }
+        if(isPrime) cnt++;
     }
-
-    vector<int> v;
-    while(num>0){
-        v.push_back(num%b);
-        num /= b;
-    }
-
-    for(int i=(int)v.size()-1; i>=0; i--){
-        printf("%d ", v[i]);
-    }
+    printf("%d\n", cnt);
 }
