@@ -1,32 +1,31 @@
 #include <iostream>
-#include <algorithm>
-
+#include <vector>
 using namespace std;
 
-int num;
-int a[2] = {5, 2};
-int cnt[2];
-int result = 0;
-
+int n;
+vector<int> result;
 int main(){
-    scanf("%d", &num);
+    scanf("%d", &n);
+    if(n != 0) {
+        while (n != 0) {
 
-    for(int i=1; i<=num; i++){
-        int base = i;
-        for(int j=0; j<2; j++){
-            while(base%a[j] == 0){
-                base /= a[j];
-                cnt[j]++;
+            if (n % 2 == 0) {
+                n = (-n / 2);
+                result.push_back(0);
+            } else {
+                if (n > 0) {
+                    n = (-n / 2);
+                } else {
+                    n = ((-n + 1) / 2);
+                }
+                result.push_back(1);
             }
         }
-    }
-    if(cnt[0] == 0 || cnt[1] == 0){
-        result = 0;
+        for (int i = (int) result.size() - 1; i >= 0; i--) {
+            printf("%d", result[i]);
+        }
     }
     else{
-        result = min(cnt[0], cnt[1]);
+        printf("0\n");
     }
-
-
-    printf("%d\n", result);
 }
