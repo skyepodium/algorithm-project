@@ -1,40 +1,48 @@
 #include <iostream>
+#include <queue>
+#include <vector>
 
-#define lld long long int
-#define max_int 101
+#define max_int 1001
 using namespace std;
 
-int t, n;
-int a[max_int];
-lld d[max_int][21];
-lld mod = 1234567891;
+int n, m, a, b;
+int ind[max_int];
+vector<int> v[max_int];
+
 
 int main(){
-    scanf("%d", &t);
+    for(int test_case=1; test_case<=20; test_case++){
+        scanf("%d %d", &n, &m);
 
-    for(int test_case = 1; test_case <=t; test_case++){
-            scanf("%d", &n);
+        for(int i=0; i<=n; i++){
+            ind[i] = 0;
+            v[i].clear();
+        }
 
-            for(int i=0; i<=n; i++){
-                for(int j=0; j<21; j++){
-                    d[i][j] = 0;
+        for(int i=0; i<m; i++){
+            scanf("%d %d", &a, &b);
+            v[a].push_back(b);
+            ind[b]++;
+        }
+
+        queue<int> q;
+        for(int i=1; i<=n; i++){
+            if(ind[i] == 0) q.push(i);
+        }
+        printf("#%d ", test_case);
+        while(!q.empty()){
+            int node = q.front();
+            printf("%d ", node);
+            q.pop();
+
+            for(int i=0; i<v[node].size(); i++){
+                int next = v[node][i];
+                ind[next]--;
+                if(ind[next] == 0){
+                    q.push(next);
                 }
             }
-            for(int i=0; i<n; i++){
-                scanf("%d", &a[i]);
-            }
-
-            d[0][a[0]] = 1;
-            for(int i=1; i<n-1; i++){
-                for(int j=0; j<21; j++){
-                    if(j-a[i] >=0) d[i][j] = (d[i][j] + d[i-1][j-a[i]])%mod;
-                    if(j+a[i] <21) d[i][j] = (d[i][j] + d[i-1][j+a[i]])%mod;
-                }
-            }
-
-            printf("#%d %lld\n", test_case, d[n-2][a[n-1]]);
-
+        }
+        printf("\n");
     }
-
-
 }
