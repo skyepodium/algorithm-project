@@ -1,61 +1,50 @@
 #include <iostream>
 #include <vector>
-#include <queue>
-#include <algorithm>
 
-#define max_int 1001
+#define max_int 27
 using namespace std;
 
+int n;
+char a, b, c;
+vector<char> v[max_int];
 
-bool check[max_int];
-vector<int> v[max_int];
+void preorder(int node){
+    if(node + 'A' == '.') return;
 
-int n, m, start_node, a, b;
-
-void dfs(int node){
-    check[node] = true;
-    printf("%d ", node);
-    for(int i=0; i<v[node].size(); i++){
-        int next = v[node][i];
-        if(check[next] == false){
-            dfs(next);
-        }
-    }
+    printf("%c", node + 'A');
+    preorder(v[node][0]);
+    preorder(v[node][1]);
 }
 
-void bfs(int start){
-    queue<int> q;
-    q.push(start);
-    check[start] = true;
-    while(!q.empty()){
-        int node = q.front();
-        printf("%d ", node);
-        q.pop();
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            if(check[next] == false){
-                check[next] = true;
-                q.push(next);
-            }
-        }
-    }
+void inorder(int node){
+    if(node + 'A' == '.') return;
+
+    inorder(v[node][0]);
+    printf("%c", node + 'A');
+    inorder(v[node][1]);
 }
+
+void postorder(int node){
+    if(node + 'A' == '.') return;
+
+    postorder(v[node][0]);
+    postorder(v[node][1]);
+    printf("%c", node + 'A');
+}
+
 
 int main(){
-    scanf("%d %d %d", &n, &m, &start_node);
-
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        v[b].push_back(a);
+    scanf("%d", &n);
+    for(int i=0; i<n; i++){
+        cin >> a >> b >> c;
+        v[a-'A'].push_back(b-'A');
+        v[a-'A'].push_back(c-'A');
     }
 
-    for(int i=1; i<=n; i++){
-        sort(v[i].begin(), v[i].end());
-    }
-
-    dfs(start_node);
-    for(int i=0; i<=n; i++) check[i] = false;
+    preorder(0);
     printf("\n");
-    bfs(start_node);
+    inorder(0);
+    printf("\n");
+    postorder(0);
+
 }
