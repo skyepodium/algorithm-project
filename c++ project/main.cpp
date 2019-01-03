@@ -1,36 +1,59 @@
 #include <iostream>
-#include <vector>
 
-#define max_int 100001
+#define max_int 17
 using namespace std;
 
-int n, a, b;
-vector<int> v[max_int];
-bool check[max_int];
-int p[max_int];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+int n, start_x, start_y, end_x, end_y;
+int d[max_int][max_int];
+char temp[17];
+bool check[max_int][max_int];
 
-void dfs(int node){
-    check[node] = true;
-    for(int i=0; i<v[node].size(); i++){
-        int next = v[node][i];
-        if(check[next] == false){
-            p[next] = node;
-            dfs(next);
+void dfs(int x, int y){
+    check[x][y] = true;
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(check[nx][ny] == false && d[nx][ny] == 0){
+            dfs(nx, ny);
+        }
+    }
+}
+
+void init(){
+    for(int i=0; i<=16; i++){
+        for(int j=0; j<=16; j++){
+            d[i][j] = 0;
+            check[i][j] =false;
         }
     }
 }
 
 int main(){
-    scanf("%d", &n);
-    for(int i=0; i<n-1; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        v[b].push_back(a);
+    for(int test_case=1; test_case<=10; test_case++){
+        scanf("%d", &n);
+        init();
+        for(int i=0; i<16; i++){
+            scanf("%s", temp);
+            for(int j=0; j<16; j++){
+                d[i][j] = temp[j] - '0';
+                if(temp[j] == '2'){
+                    start_x = i;
+                    start_y = j;
+                }
+                else if(temp[j] == '3'){
+                    d[i][j] = 0;
+                    end_x = i;
+                    end_y = j;
+                }
+            }
+        }
+
+        dfs(start_x, start_y);
+        printf("#%d %d\n", test_case, check[end_x][end_y]);
+
     }
 
-    dfs(1);
-    for(int i=2; i<=n; i++){
-        printf("%d\n", p[i]);
-    }
 
 }
