@@ -1,48 +1,61 @@
 #include <iostream>
-#include <queue>
 #include <vector>
+#include <queue>
+#include <algorithm>
 
 #define max_int 1001
 using namespace std;
 
-int n, m, a, b;
-int ind[max_int];
+
+bool check[max_int];
 vector<int> v[max_int];
 
+int n, m, start_node, a, b;
 
-int main(){
-    for(int test_case=1; test_case<=20; test_case++){
-        scanf("%d %d", &n, &m);
-
-        for(int i=0; i<=n; i++){
-            ind[i] = 0;
-            v[i].clear();
+void dfs(int node){
+    check[node] = true;
+    printf("%d ", node);
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(check[next] == false){
+            dfs(next);
         }
+    }
+}
 
-        for(int i=0; i<m; i++){
-            scanf("%d %d", &a, &b);
-            v[a].push_back(b);
-            ind[b]++;
-        }
-
-        queue<int> q;
-        for(int i=1; i<=n; i++){
-            if(ind[i] == 0) q.push(i);
-        }
-        printf("#%d ", test_case);
-        while(!q.empty()){
-            int node = q.front();
-            printf("%d ", node);
-            q.pop();
-
-            for(int i=0; i<v[node].size(); i++){
-                int next = v[node][i];
-                ind[next]--;
-                if(ind[next] == 0){
-                    q.push(next);
-                }
+void bfs(int start){
+    queue<int> q;
+    q.push(start);
+    check[start] = true;
+    while(!q.empty()){
+        int node = q.front();
+        printf("%d ", node);
+        q.pop();
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                q.push(next);
             }
         }
-        printf("\n");
     }
+}
+
+int main(){
+    scanf("%d %d %d", &n, &m, &start_node);
+
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+
+    for(int i=1; i<=n; i++){
+        sort(v[i].begin(), v[i].end());
+    }
+
+    dfs(start_node);
+    for(int i=0; i<=n; i++) check[i] = false;
+    printf("\n");
+    bfs(start_node);
 }
