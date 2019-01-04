@@ -1,54 +1,44 @@
 #include <iostream>
 #include <algorithm>
 
-#define max_int 101
+#define max_val 100001
+#define max_int 1001
 using namespace std;
 
-int n, result;
-char a[8][8];
-
+int t, n, num, result;
+int a[max_int][max_int];
 
 int main(){
-    for(int test_case = 1; test_case<=10; test_case++){
+
+    scanf("%d", &t);
+    for(int test_case = 1; test_case<=t; test_case++){
+        result = max_val;
         scanf("%d", &n);
-        result = 0;
-
-        for(int i=0; i<8; i++){
-            scanf("%s", a[i]);
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                a[i][j] = max_val;
+                scanf("%d", &num);
+                if(num == 1) a[i][j] = 1;
+                if(i==j) a[i][j] = 0;
+            }
         }
 
-        //1. 가로
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++){
-                if(j+n <= 8){
-                    bool isPal = true;
-                    for(int k=0; k<n/2; k++){
-                        if(a[i][j+k] != a[i][j+(n-1-k)]){
-                            isPal = false;
-                            break;
-                            //1 - 4
-                            //2 - 3
-                        }
+        for(int k=1; k<=n; k++){
+            for(int i=1; i<=n; i++){
+                for(int j=1; j<=n; j++){
+                    if(a[i][j] > a[i][k] + a[k][j]){
+                        a[i][j] = a[i][k] + a[k][j];
                     }
-                    if(isPal) result++;
                 }
             }
         }
 
-        //2. 세로
-        for(int j=0; j<8; j++){
-            for(int i=0; i<8; i++){
-                if(i+n <= 8){
-                    bool isPal = true;
-                    for(int k=0; k<n/2; k++){
-                        if(a[i+k][j] != a[i+(n-1-k)][j]){
-                            isPal = false;
-                            break;
-                        }
-                    }
-                    if(isPal) result++;
-                }
+        for(int i=1; i<=n; i++){
+            int temp = 0;
+            for(int j=1; j<=n; j++){
+                if(i!=j) temp += a[i][j];
             }
+            result = min(result, temp);
         }
 
 
