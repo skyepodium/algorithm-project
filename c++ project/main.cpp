@@ -1,60 +1,44 @@
 #include <iostream>
-#include <vector>
-#include <queue>
 
-#define max_int 101
 using namespace std;
 
-int n, start_node, a, b, result, max_node;
-bool d[max_int][max_int];
-int check[max_int];
+double a, b;
+double result1, result2;
+void go1(int idx, double p, int cnt){
 
-void bfs(int start){
-    check[start] = true;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        for(int next=1; next<=100; next++){
-            if(d[node][next] && check[next] == false){
-                check[next] = check[node] + 1;
-                q.push(next);
-            }
+    if(idx == 18){
+
+        if(cnt != 2 && cnt !=3 && cnt !=5 && cnt !=7 && cnt != 11 && cnt!= 13 && cnt !=17){
+            result1 += p;
         }
+
+        return;
     }
+
+    go1(idx+1, p*a, cnt+1);
+    go1(idx+1, p*(1-a), cnt);
 }
 
+void go2(int idx, double p, int cnt){
 
-void init(){
-    result = 0;
-    max_node = 0;
-    for(int i=1; i<max_int; i++){
-        check[i] = 0;
-        for(int j=1; j<max_int; j++){
-            d[i][j] = false;
+    if(idx == 18){
+
+        if(cnt != 2 && cnt !=3 && cnt !=5 && cnt !=7 && cnt != 11 && cnt!= 13 && cnt !=17){
+            result2 += p;
         }
+
+        return;
     }
+
+    go2(idx+1, p*b, cnt+1);
+    go2(idx+1, p*(1-b), cnt);
 }
 
 int main(){
-    for(int test_case=1; test_case<=1; test_case++){
-        scanf("%d %d", &n, &start_node);
-        init();
-
-        for(int i=0; i<n/2; i++){
-            scanf("%d %d", &a, &b);
-            if(d[a][b] == false){
-                d[a][b] = true;
-            }
-        }
-        bfs(start_node);
-        for(int i=100; i>=1; i--){
-            if(result < check[i]){
-                result = check[i];
-                max_node = i;
-            }
-        }
-        printf("#%d %d\n", test_case, max_node);
-    }
+    a = 12*0.01;
+    b = 89*0.01;
+    go1(0, 1, 0);
+    go2(0, 1, 0);
+    cout << (1-result1) * (1-result2) << endl;
+    printf("%.16f\n", 1-(result1*result2));
 }
