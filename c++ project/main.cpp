@@ -1,48 +1,51 @@
-#include<stdio.h>
+#include<cstdio>
 #include<iostream>
-
+#include<algorithm>
+#include<vector>
 using namespace std;
 
 /**
-* 동아리 멤버들의 탑승 가능 여부를 출력하는 함수
-*
-* @param data 각 멤버들의 몸무게 data[0] ~ data[n-1]
-* @param n    멤버들의 수
-* @param p    놀이기구 탑승 가능 체중 제한
-* @param q    놀이기구 최대 하중
+* 주어진 배열이 오름차순인지 검사하는 함수
+* @param data
+* @param n     데이터의 수
+* @return      data[0] ~ data[n-1]이 오름차순이라면 true, else false
 */
-
-int cnt = 0;
-int total = 0;
-
-void solve(int data[], int n, int p, int q)
+bool isOrdered(int data[], int n)
 {
-    cnt = 0;
-    total = 0;
+    vector<int> a;
+    for(int i=0; i<n; i++) a.push_back(data[i]);
+
+    sort(a.begin(), a.end());
     for(int i=0; i<n; i++){
-        if(data[i] <= p){
-            cnt++;
-            total += data[i];
+        if(a[i] != data[i]){
+            return false;
         }
     }
-    printf("%d %d\n", cnt, total);
-    if(total <= q) printf("YES\n");
-    else printf("NO\n");
+    return true;
 }
 
 int main()
 {
-    int n, p, q;
-    int *data;
+    int n;
+    int* data;
 
-    scanf("%d %d %d", &n, &p, &q);
+    scanf("%d", &n);
     data = new int[n];
+
     for (int i = 0; i < n; i++)
     {
         scanf("%d", &data[i]);
     }
 
-    solve(data, n, p, q);
+    bool result = isOrdered(data, n);
+
+    if (result)
+    {
+        printf("YES");
+    }
+    else{
+        printf("NO");
+    }
 
     delete[] data;
     return 0;
