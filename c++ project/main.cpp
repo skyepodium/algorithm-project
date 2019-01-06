@@ -1,44 +1,49 @@
-#include <iostream>
+#include<stdio.h>
+#include<iostream>
 
 using namespace std;
 
-double a, b;
-double result1, result2;
-void go1(int idx, double p, int cnt){
+/**
+* 동아리 멤버들의 탑승 가능 여부를 출력하는 함수
+*
+* @param data 각 멤버들의 몸무게 data[0] ~ data[n-1]
+* @param n    멤버들의 수
+* @param p    놀이기구 탑승 가능 체중 제한
+* @param q    놀이기구 최대 하중
+*/
 
-    if(idx == 18){
+int cnt = 0;
+int total = 0;
 
-        if(cnt != 2 && cnt !=3 && cnt !=5 && cnt !=7 && cnt != 11 && cnt!= 13 && cnt !=17){
-            result1 += p;
+void solve(int data[], int n, int p, int q)
+{
+    cnt = 0;
+    total = 0;
+    for(int i=0; i<n; i++){
+        if(data[i] <= p){
+            cnt++;
+            total += data[i];
         }
-
-        return;
     }
-
-    go1(idx+1, p*a, cnt+1);
-    go1(idx+1, p*(1-a), cnt);
+    printf("%d %d\n", cnt, total);
+    if(total <= q) printf("YES\n");
+    else printf("NO\n");
 }
 
-void go2(int idx, double p, int cnt){
+int main()
+{
+    int n, p, q;
+    int *data;
 
-    if(idx == 18){
-
-        if(cnt != 2 && cnt !=3 && cnt !=5 && cnt !=7 && cnt != 11 && cnt!= 13 && cnt !=17){
-            result2 += p;
-        }
-
-        return;
+    scanf("%d %d %d", &n, &p, &q);
+    data = new int[n];
+    for (int i = 0; i < n; i++)
+    {
+        scanf("%d", &data[i]);
     }
 
-    go2(idx+1, p*b, cnt+1);
-    go2(idx+1, p*(1-b), cnt);
-}
+    solve(data, n, p, q);
 
-int main(){
-    a = 12*0.01;
-    b = 89*0.01;
-    go1(0, 1, 0);
-    go2(0, 1, 0);
-    cout << (1-result1) * (1-result2) << endl;
-    printf("%.16f\n", 1-(result1*result2));
+    delete[] data;
+    return 0;
 }
