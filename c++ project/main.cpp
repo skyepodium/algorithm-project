@@ -1,34 +1,59 @@
 #include <iostream>
+#include <vector>
 
-#define lld long long int
-#define max_int 101
+#define max_int 50001
 using namespace std;
 
-int n;
-int a[max_int][max_int];
-lld d[max_int][max_int];
+int n, m, a, b;
+vector<int> v[max_int];
+int p[max_int];
+int d[max_int];
+bool check[max_int];
+
+void dfs(int node){
+    check[node] = true;
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(!check[next]){
+            p[next] = node;
+            d[next] = d[node] + 1;
+            dfs(next);
+        }
+    }
+}
+
+int lca(int first, int second){
+    if(d[first] < d[second]){
+        swap(first, second);
+    }
+
+    while(d[first] != d[second]){
+        first = p[first];
+    }
+    while(first != second){
+        first = p[first];
+        second = p[second];
+    }
+    return first;
+}
 
 int main(){
     scanf("%d", &n);
-
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &a[i][j]);
-        }
+    for(int i=0; i<n-1; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
     }
 
-    d[1][1] = 1;
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            if(a[i][j] == 0) continue;
+    p[1] = 0;
+    d[1] = 1;
+    dfs(1);
 
-            //가로
-            if(j+ a[i][j] <=n ) d[i][j + a[i][j]] += d[i][j];
-
-            //세로
-            if(i+ a[i][j] <=n ) d[i + a[i][j]][j] += d[i][j];
-        }
+    scanf("%d", &m);
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        printf("%d\n", lca(a, b));
     }
 
-    printf("%lld\n", d[n][n]);
+
 }
