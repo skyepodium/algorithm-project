@@ -1,52 +1,28 @@
-#include<cstdio>
-#include<iostream>
-#include<algorithm>
-#include<vector>
+#include <iostream>
+
+#define max_int 1001
+
 using namespace std;
 
-/**
-* 주어진 배열이 오름차순인지 검사하는 함수
-* @param data
-* @param n     데이터의 수
-* @return      data[0] ~ data[n-1]이 오름차순이라면 true, else false
-*/
-bool isOrdered(int data[], int n)
-{
-    vector<int> a;
-    for(int i=0; i<n; i++) a.push_back(data[i]);
+int n, m;
+int a[max_int][max_int];
+int d[max_int][max_int];
 
-    sort(a.begin(), a.end());
-    for(int i=0; i<n; i++){
-        if(a[i] != data[i]){
-            return false;
+int main(){
+    scanf("%d %d", &n, &m);
+
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            scanf("%d", &a[i][j]);
         }
     }
-    return true;
-}
 
-int main()
-{
-    int n;
-    int* data;
-
-    scanf("%d", &n);
-    data = new int[n];
-
-    for (int i = 0; i < n; i++)
-    {
-        scanf("%d", &data[i]);
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            d[i][j] = max(d[i-1][j], d[i][j-1]) + a[i][j];
+        }
     }
 
-    bool result = isOrdered(data, n);
+    printf("%d\n", d[n][m]);
 
-    if (result)
-    {
-        printf("YES");
-    }
-    else{
-        printf("NO");
-    }
-
-    delete[] data;
-    return 0;
 }
