@@ -1,6 +1,8 @@
 #include <iostream>
 #include <queue>
 #include <algorithm>
+#include <stack>
+
 #define max_int 101
 using namespace std;
 
