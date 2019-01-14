@@ -1,30 +1,24 @@
 #include <iostream>
-#include <queue>
-#include <algorithm>
-#include <stack>
 
-#define max_int 101
+#define max_int 201
 using namespace std;
 
-int t, n, start_node;
-int pre[max_int];
-int in[max_int];
-
-
+int n;
+int a[max_int][max_int];
+int d[max_int][max_int];
 
 int main(){
-    scanf("%d", &t);
-    for(int test_case = 1; test_case<=t; test_case++){
-        scanf("%d", &n);
-        for(int i=0; i<n; i++){
-            scanf("%d", &pre[i]);
-        }
-
-        for(int i=0; i<n; i++){
-            scanf("%d", &in[i]);
+    scanf("%d", &n);
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            scanf("%d", &a[i][j]);
         }
     }
 
-    start_node = pre[0];
-
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=n; j++){
+            d[i][j] = max(d[i-1][j], d[i][j-1]) + a[i][j];
+        }
+    }
+    printf("%d\n", d[n][n]);
 }
