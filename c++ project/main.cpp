@@ -1,22 +1,30 @@
 #include <string>
 #include <vector>
-
+#include <queue>
 using namespace std;
 
-int answer = 0;
-void go(int idx, int sum, vector<int> &v, int target){
-    if(idx == (int)v.size()){
-        if(sum == target){
-            answer++;
-        }
-        return;
-    }
+bool check[201];
 
-    go(idx + 1, sum + v[idx], v, target);
-    go(idx + 1, sum - v[idx], v, target);
+void dfs(int node, vector<vector<int>> &computers, int n){
+    check[node] = true;
+    for(int i=0; i<n; i++){
+        int next = i;
+        if(check[next] == false && computers[node][i] == 1){
+            dfs(next, computers, n);
+        }
+    }
 }
 
-int solution(vector<int> numbers, int target) {
-    go(0, 0, numbers, target);
+int solution(int n, vector<vector<int>> computers) {
+    int answer = 0;
+    for(int i=0; i<=n; i++) check[i] = false;
+
+    for(int i=0; i<n; i++){
+        if(check[i] == false){
+            dfs(i, computers, n);
+            answer++;
+        }
+    }
+
     return answer;
 }
