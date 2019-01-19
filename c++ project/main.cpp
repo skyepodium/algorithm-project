@@ -1,51 +1,46 @@
-#include <string>
-#include <vector>
-#include <queue>
 #include <iostream>
-#include <algorithm>
-#define max_int 20001
+#include <queue>
+#include <vector>
 using namespace std;
 
-int check[max_int];
-int max_distance = 0;
-vector<int> v[max_int];
+int a[4] = {2, 1, 3, 2};
+int location = 2;
+struct info{
+    int idx;
+    int cost;
+};
 
-void bfs(int node){
-    check[node] = 0;
-    queue<int> q;
-    q.push(node);
+struct cmp{
+    bool operator()(const info  &a, const info &b){
+        return a.cost < b.cost;
+    }
+};
+
+int main(){
+    queue<info> q;
+    priority_queue<info, vector<info>, cmp> pq;
+
+    for(int i=0; i<4; i++){
+        q.push({i, a[i]});
+        pq.push({i, a[i]});
+    }
+
+    int cnt = 1;
     while(!q.empty()){
-        node = q.front();
+        info cur = q.front();
         q.pop();
-        for(int i=0; i<v[node].size(); i++){
-            cout << "asdf" << endl;
-            int next = v[node][i];
-            if(check[next] == -1){
-                check[next] = check[node] + 1;
-                max_distance = max(max_distance, check[next]);
-                q.push(next);
+        int max_val = pq.top().cost;
+        if(cur.cost == max_val){
+            if(cur.idx == location){
+                printf("%d\n", cnt);
+                break;
+            }else{
+                pq.pop();
+                cnt++;
             }
         }
+        else{
+            q.push(cur);
+        }
     }
-}
-
-int solution(int n, vector<vector<int>> edge) {
-    int answer = 0;
-    for(int i=0; i<n; i++){
-        check[i] = false;
-        cout << edge[i][0] << " " << edge[i][1] << endl;
-        v[edge[i][0]].push_back(edge[i][1]);
-        v[edge[i][1]].push_back(edge[i][0]);
-    }
-
-
-    check[1] = 0;
-    bfs(1);
-    for(int i=1; i<=n; i++){
-        cout << check[i] << endl;
-    }
-    for(int i=1; i<=n; i++){
-        if(check[i] == max_distance) answer++;
-    }
-    return answer;
 }
