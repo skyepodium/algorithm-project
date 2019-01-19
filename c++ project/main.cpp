@@ -3,13 +3,12 @@
 
 using namespace std;
 
-string solution(string phone_number) {
-    string answer = "";
-    int size = (int)phone_number.size();
-    int idx = size - 4;
-    for(int i=0; i<size; i++){
-        if(i < idx) answer += '*';
-        else answer += phone_number[i];
+vector<long long> solution(int x, int n) {
+    vector<long long> answer;
+    long long int cur = 0;
+    for(int i=0; i<n; i++){
+        answer.push_back(cur + x);
+        cur = cur + x;
     }
     return answer;
 }
