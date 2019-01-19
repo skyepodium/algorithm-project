@@ -3,12 +3,12 @@
 
 using namespace std;
 
-vector<long long> solution(int x, int n) {
-    vector<long long> answer;
-    long long int cur = 0;
-    for(int i=0; i<n; i++){
-        answer.push_back(cur + x);
-        cur = cur + x;
+double solution(vector<int> arr) {
+    double answer = 0;
+    double total = 0;
+    for(int i=0; i<(int)arr.size(); i++){
+        total += arr[i];
     }
+    answer = total/(int)arr.size();
     return answer;
 }
