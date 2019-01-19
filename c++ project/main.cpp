@@ -1,15 +1,15 @@
-#include <iostream>
 #include <string>
+#include <vector>
+
 using namespace std;
 
-string s = "qwer";
-
-int main() {
-    int size =(int)s.size();
-    if(size%2 == 1){
-        cout << s[size/2] << endl;
+string solution(string phone_number) {
+    string answer = "";
+    int size = (int)phone_number.size();
+    int idx = size - 4;
+    for(int i=0; i<size; i++){
+        if(i < idx) answer += '*';
+        else answer += phone_number[i];
     }
-    else{
-        cout << s[size/2 - 1] << s[size/2] << endl;
-    }
+    return answer;
 }
