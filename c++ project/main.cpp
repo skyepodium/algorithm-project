@@ -1,16 +1,17 @@
-#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-int gcd(int a, int b){
-    if(b==0) return a;
-    else return gcd(b, a%b);
-}
+bool solution(int x) {
+    bool answer = true;
 
-int main(){
-    int a, b;
-    scanf("%d %d", &a, &b);
-    cout << gcd(a, b) << endl;
-    cout << a*b/gcd(a, b) << endl;
-
+    int num = 0;
+    int base = x;
+    while(x > 0){
+        num += x%10;
+        x /= 10;
+    }
+    if(base%num != 0) answer = false;
+    return answer;
 }
