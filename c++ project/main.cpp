@@ -1,62 +1,66 @@
-#include <iostream>
+#include <string>
 #include <vector>
-#include <queue>
+#include <algorithm>
 
-#define max_val 300001
-#define max_int 126
+#define max_int 101
 using namespace std;
 
-int n;
-int a[max_int][max_int];
-int d[max_int][max_int];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+//시간 복잡도: O(elogn) (n: 정점의 개수, e: 간선의 개수)
+//공간 복잡도: O(en)
+//사용한 알고리즘: 크루스칼 알고리즘
+//사용한 자료구조: 인접리스트
 
-struct info{
-    int x;
-    int y;
-    int cost;
-};
 
-struct cmp{
-    bool operator()(const info &a, const info &b){
-        return a.cost > b.cost;
+// d[i]는 정점 i의 부모 정점을 넣는다.
+int d[max_int];
+
+
+// find는 최상위 부모를 찾는 함수
+int find(int node){
+    // 1) 만약 부모가 자기자신이면 현재 노드가 최상위 부모이다.
+    if(node == d[node]) return node;
+
+        // 2) 아니라면 최상위 부모의 부모를 찾는다.
+    else return d[node] = find(d[node]);
+}
+
+
+// 간선의 가중치를 기준으로 오름차순 정렬
+bool cmp(const vector<int> &a, const vector<int> &b){
+    return a[2] < b[2];
+}
+
+
+int solution(int n, vector<vector<int>> costs) {
+    int answer = 0;
+
+    // 1. d[i] = i의 부모를 담는다. 처음에는 자기 자신이 부모이다.
+    // disjoint-set을 사용하기 위해 초기화
+    for(int i=0; i<n; i++){
+        d[i] = i;
     }
-};
 
-int main(){
-    for(int test_case = 1; ; test_case++){
-      scanf("%d", &n);
-      if(n == 0) break;
 
-      for(int i=0; i<n; i++){
-          for(int j=0; j<n; j++){
-              scanf("%d", &a[i][j]);
-              d[i][j] = max_val;
-          }
-      }
+    // 2. 간선의 가중치 기준 오름차순 정렬
+    sort(costs.begin(), costs.end(), cmp);
 
-        d[0][0] = a[0][0];
-        priority_queue<info, vector<info>, cmp> pq;
-        pq.push({0, 0, d[0][0]});
 
-        while(!pq.empty()){
-            info cur = pq.top();
-            pq.pop();
-            int x = cur.x;
-            int y = cur.y;
+    // 3. 모든 간선을 검사한다.
+    for(int i=0; i<costs.size(); i++){
+        int start = find(costs[i][0]);
+        int end = find(costs[i][1]);
+        int cost = costs[i][2];
 
-            for(int i=0; i<4; i++){
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-                if(nx>=0 && nx<n && ny>=0 && ny<n){
-                    if(d[nx][ny] > d[x][y] + a[nx][ny]){
-                        d[nx][ny] = d[x][y] + a[nx][ny];
-                        pq.push({nx, ny, a[nx][ny]});
-                    }
-                }
-            }
+
+        // 4. start와 end가 아직 연결되지 않았다면
+        if(start != end){
+            // 1) start의 부모를 end로 설정하고
+            d[start] = end;
+
+            // 2) 간선의 가중치를 결과에 더해준다.
+            answer += cost;
         }
-        printf("Problem %d: %d\n", test_case, d[n-1][n-1]);
     }
+
+    return answer;
 }
