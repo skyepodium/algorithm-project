@@ -1,23 +1,36 @@
 #include <iostream>
+#include <algorithm>
 
+#define max_int 200000001
 using namespace std;
 
-//시간 복잡도: O(logn)
-//공간 복잡도: O(1)
-//사용한 알고리즘: 반복문
-//사용한 자료구조: 없음
+int n = 16;
+int stations[1] = {9};
+int w = 2;
+bool check[max_int];
 
-int solution(int n)
-{
+int main(){
+
+    int idx = 0;
+    int size = 1;
+    int cur = 1;
     int answer = 0;
-    while(n != 0){
-        if(n%2==0){
-            n = n/2;
+    int end;
+    end = min(stations[idx] - w, n);
+
+    for(int i=0; i<size; i++){
+        end = min(stations[idx] - w, n);
+
+        if(cur < end){
+            answer++;
+            cur = stations[idx] + w + 1;
+            idx++;
         }
         else{
-            n = n-1;
-            answer++;
+            cur = stations[idx] + w + 1;
+            idx++;
         }
     }
-    return answer;
+    cout << answer << endl;
+
 }
