@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <queue>
+#include <vector>
 
 #define max_int 200000001
 using namespace std;
