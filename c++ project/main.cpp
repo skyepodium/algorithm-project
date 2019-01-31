@@ -1,38 +1,19 @@
 #include <iostream>
-#include <algorithm>
-#include <queue>
+#include <stdio.h>
+#include <string>
 #include <vector>
+#include <algorithm>
 
-#define max_int 200000001
 using namespace std;
 
-int n = 16;
-int stations[1] = {9};
-int w = 2;
-bool check[max_int];
-
-int main(){
-
-    int idx = 0;
-    int size = 1;
-    int cur = 1;
+int solution(vector<int> d, int budget) {
     int answer = 0;
-    int end;
-    end = min(stations[idx] - w, n);
-
-    for(int i=0; i<size; i++){
-        end = min(stations[idx] - w, n);
-
-        if(cur < end){
+    sort(d.begin(), d.end());
+    for(int  i=0; i<d.size();i++)
+        if(budget-d[i]>=0){
+            budget-=d[i];
             answer++;
-            cur = stations[idx] + w + 1;
-            idx++;
         }
-        else{
-            cur = stations[idx] + w + 1;
-            idx++;
-        }
-    }
-    cout << answer << endl;
 
+    return answer;
 }
