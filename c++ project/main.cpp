@@ -1,76 +1,45 @@
 #include <iostream>
 #include <algorithm>
 
-#define lld long long int
 #define max_int 101
 using namespace std;
 
-int t, n, result;
-int a[max_int][max_int];
-lld d[max_int][max_int];
-int p[max_int][max_int];
-lld max_val;
+//시간 복잡도: O(mnlogn)
+//공간 복잡도: O(n)
+//사용한 알고리즘: 그리디, STL sort
+//사용한 자료구조: 배열
 
-void init() {
-    max_val = 0;
-    result = 0;
-    for(int i=0; i<=n; i++){
-        for(int j=0; j<=n; j++){
-            d[i][j] = 0;
-            p[i][j] = 0;
-        }
-    }
-}
+
+int t, n, m, result;
+int a[max_int];
 
 int main(){
     scanf("%d", &t);
 
-    for(int test_case = 1; test_case <= t; test_case++){
-        scanf("%d", &n);
+    for(int test_case = 1; test_case <=t; test_case++){
 
-        init();
+        // 1. 변수 초기화
+        result = 0;
 
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=i; j++){
-                scanf("%d", &a[i][j]);
-            }
+        // 2. 정보를 입력받는다.
+        scanf("%d %d", &n, &m);
+        for(int i=0; i<n; i++){
+            scanf("%d", &a[i]);
         }
 
-        d[1][1] = a[1][1];
-        p[1][1] = 1;
-        for(int i=2; i<=n; i++){
-            for(int j=1; j<=i; j++){
+        // 3. m번 만큼 아이템을 사용합니다.
+        while(m--){
+            // 마력 내림차순으로 정렬
+            sort(a, a+n, greater<int>());
 
-                if(j==1) {
-                    d[i][j] = d[i-1][j] + a[i][j];
-                    p[i][j] = 1;
-                }
-                else if(j==i) {
-                    d[i][j] = d[i-1][j-1] + a[i][j];
-                    p[i][j] = 1;
-                }
-                else {
-                    if(d[i-1][j-1] > d[i-1][j]){
-                        d[i][j] = d[i-1][j-1] + a[i][j];
-                        p[i][j] = p[i-1][j-1];
-                    }else if(d[i-1][j-1] < d[i-1][j]){
-                        d[i][j] = d[i-1][j] + a[i][j];
-                        p[i][j] = p[i-1][j];
-                    }
-                    else{
-                        d[i][j] = d[i-1][j] + a[i][j];
-                        p[i][j] = p[i-1][j-1] + p[i-1][j];
-                    }
-                }
-                max_val = max(max_val, d[i][j]);
-            }
+            // 제일 마력이 많이 들어있는 아이템을 사용합니다.
+            result += a[0];
+
+            // 마력은 0이 되면 없어집니다.
+            if(a[0] > 0) a[0]--;
         }
 
-        for(int j=1; j<=n; j++){
-            if(max_val == d[n][j]){
-                result += p[n][j];
-            }
-        }
+        // 4. 결과 출력
         printf("%d\n", result);
     }
 }
