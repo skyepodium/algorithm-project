@@ -1,23 +1,22 @@
 #include <iostream>
 
+#define max_int 101
 using namespace std;
 
-int t, n, m, num;
+int t, n;
+int mod = 1000000007;
+int d[max_int];
 
 int main(){
     scanf("%d", &t);
     for(int test_case = 1; test_case <= t; test_case++){
-        scanf("%d %d", &n, &m);
+        scanf("%d", &n);
 
-        if(n > m){
-            printf("0\n");
+        d[0] = d[1] = 1;
+        for(int i=2; i<=n; i++){
+            d[i] = (d[i-1] + d[i-2])%mod;
         }
-        else{
-            num = m - n;
+        printf("%d\n", d[n]);
 
-            int base = 4;
-            int result = base + num;
-            printf("%d\n", result);
-        }
     }
 }
