@@ -1,42 +1,31 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#define max_int 100001
+#include <cstring>
+
+#define max_int 501
 using namespace std;
 
-int n, m, start_node, end_node, a, b;
-vector<int> v[max_int];
-int check[max_int];
-
-void bfs(int start){
-    check[start] = 1;
-    queue<int> q;
-    q.push(start);
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            if(check[next] == 0){
-                check[next] = check[node] + 1;
-                q.push(next);
-            }
-        }
-    }
-}
+int t, n, m;
+int d[max_int][max_int];
+int mod = 1000000007;
 
 int main(){
-    scanf("%d %d %d %d", &n, &m, &start_node, &end_node);
+    scanf("%d", &t);
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d %d", &n, &m);
 
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        v[b].push_back(a);
+        memset(d, 0, sizeof(d));
+
+        d[0][0] = 1;
+        d[1][0] = 1;
+        for(int i=1; i<n; i++){
+            for(int j=101; j>0; j--){
+                for(int k=499; k>=0; k--){
+                    // 탈출했을 때
+                    d[j][k] = (d[j][k] + d[j-1][(k-i+n)%n])%mod;
+                }
+            }
+        }
+
+        printf("%d\n", d[m][0]);
     }
-
-    bfs(start_node);
-
-    printf("%d\n", check[end_node] - 1);
-
 }
