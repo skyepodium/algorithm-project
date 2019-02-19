@@ -1,35 +1,35 @@
 #include <iostream>
+#include <math.h>
+#include <queue>
 
-#define max_int 101
-#define max_val 10001
+
+#define max_int 1001
 using namespace std;
 
-int n, m;
-int w[max_int];
-int p[max_int];
-int d[max_int][max_val];
+int n, max_val = 0;
+char a[max_int];
+double d[max_int];
 
-int main(){
-    scanf("%d %d", &n, &m);
+    int main(){
+    scanf("%s", a);
+    n = strlen(a);
 
-    for(int i=1; i<=n; i++){
-        scanf("%d %d", &w[i], &p[i]);
+    for(int i=0; i<=n; i++){
+        d[i] = sqrt(n);
     }
 
-    d[1][m] = 0;
-    if(m-w[1] >= 0) d[1][m-w[1]] = p[1];
+    for(int i=0; i<n; i++){
+        for(int j=0; j<i; j++){
+            for(int k=j; k<=i; k++){
+                if(a[k] == '.') continue;
 
-    for(int i=2; i<=n; i++){
-        for(int j=0; j<=m; j++){
-            d[i][j] = d[i-1][j];
+                d[j+1] = min(d[j+1], sqrt(j+1));
+                d[i-k+1] = min(d[i-k+1], sqrt(i-k+1));
+                d[i+1] = min(d[i+1], d[j+1] + d[i-k+1]);
 
-            if(j+w[i] <= m) d[i][j] = max(d[i][j], d[i-1][j+w[i]] + p[i]);
+            }
         }
     }
 
-    int result = 0;
-    for(int j=0; j<=m; j++){
-        result = max(result, d[n][j]);
-    }
-    printf("%d\n", result);
+    cout << d[n] << endl;
 }
