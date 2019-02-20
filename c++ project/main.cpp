@@ -1,54 +1,63 @@
 #include <iostream>
+#include <cstring>
+#define max_int 16
 
-#define max_int 501
 using namespace std;
 
-//시간 복잡도: O(n^2)
-//공간 복잡도: O(n^2)
-//사용한 알고리즘: 동적 계획법, Top-down
-//사용한 자료구조: 2차원 배열
-
-int n, result = 0;
+int n, m, k;
 int a[max_int][max_int];
-// d[i][j]는 i, j에서 시작해서 가장 오래 살아남을 수 있는 일 수
 int d[max_int][max_int];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
-
-int go(int x, int y){
-    // 메모이제이션 수행
-    if(d[x][y] > 1) return d[x][y];
-
-    // 4방향 검사
-    for(int i=0; i<4; i++){
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-
-        if(nx>=1 && nx<=n && ny>=1 && ny<=n){
-            if(a[nx][ny] > a[x][y]){
-                d[x][y] = max(d[x][y], go(nx, ny) + 1);
-            }
-        }
-    }
-    return d[x][y];
-}
+int c[max_int][max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d %d", &n, &m, &k);
 
-    // 1. 지도 정보를 입력받습니다.
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &a[i][j]);
-            d[i][j] = 1;
+    if(k!=0) {
+        int mid_i, mid_j;
+
+        int count = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                count++;
+                c[i][j] = count;
+                if (count == k) {
+                    mid_i = i;
+                    mid_j = j;
+                }
+            }
         }
+
+        d[1][1] = 1;
+        for (int i = 1; i <= mid_i; i++) {
+            for (int j = 1; j <= mid_j; j++) {
+                if (i == 1 && j == 1) continue;
+                d[i][j] = d[i - 1][j] + d[i][j - 1];
+            }
+        }
+
+        int mid_result = d[mid_i][mid_j];
+
+        memset(d, 0, sizeof(d));
+
+        d[mid_i][mid_j] = 1;
+        for (int i = mid_i; i <= n; i++) {
+            for (int j = mid_j; j <= m; j++) {
+                if (i == mid_i && j == mid_j) continue;
+
+                d[i][j] = d[i - 1][j] + d[i][j - 1];
+            }
+        }
+        printf("%d\n", mid_result * d[n][m]);
+    }
+    else{
+        d[1][1] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (i == 1 && j == 1) continue;
+                d[i][j] = d[i - 1][j] + d[i][j - 1];
+            }
+        }
+        printf("%d\n", d[n][m]);
     }
 
-    // 2. 각 지점에 대한
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            result = max(result, go(i, j));
-        }
-    }
-    printf("%d\n", result);
 }
