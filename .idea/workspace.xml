@@ -28,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="48">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="191">
+              <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -139,16 +139,15 @@
       <workItem from="1548857995705" duration="12000" />
       <workItem from="1548929835708" duration="3162000" />
       <workItem from="1549360324329" duration="46770000" />
-      <workItem from="1550222086434" duration="4222000" />
+      <workItem from="1550222086434" duration="5336000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="167580000" />
+    <option name="totallyTimeSpent" value="168694000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="586" y="23" width="854" height="822" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.30071428" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -185,8 +184,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="191">
+          <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
