@@ -28,10 +28,7 @@
         <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="348">
-              <caret line="78" column="14" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
+              <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -61,7 +58,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="693" />
+    <option name="x" value="895" />
     <option name="y" value="23" />
     <option name="width" value="854" />
     <option name="height" value="822" />
@@ -140,12 +137,12 @@
       <workItem from="1548857995705" duration="12000" />
       <workItem from="1548929835708" duration="3162000" />
       <workItem from="1549360324329" duration="46770000" />
-      <workItem from="1550222086434" duration="21927000" />
+      <workItem from="1550222086434" duration="22985000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="185285000" />
+    <option name="totallyTimeSpent" value="186343000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="693" y="23" width="854" height="822" extended-state="0" />
@@ -187,10 +184,7 @@
     <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="348">
-          <caret line="78" column="14" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+          <caret line="24" column="24" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
         </state>
       </provider>
     </entry>
