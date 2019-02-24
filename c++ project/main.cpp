@@ -1,58 +1,39 @@
 #include <iostream>
-#include <vector>
-#include <queue>
-#include <cstring>
+#include <string>
 
-#define max_int 51
 using namespace std;
 
-int n, cnt, result = 0;
-char a[max_int];
-vector<int> v[max_int];
-int check[max_int];
+int t, n, cnt;
+string word;
+bool check[26];
 
-void bfs(int start){
 
-    queue<int> q;
-    q.push(start);
-    check[start] = 0;
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
+int main(){
+    scanf("%d", &t);
 
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            if(check[next] == -1){
-                check[next] = check[node] + 1;
-                if(check[next] <= 2) cnt++;
-                q.push(next);
-            }
-        }
-    }
-}
-
-int main() {
-    scanf("%d", &n);
-
-    for(int i=0; i<n; i++){
-        scanf("%s", a);
-
-        for(int j=0; j<n; j++){
-            if(a[j] == 'Y'){
-                v[i+1].push_back(j+1);
-            }
-        }
-    }
-
-    for(int i=1; i<=n; i++){
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d", &n);
 
         cnt = 0;
-        memset(check, -1, sizeof(check));
+        for(int i=0; i<26; i++){
+            check[i] = false;
+        }
 
-        bfs(i);
 
-        result = max(result, cnt);
+        for(int i=0; i<n; i++){
+            cin >> word;
+            check[word[0] - 'A'] = true;
+        }
+
+        for(int i=0; i<n; i++){
+            if(check[i]){
+                cnt++;
+            }
+            else{
+                break;
+            }
+        }
+
+        printf("#%d %d\n", test_case, cnt);
     }
-
-    printf("%d\n", result);
 }
