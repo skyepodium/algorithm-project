@@ -1,52 +1,26 @@
 #include <iostream>
+#include <algorithm>
 
-#define max_int 40001
+#define max_int 500001
 using namespace std;
 
-int n;
-int d[max_int];
-int stack[max_int];
-int top = 1;
-int idx;
-
-int binary_search(int start, int end, int val){
-
-    int ret = 0;
-    int mid = 0;
-
-    while(start <= end){
-        mid = (start + end) / 2;
-
-        if(stack[mid] < val){
-            start = mid + 1;
-        }
-        else{
-            ret = mid;
-            end = mid - 1;
-        }
-
-    }
-    return ret;
-}
+int n, m, num;
+int a[max_int];
 
 int main(){
     scanf("%d", &n);
-
-    for(int i=1; i<=n; i++){
-        scanf("%d", &d[i]);
+    for(int i=0; i<n; i++){
+        scanf("%d", &a[i]);
     }
 
-    stack[top] = d[1];
-    for(int i=2; i<=n; i++){
-        if(stack[top] < d[i]){
-            top++;
-            stack[top] = d[i];
-        }
-        else{
-            idx = binary_search(1, top, d[i]);
-            stack[idx] = d[i];
-        }
-    }
+    sort(a, a+n);
 
-    printf("%d\n", top);
+    scanf("%d", &m);
+    for(int i=0; i<m; i++){
+        scanf("%d", &num);
+
+        int up_idx = upper_bound(a, a+n, num) - lower_bound(a, a+n, num);
+        printf("%d ", up_idx);
+    }
+    printf("\n");
 }
