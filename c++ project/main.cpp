@@ -1,26 +1,58 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
+#include <queue>
+#include <cstring>
 
-#define max_int 500001
+#define max_int 51
 using namespace std;
 
-int n, m, num;
-int a[max_int];
+int n, cnt, result = 0;
+char a[max_int];
+vector<int> v[max_int];
+int check[max_int];
 
-int main(){
+void bfs(int start){
+
+    queue<int> q;
+    q.push(start);
+    check[start] = 0;
+    while(!q.empty()){
+        int node = q.front();
+        q.pop();
+
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            if(check[next] == -1){
+                check[next] = check[node] + 1;
+                if(check[next] <= 2) cnt++;
+                q.push(next);
+            }
+        }
+    }
+}
+
+int main() {
     scanf("%d", &n);
+
     for(int i=0; i<n; i++){
-        scanf("%d", &a[i]);
+        scanf("%s", a);
+
+        for(int j=0; j<n; j++){
+            if(a[j] == 'Y'){
+                v[i+1].push_back(j+1);
+            }
+        }
     }
 
-    sort(a, a+n);
+    for(int i=1; i<=n; i++){
 
-    scanf("%d", &m);
-    for(int i=0; i<m; i++){
-        scanf("%d", &num);
+        cnt = 0;
+        memset(check, -1, sizeof(check));
 
-        int up_idx = upper_bound(a, a+n, num) - lower_bound(a, a+n, num);
-        printf("%d ", up_idx);
+        bfs(i);
+
+        result = max(result, cnt);
     }
-    printf("\n");
+
+    printf("%d\n", result);
 }
