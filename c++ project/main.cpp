@@ -1,53 +1,37 @@
 #include <iostream>
-#include <vector>
-#include <queue>
 
-#define max_int 51
+#define max_int 100001
 using namespace std;
 
-int n, num, root_node, result = 0;
-vector<int> v[max_int];
-bool check[max_int];
-
-void bfs(int start){
-    check[start] = true;
-    queue<int> q;
-    q.push(start);
-
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        int child_cnt = 0;
-        for(int i=0; i<v[node].size(); i++){
-            int next = v[node][i];
-            if(!check[next]){
-                child_cnt++;
-                check[next] = true;
-                q.push(next);
-            }
-        }
-        if(child_cnt == 0){
-            result++;
-        }
-    }
-}
+int t, n, m, num, start_index, end_index;
+int a[max_int];
+int b[max_int];
+int c[max_int];
 
 int main(){
-    scanf("%d", &n);
-    for(int i=0; i<n; i++){
-        scanf("%d", &num);
-        if(num != -1){
-            v[num].push_back(i);
-            v[i].push_back(num);
-        } else {
-            root_node = i;
+    scanf("%d", &t);
+
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d %d", &n, &m);
+
+        for(int i=1; i<=n; i++){
+            scanf("%d", &num);
+            a[i] = a[i-1];
+            b[i] = b[i-1];
+            c[i] = c[i-1];
+            if(num == 1) a[i]++;
+            else if(num == 2) b[i]++;
+            else c[i]++;
+        }
+
+        printf("#%d\n", test_case);
+        for(int i=0; i<m; i++){
+            scanf("%d %d", &start_index, &end_index);
+            printf("%d ", a[end_index] - a[start_index-1]);
+            printf("%d ", b[end_index] - b[start_index-1]);
+            printf("%d\n", c[end_index] - c[start_index-1]);
         }
     }
 
-    scanf("%d", &num);
-    check[num] = true;
 
-    if(!check[root_node]) bfs(root_node);
-
-    printf("%d\n", result);
 }
