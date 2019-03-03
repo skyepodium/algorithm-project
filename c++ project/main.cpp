@@ -4,7 +4,7 @@
 #define max_int 1001
 using namespace std;
 
-int n, m, result = max_int*max_int;
+int t, n, m, result;
 char a[max_int][max_int];
 queue<pair<int, int>> fire;
 queue<pair<int, int>> q;
@@ -40,7 +40,7 @@ int bfs(){
         q.pop();
 
         if(x == 0 || y == 0 || x == n-1 || y == m-1){
-            return check[x][y] + 1;
+            result = min(result, check[x][y]);
         }
 
         for(int i=0; i<4; i++){
@@ -57,36 +57,38 @@ int bfs(){
             }
         }
     }
-    return -1;
 }
 
 
 int main(){
-    scanf("%d %d", &n, &m);
+    scanf("%d", &t);
+    while(t--){
+        scanf("%d %d", &m, &n);
+        result = max_int*max_int;
 
-    for(int i=0; i<n; i++){
-        scanf("%s", a[i]);
-        for(int j=0; j<m; j++){
-            check[i][j] = max_int*max_int;
-            if(a[i][j] == 'F'){
-                check[i][j] = 0;
-                fire.push(make_pair(i, j));
-            }else if(a[i][j] == 'J'){
-                check[i][j] = 0;
-                a[i][j] = '.';
-                q.push(make_pair(i, j));
+        for(int i=0; i<n; i++){
+            scanf("%s", a[i]);
+            for(int j=0; j<m; j++){
+                check[i][j] = max_int*max_int;
+                if(a[i][j] == '*'){
+                    check[i][j] = 0;
+                    fire.push(make_pair(i, j));
+                }else if(a[i][j] == '@'){
+                    check[i][j] = 0;
+                    a[i][j] = '.';
+                    q.push(make_pair(i, j));
+                }
             }
         }
+
+        fire_bfs();
+
+        bfs();
+
+        if(result == max_int*max_int){
+            printf("IMPOSSIBLE\n");
+        }else{
+            printf("%d\n", result+1);
+        }
     }
-
-    fire_bfs();
-
-    int result = bfs();
-
-    if(result == -1){
-        printf("IMPOSSIBLE\n");
-    }else{
-        printf("%d\n", result);
-    }
-
 }
