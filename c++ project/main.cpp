@@ -1,94 +1,78 @@
 #include <iostream>
 #include <queue>
+#include <cstring>
 
-#define max_int 1001
+#define max_val 2147483647
+#define max_k 31
+#define max_int 201
 using namespace std;
 
-int t, n, m, result;
-char a[max_int][max_int];
-queue<pair<int, int>> fire;
-queue<pair<int, int>> q;
-int check[max_int][max_int];
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+int k, n, m;
+int a[max_int][max_int];
+int check[max_int][max_int][max_k];
+int dx[] = {0, 0, 1, -1, 1, 2, 2, 1, -1, -2, -1, -2};
+int dy[] = {-1, 1, 0, 0, 2, 1, -1, -2, 2, 1, -2, -1};
 
-void fire_bfs(){
-    while(!fire.empty()){
-        int x = fire.front().first;
-        int y = fire.front().second;
-        fire.pop();
-        for(int i=0; i<4; i++){
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+struct info{
+    int x;
+    int y;
+    int remain;
+};
 
-            if(nx>=0 && nx<n && ny>=0 && ny<m){
-                if(a[nx][ny] != '#'){
-                    if(check[nx][ny] > check[x][y] + 1){
-                        check[nx][ny] = check[x][y] + 1;
-                        fire.push(make_pair(nx, ny));
-                    }
-                }
-            }
-        }
-    }
-}
-
-int bfs(){
+void bfs(){
+    queue<info> q;
+    q.push({0, 0, k});
+    check[0][0][k] = 0;
     while(!q.empty()){
-        int x = q.front().first;
-        int y = q.front().second;
+        int x = q.front().x;
+        int y = q.front().y;
+        int remain = q.front().remain;
         q.pop();
 
-        if(x == 0 || y == 0 || x == n-1 || y == m-1){
-            result = min(result, check[x][y]);
-        }
-
-        for(int i=0; i<4; i++){
+        for(int i=0; i<12; i++){
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if(nx>=0 && nx<n && ny>=0 && ny<m){
-                if(a[nx][ny] != '#'){
-                    if(check[nx][ny] > check[x][y] + 1){
-                        check[nx][ny] = check[x][y] + 1;
-                        q.push(make_pair(nx, ny));
+            if(i < 4){
+                if(nx >=0 && nx<n && ny>=0 && ny<m && a[nx][ny] == 0){
+                    if(check[nx][ny][remain] == -1){
+                        check[nx][ny][remain] = check[x][y][remain] + 1;
+                        q.push({nx, ny, remain});
                     }
                 }
             }
+            else{
+                if(remain > 0 && nx>=0 && nx<n && ny>=0 && ny<m && a[nx][ny] == 0){
+                    if(check[nx][ny][remain-1] == -1){
+                        check[nx][ny][remain-1] = check[x][y][remain] + 1;
+                        q.push({nx, ny, remain-1});
+                    }
+                }
+            }
+
         }
+
     }
 }
 
-
 int main(){
-    scanf("%d", &t);
-    while(t--){
-        scanf("%d %d", &m, &n);
-        result = max_int*max_int;
-
-        for(int i=0; i<n; i++){
-            scanf("%s", a[i]);
-            for(int j=0; j<m; j++){
-                check[i][j] = max_int*max_int;
-                if(a[i][j] == '*'){
-                    check[i][j] = 0;
-                    fire.push(make_pair(i, j));
-                }else if(a[i][j] == '@'){
-                    check[i][j] = 0;
-                    a[i][j] = '.';
-                    q.push(make_pair(i, j));
-                }
-            }
-        }
-
-        fire_bfs();
-
-        bfs();
-
-        if(result == max_int*max_int){
-            printf("IMPOSSIBLE\n");
-        }else{
-            printf("%d\n", result+1);
+    scanf("%d %d %d", &k, &m, &n);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<m; j++){
+            scanf("%d", &a[i][j]);
         }
     }
+
+    memset(check, -1, sizeof(check));
+
+    bfs();
+
+    int result = max_val;
+    for(int i=0; i<=k; i++){
+        if(check[n-1][m-1][i] != -1){
+            result = min(result, check[n-1][m-1][i]);
+        }
+    }
+    if(result == max_val) printf("%d\n", -1);
+    else printf("%d\n", result);
 }
