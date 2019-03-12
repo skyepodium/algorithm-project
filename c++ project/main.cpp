@@ -130,6 +130,51 @@ bool do_test3(int q_idx, int f_idx, int s_idx, int t_idx){
     return flag;
 }
 
+bool do_test4(int q_idx, int f_idx, int s_idx, int t_idx, int w_idx){
+    memset(base, '.', sizeof(base));
+
+    for(int i=0; i<8; i++){
+        for(int j=0; j<8; j++) {
+            if (v[f_idx][i][j] == '.' && base[i][j] != '.') continue;
+            base[i][j] = v[f_idx][i][j];
+        }
+    }
+
+    for(int i=0; i<8; i++){
+        for(int j=0; j<8; j++){
+            if (v[s_idx][i][j] == '.' && base[i][j] != '.') continue;
+            base[i][j] = v[s_idx][i][j];
+        }
+    }
+
+    for(int i=0; i<8; i++){
+        for(int j=0; j<8; j++){
+            if (v[t_idx][i][j] == '.' && base[i][j] != '.') continue;
+            base[i][j] = v[t_idx][i][j];
+        }
+    }
+
+    for(int i=0; i<8; i++){
+        for(int j=0; j<8; j++){
+            if (v[w_idx][i][j] == '.' && base[i][j] != '.') continue;
+            base[i][j] = v[w_idx][i][j];
+        }
+    }
+
+    bool flag = true;
+    for(int i=0; i<8; i++){
+        for(int j=0; j<8; j++){
+            if(base[i][j] == '.') base[i][j] ='W';
+            if(question[q_idx][i][j] != base[i][j]){
+                flag = false;
+                break;
+            }
+        }
+    }
+
+    return flag;
+}
+
 int main(){
     scanf("%d", &t);
     for(int test_case=1; test_case<=t; test_case++){
@@ -179,6 +224,7 @@ int main(){
             if(find) continue;
             for(int i=0; i<n; i++){
                 for(int j=0; j<n; j++){
+                    if(i==j) continue;
 
                         for(int a=0; a<4; a++){
                             rotate(i);
@@ -202,7 +248,9 @@ int main(){
             if(find) continue;
             for(int i=0; i<n; i++){
                 for(int j=0; j<n; j++){
+                    if(i==j) continue;
                     for(int k=0; k<n; k++){
+                        if(i==k || j==k ) continue;
 
                         for(int a=0; a<4; a++){
                             rotate(i);
@@ -231,25 +279,37 @@ int main(){
             if(find) continue;
             for(int i=0; i<n; i++){
                 for(int j=0; j<n; j++){
+                    if(i==j) continue;
                     for(int k=0; k<n; k++){
+                        if(i==k || j==k ) continue;
+                        for(int l=0; l<n; l++){
+                            if(i==l || j==l || k==l ) continue;
 
-                        for(int a=0; a<4; a++){
-                            rotate(i);
-                            for(int b=0; b<4; b++){
-                                rotate(j);
-                                for(int c=0; c<4; c++){
-                                    rotate(k);
-                                    if(do_test3(idx, i, j, k)){
-                                        if(!find){
-                                            find = true;
-                                            result.push_back(3);
-                                            result.push_back(i+1);
-                                            result.push_back(j+1);
-                                            result.push_back(k+1);
+                            for(int a=0; a<4; a++){
+                                rotate(i);
+                                for(int b=0; b<4; b++){
+                                    rotate(j);
+                                    for(int c=0; c<4; c++){
+                                        rotate(k);
+                                        for(int d=0; d<4; d++){
+
+                                            if(do_test4(idx, i, j, k, l)){
+                                                if(!find){
+                                                    find = true;
+                                                    result.push_back(3);
+                                                    result.push_back(i+1);
+                                                    result.push_back(j+1);
+                                                    result.push_back(k+1);
+                                                    result.push_back(l+1);
+
+                                                }
+                                            }
+
                                         }
                                     }
                                 }
                             }
+
                         }
                     }
                 }
@@ -262,17 +322,5 @@ int main(){
     }
     printf("\n");
 
-//        cout << v.size() << endl;
-//        for(int idx=0; idx<v.size(); idx++){
-//            for(int i=0; i<8; i++){
-//                for(int j=0; j<8; j++){
-//                    printf("%c", v[idx][i][j]);
-//                }
-//                cout << endl;
-//            }
-//            cout << endl;
-//        }
     }
-
-
 }
