@@ -9,7 +9,9 @@
 /Users/skyepodium/dev/c++/algorithm-project/c++ project/main.cpp
 iostream
 -
-queue
+vector
+-
+string
 -
 cstring
 -

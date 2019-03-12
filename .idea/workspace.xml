@@ -12,6 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cfed03dd-d33d-4b58-ab1c-d4c605583a19" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++ project/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++ project/main.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -27,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+            <state relative-caret-position="93">
+              <caret line="151" lean-forward="true" selection-start-line="151" selection-end-line="151" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -45,6 +46,7 @@
       <find>printf</find>
       <find>false</find>
       <find>node</find>
+      <find>do_test</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -61,9 +63,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="551" />
+    <option name="x" value="354" />
     <option name="y" value="23" />
-    <option name="width" value="854" />
+    <option name="width" value="1068" />
     <option name="height" value="822" />
   </component>
   <component name="ProjectView">
@@ -143,15 +145,16 @@
       <workItem from="1550222086434" duration="24260000" />
       <workItem from="1551002604659" duration="5379000" />
       <workItem from="1551591562686" duration="10834000" />
-      <workItem from="1551785393360" duration="2681000" />
+      <workItem from="1551785393360" duration="3049000" />
+      <workItem from="1552389110370" duration="5443000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="206512000" />
+    <option name="totallyTimeSpent" value="212323000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="551" y="23" width="854" height="822" extended-state="0" />
+    <frame x="354" y="23" width="1068" height="822" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.30071428" />
@@ -159,7 +162,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3875" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -189,8 +192,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/c++ project/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+        <state relative-caret-position="93">
+          <caret line="151" lean-forward="true" selection-start-line="151" selection-end-line="151" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
