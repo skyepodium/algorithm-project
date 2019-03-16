@@ -1,34 +1,53 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
-#define lld long long int
 using namespace std;
 
-int n;
+int n, num, base = 0;
+char cmd[10];
 
 int main(){
     scanf("%d", &n);
 
-    vector<int> a(n), b(n), c(n), d(n);
     for(int i=0; i<n; i++){
-        scanf("%d %d %d %d", &a[i], &b[i], &c[i], &d[i]);
-    }
+        scanf("%s", cmd);
 
-    vector<int> first, second;
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            first.push_back(a[i]+b[j]);
-            second.push_back(c[i]+d[j]);
+        // add
+        if(cmd[0] == 'a' && cmd[1] == 'd'){
+            scanf("%d", &num);
+            base = base | (1<<num);
+        }
+
+        // check
+        if(cmd[0] == 'c'){
+            scanf("%d", &num);
+            if(base & (1<<num)) printf("1\n");
+            else printf("0\n");
+        }
+
+        // remove
+        if(cmd[0] == 'r'){
+            scanf("%d", &num);
+            base = base & ~(1<<num);
+        }
+
+        // all
+        if(cmd[0] == 'a' && cmd[1] == 'l'){
+            base = (1<<21) - 1;
+        }
+
+        // empty
+        if(cmd[0] == 'e'){
+            base = 0;
+        }
+
+        if(cmd[0] == 't'){
+            scanf("%d", &num);
+            if(base & (1<<num)){
+                base = base & ~(1<<num);
+            }
+            else{
+                base = base | (1<<num);
+            }
         }
     }
-
-    sort(second.begin(), second.end());
-    lld result = 0;
-    for(int i=0; i<first.size(); i++){
-        lld num = first[i];
-        result += upper_bound(second.begin(), second.end(), -num) - lower_bound(second.begin(), second.end(), -num);
-    }
-    printf("%lld\n", result);
-
 }
