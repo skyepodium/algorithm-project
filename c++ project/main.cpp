@@ -1,53 +1,61 @@
 #include <iostream>
-
+#include <vector>
+#include <queue>
+#include <algorithm>
+// d
+#define max_int 1001
 using namespace std;
 
-int n, num, base = 0;
-char cmd[10];
 
-int main(){
-    scanf("%d", &n);
+bool check[max_int];
+vector<int> v[max_int];
 
-    for(int i=0; i<n; i++){
-        scanf("%s", cmd);
+int n, m, start_node, a, b;
 
-        // add
-        if(cmd[0] == 'a' && cmd[1] == 'd'){
-            scanf("%d", &num);
-            base = base | (1<<num);
+void dfs(int node){
+    check[node] = true;
+    printf("%d ", node);
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(check[next] == false){
+            dfs(next);
         }
+    }
+}
 
-        // check
-        if(cmd[0] == 'c'){
-            scanf("%d", &num);
-            if(base & (1<<num)) printf("1\n");
-            else printf("0\n");
-        }
-
-        // remove
-        if(cmd[0] == 'r'){
-            scanf("%d", &num);
-            base = base & ~(1<<num);
-        }
-
-        // all
-        if(cmd[0] == 'a' && cmd[1] == 'l'){
-            base = (1<<21) - 1;
-        }
-
-        // empty
-        if(cmd[0] == 'e'){
-            base = 0;
-        }
-
-        if(cmd[0] == 't'){
-            scanf("%d", &num);
-            if(base & (1<<num)){
-                base = base & ~(1<<num);
-            }
-            else{
-                base = base | (1<<num);
+void bfs(int start){
+    queue<int> q;
+    q.push(start);
+    check[start] = true;
+    while(!q.empty()){
+        int node = q.front();
+        printf("%d ", node);
+        q.pop();
+        for(int i=0; i<v[node].size(); i++){
+            int next = v[node][i];
+            if(check[next] == false){
+                check[next] = true;
+                q.push(next);
             }
         }
     }
+}
+
+int main(){
+    scanf("%d %d %d", &n, &m, &start_node);
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+    
+    for(int i=1; i<=n; i++){
+        sort(v[i].begin(), v[i].end());
+    }
+    
+    dfs(start_node);
+    for(int i=0; i<=n; i++) check[i] = false;
+    printf("\n");
+    bfs(start_node);
 }
