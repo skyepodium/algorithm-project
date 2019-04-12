@@ -2,6 +2,7 @@
 #include <queue>
 #include <cstring>
 #include <algorithm>
+#include <stack>
 #define max_int 11
 using namespace std;
 
