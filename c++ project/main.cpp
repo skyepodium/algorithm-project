@@ -164,6 +164,7 @@ int main(){
 
     bfs();
 
-    if(result == 11) result = -1;
+    if(result == 11) result = 0;
+    else result = 1;
     printf("%d\n", result);
 }
