@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <queue>
-#include <algorithm>    
+#include <algorithm>         
 
 #define max_val 2147483647
 #define max_int 34000000
