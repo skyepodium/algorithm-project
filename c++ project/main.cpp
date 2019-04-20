@@ -1,50 +1,50 @@
 #include <iostream>
-#include <vector>
-#define max_int 101
+#include <cstring>
+#define max_int 12
 using namespace std;
 
-int t, n, m, a, b, result;
-vector<int> v[max_int];
-bool check[max_int];
-
-void dfs(int node){
-    check[node] = true;
-    for(int i=0; i<v[node].size(); i++){
-        int next = v[node][i];
-        if(!check[next]){
-            dfs(next);
-        }
-    }
-}
-
-void init(){
-    for(int i=0; i<=n; i++){
-        v[i].clear();
-        check[i] = false;
-    }
-    result = 0;
-}
+int t;
+char a[max_int], b[max_int];
+bool result;
 
 int main(){
     scanf("%d", &t);
     
     for(int test_case=1; test_case<=t; test_case++){
-        scanf("%d %d", &n, &m);
+        scanf("%s", a);
+        scanf("%s", b);
+
+        result = true;
         
-        init();
-        
-        for(int i=0; i<m; i++){
-            scanf("%d %d", &a, &b);
-            v[a].push_back(b);
-            v[b].push_back(a);
-        }
-        
-        for(int i=1; i<=n; i++){
-            if(!check[i]){
-                dfs(i);
-                result++;
+        if(strlen(a) == strlen(b)){
+            for(int i=0; i<strlen(a); i++){
+                if(a[i] == 'B'){
+                    if(b[i] != 'B'){
+                        result = false;
+                        break;
+                    }
+                }else if(a[i] == 'A' || a[i] == 'D' || a[i] == 'O' || a[i] == 'P' || a[i] == 'Q' || a[i] == 'R'){
+                    if(b[i] != 'A' && b[i] != 'D' && b[i] != 'O' && b[i] != 'P' && b[i] != 'Q' && b[i] != 'R'){
+                        result = false;
+                        break;
+                    }
+                }else{
+                    if(b[i] == 'B' || b[i] == 'A' || b[i] == 'D' || b[i] == 'O' || b[i] == 'P' || b[i] == 'Q' || b[i] == 'R'){
+                        result = false;
+                        break;
+                    }
+                }
             }
         }
-        printf("#%d %d\n", test_case, result);
+        else{
+            result = false;
+        }
+        
+        if(result){
+            printf("#%d SAME\n", test_case);
+        }
+        else{
+            printf("#%d DIFF\n", test_case);
+        }
     }
 }
