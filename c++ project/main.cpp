@@ -25,7 +25,7 @@ int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
 
 void bfs() {
-    
+       
     while(!q.empty()){
         int x = q.front().x;
         int y = q.front().y;
