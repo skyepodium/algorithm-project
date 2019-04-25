@@ -1,81 +1,108 @@
 #include <iostream>
-#include <queue>
 #include <vector>
-#include <cmath>
+#include <queue>
 #include <algorithm>
-
-#define max_int 1100000
+#define max_val 2147483647
+#define max_int 51
 using namespace std;
 
-bool check[max_int];
-int n, num, max_size, result;
-int dx[] = {0, 1, 0, -1};
-int dy[] = {1, 0, -1, 0};
+int n, m, a[max_int][max_int], check[max_int][max_int], result = max_val;
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
 struct info{
-    int cnt;
-    int num;
-    vector<vector<int>> v;
+    int x;
+    int y;
 };
 
+vector<info> v, p;
 queue<info> q;
 
-void bfs() {
+void bfs(){
     while(!q.empty()){
         info cur = q.front();
+        int x = cur.x;
+        int y = cur.y;
         q.pop();
         
-        int c_cnt = cur.cnt;
-        int c_num = cur.num;
-        
-        for(int k=0; k<4; k++){
+        for(int i=0; i<4; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
             
-            if(k==0){
-                
-               for(int i=0; i<n; i++){
-                   
-                   int cur_num = 0;
-                   for(int j=n-1; j>=0; j++){
-                       if(cur.v[i][j]){
-                           
-                       }else{
-                           
-                       }
-                   }
+            if(nx>=0 && nx<n && ny>=0 && ny<n){
+                if(a[nx][ny] == 0 && check[nx][ny] == -1){
+                    check[nx][ny] = check[x][y] + 1;
+                    q.push({nx, ny});
                 }
-                
-                
             }
         }
     }
+
+    bool isClear = true;
+    int max_time = 0;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            if(a[i][j] == 0){
+                if(check[i][j] == -1){
+                    isClear = false;
+                    break;
+                }else{
+                    max_time = max(max_time, check[i][j]);
+                }
+            }
+        }
+    }
+    
+    if(isClear){
+        result = min(result, max_time);
+    }
+}
+
+void go(int idx){
+    
+    if(idx == (int)v.size()){
+        
+        if((int)p.size() == m){
+            
+            for(int i=0; i<n; i++){
+                for(int j=0; j<n; j++){
+                    check[i][j] = -1;
+                }
+            }
+            
+            for(int i=0; i<(int)p.size(); i++){
+                int x = p[i].x;
+                int y = p[i].y;
+                check[x][y] = 0;
+                q.push(p[i]);
+            }
+            bfs();
+        }
+        return;
+    }
+
+    p.push_back(v[idx]);
+    go(idx+1);
+    p.pop_back();
+    
+    go(idx+1);
 }
 
 int main(){
+    scanf("%d %d", &n, &m);
     
-    scanf("%d", &n);
-    max_size = n*n-1;
-    
-    int temp_val = 0;
-    int temp_size = max_size;
-    vector<vector<int>> main;
-    for(int i=1; i<=n; i++){
-        vector<int> sub;
-        for(int j=1; j<=n; j++){
-            scanf("%d", &num);
-            sub.push_back(num);
-            
-            if(num != 0) temp_val += pow(2, temp_size);
-            temp_size--;
-            
-            result = max(result, num);
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            scanf("%d", &a[i][j]);
+            if(a[i][j] == 2){
+                v.push_back({i, j});
+                a[i][j] = 0;
+            }
         }
-        main.push_back(sub);
     }
     
-    q.push({0, temp_val, main});
-    
-    bfs();
-    
+    go(0);
+ 
+    if(result == max_val) result = -1;
     printf("%d\n", result);
 }
-
