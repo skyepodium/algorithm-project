@@ -33,7 +33,7 @@ void bfs(){
                 if(a[nx][ny] == 0 && check[nx][ny] == -1){
                     check[nx][ny] = check[x][y] + 1;
                     q.push({nx, ny});
-                }  
+                }  //
             }
         }
     }
