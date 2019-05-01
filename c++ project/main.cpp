@@ -34,6 +34,7 @@ void bfs(){
                     check[nx][ny] = check[x][y] + 1;
                     q.push({nx, ny});
                 }  //
+                //
             }
         }
     }
