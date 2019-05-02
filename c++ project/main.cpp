@@ -35,6 +35,7 @@ void bfs(){
                     q.push({nx, ny});
                 }  //
                 //
+                //
             }
         }
     }
