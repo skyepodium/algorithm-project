@@ -1,18 +1,39 @@
 #include <iostream>
-#include <queue>
-
-#define max_int 51
+#include <algorithm>
+#include <vector>
 using namespace std;
 
-int n, m, t, a[max_int][max_int];
+int n, m;
+struct info{
+    int a;
+    int b;
+    char c;
+};
+vector<info> v;
+
+bool cmp(const info &a, const info &b){
+    if(a.b == b.b){
+        return a.a < b.a;
+    }else{
+        return a.b < b.b;
+    }
+}
 
 int main(){
-    scanf("%d %d %d", &n, &m, &t);
+    scanf("%d %d", &n, &m);
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<m; j++){
-            scanf("%d", &a[i][j]);
-        }//
+    for(int i=0; i<m; i++){
+        int a, b;
+        char c;
+        cin >> a >> b >> c;
+        v.push_back({a, b, c});
     }
+    
+    sort(v.begin(), v.end(), cmp);
+    
+    for(int i=0; i<m; i++){
+        cout << v[i].c;
+    }
+    cout << endl;
     
 }
