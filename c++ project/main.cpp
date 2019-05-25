@@ -9,7 +9,7 @@ struct info{
     int b;
     char c;
 };
-vector<info> v;
+vector<info> v;//
 
 bool cmp(const info &a, const info &b){
     if(a.b == b.b){
