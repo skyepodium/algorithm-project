@@ -1,22 +1,51 @@
 #include <iostream>
-#include <string>
+#include <vector>
+#include <cmath>
+#define max_int 2147483647
 using namespace std;
 
-int main(){
-    string word;
-    cin >> word;
-    
-    int l_cnt = 0;
-    int r_cnt = 0;
-    bool face = false;
-    for(int i=0; i<(int)word.size(); i++){
-        if(word[i] == '(') face = true;
+int n;
+vector<int> pick;
+vector<int> result;
+void go(int idx){
+
+    if(idx == 20){
         
-        if(word[i] == '@'){
-            if(!face) l_cnt++;
-            else r_cnt++;
+        int num = 0;
+        for(int i=0; i<(int)pick.size(); i++){
+            num += pow(3, pick[i]);
+        }
+        result.push_back(num);
+        
+        return;
+    }
+    
+    pick.push_back(idx);
+    go(idx+1);
+    pick.pop_back();
+    
+    go(idx+1);
+}
+
+int main(){
+    scanf("%d", &n);
+    
+    go(0);
+    
+    bool flag = false;
+    for(int i=0; i<(int)result.size(); i++){
+        if(result[i] == n){
+            flag = true;
+            break;
         }
     }
     
-    printf("%d %d\n", l_cnt, r_cnt);
+    if(n == 0) flag = false;
+    
+    if(flag){
+        printf("YES");
+    }else{
+        printf("NO");
+    }
+    
 }
