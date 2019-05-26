@@ -1,51 +1,39 @@
 #include <iostream>
-#include <vector>
-#include <cmath>
-#define max_int 2147483647
+#define max_int 100001
 using namespace std;
 
-int n;
-vector<int> pick;
-vector<int> result;
-void go(int idx){
+int n, m, a, b, d[max_int];
+int p[max_int];
 
-    if(idx == 20){
-        
-        int num = 0;
-        for(int i=0; i<(int)pick.size(); i++){
-            num += pow(3, pick[i]);
-        }
-        result.push_back(num);
-        
-        return;
+int find(int node){
+    if(node == d[node]) return node;
+    else{
+        return d[node] = find(d[node]);
     }
-    
-    pick.push_back(idx);
-    go(idx+1);
-    pick.pop_back();
-    
-    go(idx+1);
 }
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    go(0);
-    
-    bool flag = false;
-    for(int i=0; i<(int)result.size(); i++){
-        if(result[i] == n){
-            flag = true;
-            break;
-        }
+    for(int i=1; i<=n; i++){
+        d[i] = i;
     }
     
-    if(n == 0) flag = false;
+    for(int i=1; i<=n; i++){
+        scanf("%d", &p[i]);
+    }
     
-    if(flag){
-        printf("YES");
-    }else{
-        printf("NO");
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        a = find(a);
+        b = find(b);
+        
+        if(a != b){
+            d[a] = b;
+            p[a] += p[b];
+            p[b] = p[a];
+        }
+        printf("%d\n", p[a]);
     }
     
 }
