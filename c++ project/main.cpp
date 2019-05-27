@@ -11,7 +11,7 @@ int find(int node){
         return d[node] = find(d[node]);
     }
 }
-
+//
 int main(){
     scanf("%d %d", &n, &m);
     
