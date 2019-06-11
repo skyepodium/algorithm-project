@@ -9,7 +9,7 @@ int main(){
         scanf("%d", &num);
         if(num == -1) break;
         for(int i=0; i<max_int; i++){
-            check[i] = false;
+            check[i] = false;  
         }
         check[num] = true;
         result = 0;
