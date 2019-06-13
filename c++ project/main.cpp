@@ -29,7 +29,7 @@ void init(){
         for(int j=0; j<=k; j++){
             d[i][j] = max_val;
         }
-    }
+    } 
 }
 
 void dijkstra() {
