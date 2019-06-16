@@ -4,6 +4,7 @@
 #define max_int 101
 #define max_val 1073741824
 #define limit_time 32
+#define lld long long int
 using namespace std;
 
 int t, n, r, a, b, c, d, c_time;
@@ -25,6 +26,7 @@ void init(){
 }
 
 int ccw(int x1, int y1, int x2, int y2, int x3, int y3);
+
 void check_same_position();
 void check_one_line();
 
@@ -84,19 +86,13 @@ int main(){
         scanf("%d", &n);
         
         init();
-        
         for(int i=1; i<=n; i++){
             scanf("%d %d %d %d", &a, &b, &c, &d);
             v.push_back({a, b, c, d, limit_time, limit_time, limit_time});
         }
         
         for(int w=0; w<limit_time; w++){
-            cout << endl;
-            cout << "c_time " << c_time << endl;
-            for(int i=0; i<n; i++){
-                cout << v[i].ax << " " << v[i].ay << " "<< v[i].bx << " "<<v[i].by << endl;
-            }
-            cout << endl;
+
             
             check_same_position();
             
@@ -202,11 +198,13 @@ int main(){
 
 
 int ccw(int x1, int y1, int x2, int y2, int x3, int y3){
-    int temp = x1*y2 + x2*y3 + x3*y1;
-    temp = temp - y1*x2-y2*x3-y3*x1;
-    
-    if(temp > 0) return 1;
-    else if(temp < 0) return -1;
+
+//    lld first = x1*y2 + x2*y3 + x3*y1;
+//    lld second = y1*x2+y2*x3+y3*x1;
+//    lld temp = (x1*y2 + x2*y3 + x3*y1) - (y1*x2+y2*x3+y3*x1);
+
+    if((x1*y2 + x2*y3 + x3*y1) - (y1*x2+y2*x3+y3*x1) > 0) return 1;
+    else if((x1*y2 + x2*y3 + x3*y1) - (y1*x2+y2*x3+y3*x1) < 0) return -1;
     else return 0;
 }
 
