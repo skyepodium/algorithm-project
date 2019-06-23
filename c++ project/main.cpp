@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #define max_int 101
 using namespace std;
 
@@ -11,7 +12,7 @@ int main(){
     
     for(int i=0; i<m; i++){
         scanf("%d %d", &s, &e);
-        swap(a[s], a[e]);
+        reverse(a + s, a + e + 1);
     }
     
     for(int i=1; i<=n; i++){
