@@ -1,28 +1,21 @@
 #include <iostream>
-#include <cstring>
 #define max_int 101
 using namespace std;
 
-int size, result;
-char w[max_int];
+int n, m, a[max_int], s, e;
 
 int main(){
-    scanf("%s", w);
+    scanf("%d %d", &n, &m);
     
-    size = (int)strlen(w);
+    for(int i=1; i<=n; i++) a[i] = i;
     
-    int cur = 0;
-    for(int i=0; i<size; i++){
-        if(w[i] != ','){
-            cur = cur*10 + (w[i] - '0');
-        }else{
-            result += cur;
-            cur = 0;
-        }
-        if(i == size-1){
-            result += cur;
-            cur = 0;
-        }
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &s, &e);
+        swap(a[s], a[e]);
     }
-    printf("%d\n", result);
+    
+    for(int i=1; i<=n; i++){
+        printf("%d ", a[i]);
+    }
+    printf("\n");
 }
