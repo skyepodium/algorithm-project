@@ -1,33 +1,26 @@
 #include <iostream>
+#include <vector>
 #define max_int 1001
+
 using namespace std;
 
-int a, b, c;
-
-int max(int a, int b){
-    return a < b ? b : a;
-}
-
-int max3(int a, int b, int c){
-    return max(max(a, b), c);
-}
-
+int a, b, cnt[1000001];
+vector<int> v;
 int main(){
-    while(true){
-        scanf("%d %d %d", &a, &b, &c);
-        if(!a && !b && !c) break;
-        
-        a *= a;
-        b *= b;
-        c *= c;
-        
-        if(a > c) swap(a, c);
-        if(b > c) swap(b, c);
-
-        if(c == a+b){
-            printf("right\n");
-        }else{
-            printf("wrong\n");
+    for(int i=1; i<=max_int; i++){
+        for(int j=1; j<=i; j++){
+            v.push_back(i);
         }
     }
+    scanf("%d %d", &a, &b);
+    a--;
+    b--;
+
+    int cur = 0;
+    for(int i=0; i<v.size(); i++){
+        cur += v[i];
+        cnt[i] = cur;
+    }
+    
+    printf("%d\n", cnt[b] - cnt[a-1]);
 }
