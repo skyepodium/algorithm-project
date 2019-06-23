@@ -1,23 +1,28 @@
 #include <iostream>
-#include <string>
+#include <cstring>
+#define max_int 101
 using namespace std;
 
-int t, n, drink, max_drink;
-string name, max_name;
+int size, result;
+char w[max_int];
 
 int main(){
-    scanf("%d", &t);
+    scanf("%s", w);
     
-    for(int test_case=1; test_case<=t; test_case++){
-        scanf("%d", &n);
-        max_drink = 0;
-        for(int i=0; i<n; i++){
-            cin >> name >> drink;
-            if(drink > max_drink){
-                max_drink = drink;
-                max_name = name;
-            }
+    size = (int)strlen(w);
+    
+    int cur = 0;
+    for(int i=0; i<size; i++){
+        if(w[i] != ','){
+            cur = cur*10 + (w[i] - '0');
+        }else{
+            result += cur;
+            cur = 0;
         }
-        cout << max_name << "\n";
+        if(i == size-1){
+            result += cur;
+            cur = 0;
+        }
     }
+    printf("%d\n", result);
 }
