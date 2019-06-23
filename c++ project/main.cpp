@@ -1,42 +1,21 @@
 #include <iostream>
-#include <cstring>
-#define max_int 11
+#define max_int 1001
 using namespace std;
 
-int n, size, result;
-char a[max_int], w[max_int * 2];
+int n, m, a, b;
+int result[max_int];
 
 int main(){
-    scanf("%s", a);
-    size = (int)strlen(a);
-
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
-    for(int line=0; line<n; line++){
-        scanf("%s", w);
-        
-        for(int i=0; i<size-1; i++){
-            w[10 + i] = w[i];
-        }
-
-        bool find = false;
-        for(int i=0; i<10 + size; i++){
-            if(find) break;
-            
-            if(w[i] == a[0]){
-                bool flag = true;
-                for(int j=0; j<size; j++){
-                    if(a[j] != w[i+j]){
-                        flag = false;
-                        break;
-                    }
-                }
-                if(flag){
-                    find = true;
-                    result++;
-                }
-            }
-        }
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        result[a]++;
+        result[b]++;
     }
-    printf("%d\n", result);
+    
+    for(int i=1; i<=n; i++){
+        printf("%d\n", result[i]);
+    }
+    
 }
