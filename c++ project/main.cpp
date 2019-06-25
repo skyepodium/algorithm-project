@@ -1,44 +1,48 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#define max_int 101
 using namespace std;
 
-int n, a[26];
-string name, result;
-vector<string> v;
+int n, m, a[max_int][max_int], result = 0;
+bool check[max_int][max_int];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
 
-
-bool cmp(const string &a, const string &b){
-    return a[0] < b[0];
+void dfs(int x, int y){
+    check[x][y] = true;
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(nx>=0 && nx<n && ny >= 0 && ny<m){
+            if(!check[nx][ny]){
+                dfs(nx, ny);//
+            }
+        }
+    }
 }
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
     for(int i=0; i<n; i++){
-        cin >> name;
-        v.push_back(name);
-    }
-    
-    sort(v.begin(), v.end(), cmp);
-    
-    int cur = v[0][0];
-    int cnt = 1;
-    bool flag = false;
-    for(int i=1; i<(int)v.size(); i++){
-        if(cur != v[i][0]){
-            if(cnt >= 5){
-                result += cur;
-            }
-            cur = v[i][0];
-            cnt = 1;
-        }else{
-            if(i == v.size() - 1) flag = true;
-            cnt++;
+        for(int j=0; j<m; j++){
+            scanf("%d", &a[i][j]);
         }
     }
-    if(flag && cnt >= 5)  result += cur;
-    if(result.size() > 0) cout << result << endl;
-    else cout << "PREDAJA" << endl;
+    
+    
+    while(true){
+        int flag = 0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<m; j++){
+                if(a[i][j] == 1){
+                    dfs(i, j);
+                    flag++;
+                }
+            }
+        }
+        if(flag == 0) break;
+        result++;
+    }
+    printf("%d\n", result);
+    
 }
