@@ -1,65 +1,73 @@
 #include <iostream>
-#include <cstring>
 #include <algorithm>
-#include <vector>
 #define max_int 1001
-
+#define max_val 100000001
 using namespace std;
 
-int n, m, d[max_int][max_int], p[max_int][max_int];
-char a[max_int], b[max_int];
+int n, m, a[max_int][max_int], d[max_int][max_int][3];
 
-int main(){
-    scanf("%s", a);
-    n = (int)strlen(a);
-    scanf("%s", b);
-    m = (int)strlen(b);
-    
-    // 0 대각선, 1 위, 2 왼쪽
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            if(a[i-1] == b[j-1]){
-                d[i][j] = d[i-1][j-1] + 1;
-                p[i][j] = 0;
-            }
-            else{
-                if(d[i-1][j] > d[i][j-1]){
-                    d[i][j] = d[i-1][j];
-                    p[i][j] = 1;
-                }else{
-                    d[i][j] = d[i][j-1];
-                    p[i][j] = 2;
-                }
-            }
-        }
-    }
-
-    
-    vector<char> result;
-    
-
-    
-    int x = n;
-    int y = m;
-    while(true){
-        if(x==0 || y==0) break;
-        int dir = p[x][y];
-        if(dir == 0){
-            result.push_back(a[x-1]);
-            x--;
-            y--;
-        }else if(dir == 1){
-            x--;
-        }else{
-            y--;
-        }
-    }
-
-    printf("%d\n", d[n][m]);
-    for(int i=(int)result.size() - 1; i>=0; i--){
-        printf("%c", result[i]);
-    }
-    printf("\n");
+int max3(int a, int b, int c){
+    return max(max(a, b), c);
 }
 
+void init(){
+    for(int i=0; i<=n+1; i++){
+        for(int j=0; j<=m+1; j++){
+            d[i][j][0] = -max_val;
+            d[i][j][1] = -max_val;
+            d[i][j][2] = -max_val;
+        }
+    }
+}
 
+int main(){
+    scanf("%d %d", &n, &m);
+    
+    init();
+    
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            scanf("%d", &a[i][j]);
+        }
+    }
+
+    /*
+     0 위
+     1 왼쪽
+     2 오른쪽
+    */
+    d[1][1][0] = a[1][1];
+    d[1][1][1] = a[1][1];
+    d[1][1][2] = a[1][1];
+    
+    for(int j=2; j<=m; j++){
+        d[1][j][2] = d[1][j-1][2] + a[1][j];
+    }
+    
+    for(int i=2; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            int t = max3(d[i-1][j][0], d[i-1][j][1], d[i-1][j][2]);
+            int l = max(d[i][j-1][0], d[i][j-1][1]);
+            
+            if(t < l){
+                d[i][j][1] = max(d[i][j][1], l + a[i][j]);
+            }else{
+                d[i][j][0] = max(d[i][j][0], t + a[i][j]);
+            }
+        }
+        
+        for(int j=m; j>=1; j--){
+            
+            int t = max3(d[i-1][j][0], d[i-1][j][1], d[i-1][j][2]);
+            int r = max(d[i][j+1][0], d[i][j+1][2]);
+            
+            if(t < r){
+                d[i][j][2] = max(d[i][j][2], r + a[i][j]);
+            }else{
+                d[i][j][0] = max(d[i][j][0], t + a[i][j]);
+            }
+        }
+    }
+    
+    printf("%d\n", max3(d[n][m][0], d[n][m][1], d[n][m][2]));
+}
