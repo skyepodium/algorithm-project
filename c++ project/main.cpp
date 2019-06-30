@@ -21,22 +21,26 @@ int lower_bound(int start, int end, int val){
 }
 
 int main(){
-    scanf("%d", &n);
     
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
-    }
-    
-    d[1] = a[1];
-    for(int i=2; i<=n; i++){
-        if(a[i] > d[top]){
-            top++;
-            d[top] = a[i];
+    while(scanf("%d", &n) > 0){
+        for(int i=1; i<=n; i++){
+            scanf("%d", &a[i]);
         }
-        else{
-            int idx = lower_bound(1, top, a[i]);
-            d[idx] = a[i];
+        
+        top = 1;
+        for(int i=1; i<=n; i++) d[i] = 0;
+        
+        d[1] = a[1];
+        for(int i=2; i<=n; i++){
+            if(a[i] > d[top]){
+                top++;
+                d[top] = a[i];
+            }
+            else{
+                int idx = lower_bound(1, top, a[i]);
+                d[idx] = a[i];
+            }
         }
+        printf("%d\n",  top);
     }
-    printf("%d\n", n - top);
 }
