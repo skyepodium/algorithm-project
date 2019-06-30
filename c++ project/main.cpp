@@ -1,5 +1,5 @@
 #include <iostream>
-#define max_int 10001
+#define max_int 1000001
 #define lld long long int
 using namespace std;
 
