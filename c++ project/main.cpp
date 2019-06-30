@@ -1,59 +1,44 @@
 #include <iostream>
-#define max_int 1000001
+#define max_int 10001
 #define lld long long int
 using namespace std;
 
-int n, m, k, idx, a, b, c;
-lld tree[max_int * 4];
+int n, q, a, b, c;
+lld tree[max_int], d[max_int];
 
-void update_tree(int node, lld delta){
-    while(node > 0){
-        tree[node] += delta;
-        node /= 2;
+void update_tree(int idx, lld delta){
+    
+    while(idx <= n){
+        tree[idx] += delta;
+        idx += idx & -idx;
     }
 }
 
-lld find_data(int start, int end){
+lld get_data(int idx){
     lld result = 0;
     
-    while(start <= end){
-        if(start % 2 == 1) result += tree[start];
-        if(end % 2 == 0) result += tree[end];
-        start = (start + 1) / 2;
-        end = (end - 1) / 2;
+    while(idx > 0){
+        result += tree[idx];
+        idx -= (idx & -idx);
     }
     
     return result;
 }
 
 int main(){
-    scanf("%d %d %d", &n, &m, &k);
+    scanf("%d %d", &n, &q);
     
-    //0. find idx
-    for(idx = 1; idx < n; idx *= 2);
-    idx--;
-    
-    //1. input
-    for(int i=1; i<=n; i++){
-        scanf("%lld", &tree[idx + i]);
-    }
-
-    //2. make_tree
-    for(int i=idx; i>=1; i--){
-        tree[i] = tree[i*2] + tree[i*2+1];
-    }
-    
-    for(int i=0; i < m + k; i++){
+    for(int i=0; i<q; i++){
         scanf("%d %d %d", &a, &b, &c);
-        // update_tree
-        // change b to c
+        
         if(a == 1){
-            update_tree(b + idx, c - tree[b + idx]);
+            lld delta = c;
+            d[b] += c;
+            update_tree(b, delta);
         }
-        // find_data
-        // get b ~ c
         else{
-            printf("%lld\n", find_data(b + idx, c + idx));
+            printf("%lld\n", get_data(c) - get_data(b-1));
         }
+        
     }
 }
