@@ -1,81 +1,59 @@
 #include <iostream>
-#define max_int 16
-#define max_val 801
-
+#define max_int 1000001
+#define lld long long int
 using namespace std;
 
-/*
- 시간 복잡도: O(2^n * n^2) - 1600만
- 공간 복잡도: O(2^n)
- 사용한 알고리즘: 비트 마스킹, DP - bottom up
- 사용한 자료구조: 비트셋
- */
+int n, m, k, idx, a, b, c;
+lld tree[max_int * 4];
 
-int n, p, a[max_int][max_int], first_status, result = max_val;
-int check[1 << max_int];
-char c[max_int];
+void update_tree(int node, lld delta){
+    while(node > 0){
+        tree[node] += delta;
+        node /= 2;
+    }
+}
 
-int min(int a, int b){
-    return a < b ? a : b;
+lld find_data(int start, int end){
+    lld result = 0;
+    
+    while(start <= end){
+        if(start % 2 == 1) result += tree[start];
+        if(end % 2 == 0) result += tree[end];
+        start = (start + 1) / 2;
+        end = (end - 1) / 2;
+    }
+    
+    return result;
 }
 
 int main(){
-    // 0. 입력
-    scanf("%d", &n);
+    scanf("%d %d %d", &n, &m, &k);
     
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            scanf("%d", &a[i][j]);
-        }
+    //0. find idx
+    for(idx = 1; idx < n; idx *= 2);
+    idx--;
+    
+    //1. input
+    for(int i=1; i<=n; i++){
+        scanf("%lld", &tree[idx + i]);
+    }
+
+    //2. make_tree
+    for(int i=idx; i>=1; i--){
+        tree[i] = tree[i*2] + tree[i*2+1];
     }
     
-    scanf("%s", c);
-    
-    for(int i=0; i<n; i++){
-        if(c[i] == 'Y'){
-            first_status |= (1<<i);
+    for(int i=0; i < m + k; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        // update_tree
+        // change b to c
+        if(a == 1){
+            update_tree(b + idx, c - tree[b + idx]);
+        }
+        // find_data
+        // get b ~ c
+        else{
+            printf("%lld\n", find_data(b + idx, c + idx));
         }
     }
-    scanf("%d", &p);
-    
-    // 1. 초기화
-    int num = (1 << n);
-    for(int i=0; i<num; i++){
-        check[i] = max_val;
-    }
-    check[first_status] = 0;
-    
-    // 2. DP 수행
-    for(int k=0; k<num; k++){
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                if(i == j) continue;
-                
-                if((k & (1 << i))){
-                    if(k & (1<<j)) continue;
-                    int next = k | (1 << j);
-                    check[next] = min(check[next], check[k] + a[i][j]);
-                }
-            }
-        }
-    }
-    
-    // 3. 최소값 갱신
-    for(int k=0; k<num; k++){
-        int cnt = 0;
-        for(int q=0; q<n; q++){
-            if(k & (1 << q)){
-                cnt++;
-            }
-        }
-        if(cnt >= p){
-            result = min(result, check[k]);
-        }
-    }
-    
-    // 4. 예외처리
-    if(result == max_val) result = -1;
-    
-    // 5. 출력
-    printf("%d\n", result);
 }
