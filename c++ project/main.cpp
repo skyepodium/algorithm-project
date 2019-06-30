@@ -1,52 +1,42 @@
 #include <iostream>
 #define max_int 100001
-#define lld long long int
 using namespace std;
 
-int n, q, x, y, a, b;
-lld tree[max_int], d[max_int];
+int n, a[max_int], d[max_int], top = 1;
 
-void update_tree(int idx, lld delta){
+int lower_bound(int start, int end, int val){
+    int result = 0;
     
-    while(idx <= n){
-        tree[idx] += delta;
-        idx += (idx & -idx);
+    while(start <= end){
+        int mid = (start + end) / 2;
+        
+        if(d[mid] < val){
+            start = mid + 1;
+        }else{
+            result = mid;
+            end = mid - 1;
+        }
     }
-}
-
-lld get_data(int idx){
-    lld result = 0;
-    
-    while(idx > 0){
-        result += tree[idx];
-        idx -= (idx & -idx);
-    }
-    
     return result;
 }
 
-void swap(int &a, int &b){
-    int temp = a;
-    a = b;
-    b = temp;
-}
-
 int main(){
-    scanf("%d %d", &n, &q);
+    scanf("%d", &n);
     
     for(int i=1; i<=n; i++){
-        scanf("%lld", &d[i]);
-        update_tree(i, d[i]);
+        scanf("%d", &a[i]);
     }
- 
-    for(int i=0; i<q; i++){
-        scanf("%d %d %d %d", &x, &y, &a, &b);
-        
-        if(x > y) swap(x, y);
-        printf("%lld\n", get_data(y) - get_data(x - 1));
-        
-        lld delta = b - d[a];
-        d[a] = b;
-        update_tree(a, delta);
+    
+    d[1] = a[1];
+    for(int i=2; i<=n; i++){
+        if(a[i] > d[top]){
+            top++;
+            d[top] = a[i];
+        }
+        else{
+            int idx = lower_bound(1, top, a[i]);
+            d[idx] = a[i];
+        }
     }
+    printf("%d\n", n - top);
 }
