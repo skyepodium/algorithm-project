@@ -1,31 +1,36 @@
 #include <iostream>
-#define max_int 100001
+#define max_int 1001
+#define max_val 1000001
 using namespace std;
 
-int n, m, q, w, d[max_int], a[max_int], b[max_int], c[max_int];
+int t, n, a[max_int], d[max_int], result;
+
+int max(int a, int b){
+    return a > b ? a : b;
+}
 
 int main(){
-    scanf("%d %d", &n, &m);
-    for(int i=1; i<=n; i++){
-        scanf("%d", &d[i]);
-    }
+    scanf("%d", &t);
     
-    for(int i=1; i<=n; i++){
-        a[i] = a[i-1];
-        b[i] = b[i-1];
-        c[i] = c[i-1];
-        if(d[i] == 1) a[i]++;
-        else if(d[i] == 2) b[i]++;
-        else if(d[i] == 3) c[i]++;
-    }
-    
-    for(int i=0; i<m; i++){
-        scanf("%d %d", &q, &w);
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d", &n);
         
-        int a_num = a[w] - a[q-1];
-        int b_num = b[w] - b[q-1];
-        int c_num = c[w] - c[q-1];
-
-        printf("%d %d %d\n", a_num, b_num, c_num);
+        result = -max_val;
+        
+        for(int i=1; i<=n; i++){
+            scanf("%d", &a[i]);
+            d[i] = 0;
+        }
+        
+        for(int i=1; i<=n; i++){
+            d[i] = d[i-1] + a[i];
+        }
+        
+        for(int i=1; i<=n; i++){
+            for(int j=i; j<=n; j++){
+                result = max(result, d[j] - d[i-1]);
+            }
+        }
+        printf("%d\n", result);
     }
 }
