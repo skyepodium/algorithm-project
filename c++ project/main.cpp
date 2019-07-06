@@ -1,84 +1,95 @@
 #include <iostream>
-#include <algorithm>
-#include <stack>
-#define max_int 100001
-#define lld long long int
-
+#include <queue>
+#include <vector>
+#define max_int 1001
+#define max_val 10000001
 using namespace std;
 
-int n;
-
+int n, m, k, a, b, c, d[max_int];
 struct info{
-    lld x;
-    lld y;
+    int cur;
+    int cost;
 };
 
-info origin, a[max_int];
+vector<info> v[max_int];
 
-lld dist(info a, info b){
-    lld x = (a.x - b.x);
-    lld y = (a.y - b.y);
-    return x*x + y*y;
-}
+struct cmp{
+    bool operator()(const info &a, const info &b){
+        return a.cost > b.cost;
+    }
+};
 
-int ccw(const info a, info b, info c){
-    lld first = (b.x-a.x)*(c.y-a.y);
-    lld second = (c.x - a.x)*(b.y- a.y);
-    lld temp = first - second;
+struct cmp2{
+    bool operator()(const int &a, const int &b){
+        return a > b;
+    }
+};
+
+priority_queue<int, vector<int>, cmp2> min_q[max_int];
+
+void dijkstra(){
+    d[1] = 0;
+    priority_queue<info, vector<info>, cmp> pq;
+    min_q[1].push(0);
+    pq.push({1, d[1]});
     
-    if(temp > 0){
-        return 1;
-    }else if(temp == 0){
-        return 0;
-    }else{
-        return -1;
+    while(!pq.empty()){
+        info cur = pq.top();
+        pq.pop();
+        
+        int c_node =cur.cur;
+        for(int i=0; i<v[c_node].size(); i++){
+            info next = v[c_node][i];
+            int n_node = next.cur;
+            int n_cost = next.cost;
+            
+            if(d[n_node] > d[c_node] + n_cost){
+                d[n_node] = d[c_node] + n_cost;
+//                cout << "n_node push!! "  << n_node << " " << d[n_node] << endl;
+                min_q[n_node].push(d[n_node]);
+//                cout << "c_node " << c_node << " n_node " << n_node << " d_node " << d[n_node] << endl;
+                pq.push({n_node, d[n_node]});
+            }else{
+                int temp = d[c_node] + n_cost;
+                min_q[n_node].push(temp);
+            }
+        }
     }
 }
 
-bool cmp(const info &a, const info &b){
-    if(a.y == b.y) return a.x < b.x;
-    return a.y < b.y;
-}
-
-bool cmp2(const info &a, const info &b){
-    lld temp = ccw(origin, a, b);
-    if(temp == 0){
-        return dist(origin, a) <= dist(origin, b);
-    }else{
-        return temp > 0;
+void init(){
+    for(int i=0; i<=n; i++){
+        d[i] = max_val;
     }
 }
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d %d", &n, &m, &k);
+    
+    init();
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[a].push_back({b, c});
+    }
+    
+    dijkstra();
     
     for(int i=1; i<=n; i++){
-        scanf("%lld %lld", &a[i].x, &a[i].y);
     }
     
-    sort(a + 1, a + n + 1, cmp);
-    origin = a[1];
-    sort(a + 1, a + n + 1, cmp2);
-    
-    int n_node = 3;
-    stack<info> s;
-    s.push(a[1]);
-    s.push(a[2]);
-    
-    while(n_node <= n){
-        while(s.size() >= 2){
-            info second = s.top();
-            s.pop();
-            info first = s.top();
-            
-            if(ccw(first, second, a[n_node]) > 0){
-                s.push(second);
-                break;
+    for(int i=1; i<=n; i++){
+        int q_size = (int)min_q[i].size();
+        //cout << "q_size !!! " << q_size << endl;
+        if(q_size < k){
+            printf("-1\n");
+            continue;
+        }else{
+            for(int j=1; j<=k-1; j++){
+                min_q[i].pop();
             }
+            printf("%d\n", min_q[i].top());
         }
-        s.push(a[n_node]);
-        n_node++;
     }
-    printf("%d\n", (int)s.size());
-
+    
 }
