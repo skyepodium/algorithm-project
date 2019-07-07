@@ -3,12 +3,14 @@
 #include <vector>
 #define max_int 1001
 #define max_val 10000001
+#define lld long long int
 using namespace std;
 
-int n, m, k, a, b, c, d[max_int];
+int n, m, k, a, b;
+lld c, d[max_int][200];
 struct info{
     int cur;
-    int cost;
+    lld cost;
 };
 
 vector<info> v[max_int];
@@ -19,39 +21,55 @@ struct cmp{
     }
 };
 
-struct cmp2{
-    bool operator()(const int &a, const int &b){
-        return a > b;
+int update_cost(int node, lld val){
+    int start = 1;
+    int end = 100;
+    int mid = 0;
+    int ret = 0;
+    while(start <= end){
+        mid = (start + end) / 2;
+        if(d[node][mid] < val){
+            start = mid + 1;
+        }
+        else{
+            ret = mid;
+            end = mid - 1;
+        }
     }
-};
-
-priority_queue<int, vector<int>, cmp2> min_q[max_int];
+    
+    if(ret != 0){
+        for(int i=100; i>=ret; i--){
+            d[node][i+1] = d[node][i];
+        }
+        d[node][ret] = val;
+    }
+    return ret;
+}
 
 void dijkstra(){
-    d[1] = 0;
+    d[1][1] = 0;
     priority_queue<info, vector<info>, cmp> pq;
-    min_q[1].push(0);
-    pq.push({1, d[1]});
+    pq.push({1, d[1][1]});
     
     while(!pq.empty()){
         info cur = pq.top();
         pq.pop();
         
-        int c_node =cur.cur;
+        int c_node = cur.cur;
+        
         for(int i=0; i<v[c_node].size(); i++){
             info next = v[c_node][i];
             int n_node = next.cur;
-            int n_cost = next.cost;
+            lld n_cost = next.cost;
             
-            if(d[n_node] > d[c_node] + n_cost){
-                d[n_node] = d[c_node] + n_cost;
-//                cout << "n_node push!! "  << n_node << " " << d[n_node] << endl;
-                min_q[n_node].push(d[n_node]);
-//                cout << "c_node " << c_node << " n_node " << n_node << " d_node " << d[n_node] << endl;
-                pq.push({n_node, d[n_node]});
+            lld new_cost = d[c_node][1] + n_cost;
+            if(new_cost < d[n_node][1]){
+                update_cost(n_node, new_cost);
+                pq.push({n_node, d[n_node][1]});
             }else{
-                int temp = d[c_node] + n_cost;
-                min_q[n_node].push(temp);
+                if(new_cost < d[n_node][k]){
+                    update_cost(n_node, new_cost);
+                }
             }
         }
     }
@@ -59,7 +77,9 @@ void dijkstra(){
 
 void init(){
     for(int i=0; i<=n; i++){
-        d[i] = max_val;
+        for(int j=0; j<=100; j++){
+            d[i][j] = max_val;
+        }
     }
 }
 
@@ -69,27 +89,14 @@ int main(){
     init();
     
     for(int i=0; i<m; i++){
-        scanf("%d %d %d", &a, &b, &c);
+        scanf("%d %d %lld", &a, &b, &c);
         v[a].push_back({b, c});
     }
     
     dijkstra();
     
     for(int i=1; i<=n; i++){
+        if(d[i][k] == max_val) d[i][k] = -1;
+        printf("%lld\n", d[i][k]);
     }
-    
-    for(int i=1; i<=n; i++){
-        int q_size = (int)min_q[i].size();
-        //cout << "q_size !!! " << q_size << endl;
-        if(q_size < k){
-            printf("-1\n");
-            continue;
-        }else{
-            for(int j=1; j<=k-1; j++){
-                min_q[i].pop();
-            }
-            printf("%d\n", min_q[i].top());
-        }
-    }
-    
 }
