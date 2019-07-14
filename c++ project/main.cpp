@@ -1,42 +1,50 @@
 #include <iostream>
-
+#define lld long long int
 using namespace std;
 
+/*
+ 시간 복잡도: O(1)
+ 공간 복잡도: O(1)
+ 사용한 알고리즘: CCW
+ 사용한 자료구조: 배열
+*/
+
+int ccw_result;
+
+// 점을 입력받을 구조체를 정의 합니다.
 struct info{
-    double x, y;
+    lld x, y;
 };
 
-struct edge{
-    info first, second;
-};
+// 정의한 구조체를 기반으로 배열을 생성합니다.(3개의 점이 주어집니다.)
+info point[4];
+
+// CCW
+// 세점의 좌표정보를 순서대로 받습니다.
+int ccw(info r, info p, info q){
+    // 벡터의 외적을 수행합니다.
+    // 점 p, q에대해 점 r의 x, y를 빼줘서 그래프를 원점에 맞춥니다.
+    lld first = (p.x - r.x) * (q.y - r.y);
+    lld second = (p.y - r.y) * (q.x - r.x);
+    lld result = first - second;
+    
+    // 1) 1 이면 벡터rp 기준 점 q는 왼쪽에 존재합니다.
+    if(result > 0) return 1;
+    // 2) 0 이면 일직선에 존재
+    else if(result == 0) return 0;
+    // 3) -1 이면 벡터rp 기준 점 q는 오른쪽에 존재합니다.
+    else return -1;
+}
 
 int main(){
-    edge a, b;
-    a.first.x = 1;
-    a.first.y = 1;
-    a.second.x = 4;
-    a.second.y = 4;
-
-    b.first.x = 1;
-    b.first.y = 4;
-    b.second.x = 4;
-    b.second.y = 1;
+    //1. 3개의 점을 순서대로 배열에 입력받습니다.
+    for(int i=1; i<=3; i++){
+        scanf("%lld %lld", &point[i].x, &point[i].y);
+    }
     
-    double delta_a, delta_b, bias_a, bias_b;
-    delta_a = (a.second.y - a.first.y) / (a.second.x - a.first.y);
-    delta_b = (b.second.y - b.first.y) / (b.second.x - b.first.y);
-
-    bias_a = a.first.y - delta_a * a.first.x;
-    bias_b = b.first.y - delta_b * b.first.x;
+    // 2. CCW를 수행합니다.
+    ccw_result = ccw(point[1], point[2], point[3]);
     
-    // a.first.y = a.first.x * delta_a + bias_a;
-    /*
-     (a.first.y - a.second.y)x - (a.first.x - a.second.x)y = (a.first.y - a.second.y) * a.first.x - (a.first.x - a.second.x) * a.first.y;
-    */
-    //(a.first.y - a.second.y)x = (a.first.y - a.second.y) * a.first.x - (a.first.x - a.second.x) * a.first.y + (a.first.x - a.second.x)y;
-    x = ((a.first.y - a.second.y) * a.first.x - (a.first.x - a.second.x) * a.first.y + (a.first.x - a.second.x)y / (a.first.y - a.second.y));
-    (b.first.y - b.second.y)x - (b.first.x - b.second.x)y = (b.first.y - b.second.y) * b.first.x - (b.first.x - b.second.x) * b.first.y;
-    
-    (b.first.x - b.second.x)y = (b.first.y - b.second.y)((a.first.y - a.second.y) * a.first.x - (a.first.x - a.second.x) * a.first.y + (a.first.x - a.second.x)y / (a.first.y - a.second.y)); - (b.first.y - b.second.y) * b.first.x - (b.first.x - b.second.x) * b.first.y;
-    
+    // 3. 결과 출력
+    printf("%d\n", ccw_result);
 }
