@@ -1,59 +1,84 @@
 #include <iostream>
-#define max_int 101
-
+#include <cmath>
+#define max_val 10001
 using namespace std;
+double const EPSILON = 1e-9;
+int n;
 
-/*
- 시간 복잡도: O(1)
- 공간 복잡도: O(1)
- 사용한 알고리즘: 플레인 스위핑
- 사용한 자료구조: 2차원 배열
-*/
 
-int n, a[max_int][max_int], x, y, result;
-int dx[] = {0, 0, 1, -1};
-int dy[] = {-1, 1, 0, 0};
+struct info {
+    double x, y;
+    explicit info(double x_ = 0, double y_ = 0) :x(x_), y(y_) {
+        
+    }
+    bool operator ==(const info&rhs)const {
+        return x == rhs.x && y == rhs.y;
+    }
+    bool operator < (const info&rhs)const {
+        return x != rhs.x ? x < rhs.x : y < rhs.y;
+    }
+    info operator +(const info&rhs)const {
+        return info(x + rhs.x, y + rhs.y);
+    }
+    info operator -(const info&rhs)const {
+        return info(x - rhs.x, y - rhs.y);
+    }
+    //* operator는 info 뒤에 곱해야 한다.
+    info operator *(double rhs)const {
+        return info(rhs*x, rhs*y);
+    }
+    double norm()const {
+        return hypot(x, y);
+    }
+    info normalize()const {
+        return info(x / norm(), y / norm());
+    }
+    double dot(const info&rhs)const {
+        return x * rhs.x + y * rhs.y;
+    }
+    double cross(const info&rhs)const {
+        return x * rhs.y - y * rhs.x;
+    }
+    info project(const info&rhs)const {
+        info r = rhs.normalize();
+        return r*r.dot(*this);
+    }
+};
+info a, b, c, d;
+double x, y;
 
-int main(){
+int ccw(info r, info p, info q){
+    double first = (p.x - r.x) * (q.y - r.y);
+    double second = (p.y - r.y) * (q.x - r.x);
+    double result = first - second;
     
-    // 1. 입력
+    if(result > 0) return 1;
+    else if(result == 0) return 0;
+    else return -1;
+}
+
+bool lineIntersection(info a, info b, info c, info d, info&x) {
+    double det = (b - a).cross(d - c);
+    if (fabs(det) < EPSILON)return false;
+    x = a + (b-a)*((c - a).cross(d - c) / det);
+    return true;
+}
+int main(){
     scanf("%d", &n);
     
-    // 색종이의 왼쪽 아래 모서리의 좌표를 입력받습니다.
-    for(int k=1; k<=n; k++){
-        scanf("%d %d", &x, &y);
-        
-        // 왼쪽 모서리를 기준으로 색종이의 영역을 모두 1로 채웁니다.
-        for(int i=x; i<x+10; i++){
-            for(int j=y; j<y+10; j++){
-                a[i][j] = 1;
-            }
+    for(int test_case=1; test_case<=n; test_case++){
+        scanf("%lf %lf %lf %lf %lf %lf %lf %lf", &a.x, &a.y, &b.x, &b.y, &c.x, &c.y, &d.x, &d.y);
+        info result;
+        if (lineIntersection(a, b, c, d, result)) {
+            printf("POINT %.2lf %.2lf\n", result.x, result.y);
+        }
+        else {
+            double ab = ccw(a, b, c)*ccw(a, b, d);
+            double cd = ccw(c, d, a)*ccw(c, d, b);
+            if (fabs(ab) < EPSILON&&fabs(cd) < EPSILON)
+                printf("LINE\n");
+            else
+                printf("NONE\n");
         }
     }
-    
-    // 2. 플레인 스위핑
-    // x좌표를 0부터 100까지 살펴봅니다.
-    for(int j=0; j<max_int; j++){
-        // 현재 x좌표에 대해 y좌표를 0부터 100까지 살펴봅니다.
-        for(int i=0; i<max_int; i++){
-            //현재 좌표가 색종이가 덮지 않았을때를 살펴봅니다
-            if(a[i][j] != 0) continue;
-            
-            //현재 위치에서 4방향을 살펴봅니다.
-            for(int k=0; k<4; k++){
-                int nx = i + dx[k];
-                int ny = j + dy[k];
-                
-                // 4방향을 살폈는데, 색종이가 있으면 둘레를 1 증가시켜줍니다.
-                if(nx>=0 && nx<max_int && ny>=0 && ny < max_int){
-                    if(a[nx][ny] == 1){
-                        result++;
-                    }
-                }
-            }
-        }
-    }
-    
-    // 3. 출력
-    printf("%d\n", result);
 }
