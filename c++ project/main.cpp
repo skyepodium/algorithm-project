@@ -1,28 +1,28 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #define lld long long int
+#define max_int 10001
 using namespace std;
 
-int t;
-bool result;
+int n;
+
 struct info{
     lld x, y;
 };
 
-lld min_x, min_y, max_x, max_y;
-info point[5], result_node, start_node, end_node, a, b, c, d;
+info point[max_int], origin;
+lld result;
 
-bool operator <= (info a, info b){
-    if(a.y == b.y) return a.x <= b.x;
-    else return a.y < b.y;
-}
-
-bool operator > (info a, info b){
-    if(a.y == b.y) return a.x > b.x;
-    else return a.y > b.y;
+bool dist(info a, info b){
+    lld first = (a.x - origin.x) * (a.x - origin.x) + (a.y - origin.y) + (a.y - origin.y);
+    lld second = (b.x - origin.x) * (b.x - origin.x) + (b.y - origin.y) + (b.y - origin.y);
+    
+    return first < second;
 }
 
 int ccw(info r, info p, info q){
-    lld first =  (p.x - r.x) * (q.y - r.y);
+    lld first = (p.x - r.x) * (q.y - r.y);
     lld second = (p.y - r.y) * (q.x - r.x);
     lld result = first - second;
     
@@ -31,62 +31,69 @@ int ccw(info r, info p, info q){
     else return -1;
 }
 
-bool LineInterSection(info a, info b, info c, info d){
-    int first = ccw(a, b, c) * ccw(a, b, d);
-    int second = ccw(c, d, a) * ccw(c, d, b);
+lld ccw2(info r, info p, info q){
+    lld first = (p.x - r.x) * (q.y - r.y);
+    lld second = (p.y - r.y) * (q.x - r.x);
+    lld result = first - second;
     
-    if(first == 0 && second == 0){
-        if(a > b) swap(a, b);
-        if(c > d) swap(c, d);
-        
-        return a <= d && c <= b;
+    return result;
+}
+
+bool cmp(const info &a, const info &b){
+    if(a.y == b.y) return a.x > b.x;
+    else return a.y > b.y;
+}
+
+bool cmp2(const info &a, const info &b){
+    int ccw_result = ccw(origin, a, b);
+    
+    if(ccw_result == 0){
+        return dist(a, b);
     }
     else{
-        return first <= 0 && second <= 0;
+        return ccw_result > 0;
     }
 }
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d", &n);
     
-    for(int test_case=1; test_case<=t; test_case++){
-        
-        result = false;
-        
-        scanf("%lld %lld", &start_node.x, &start_node.y);
-        scanf("%lld %lld", &end_node.x, &end_node.y);
-        
-        scanf("%lld %lld %lld %lld", &min_x, &min_y, &max_x, &max_y);
-
-        if(min_x > max_x) swap(min_x, max_x);
-        if(min_y > max_y) swap(min_y, max_y);
-
-        point[1] = {min_x, min_y};
-        point[2] = {max_x, min_y};
-        point[3] = {max_x, max_y};
-        point[4] = {min_x, max_y};
-
-        for(int i=1; i<=4; i++){
-            info first, second;
-            first = point[i];
-            if(i==4) second = point[1];
-            else second = point[i+1];
-            
-            bool check_intersection = LineInterSection(start_node, end_node, first, second);
-            if(check_intersection){
-                result = true;
-            }
-        }
-        
-        if(!result){
-            if(min_x <= start_node.x && start_node.x <= max_x && min_y <= start_node.y && start_node.y <= max_y){
-                if(min_x <= end_node.x && end_node.x <= max_x && min_y <= end_node.y && end_node.y <= max_y){
-                    result = true;
-                }
-            }
-        }
-        
-        if(result) printf("T\n");
-        else printf("F\n");
+    for(int i=1; i<=n; i++){
+        scanf("%lld %lld", &point[i].x ,&point[i].y);
     }
+    
+    sort(point + 1, point + 1 + n, cmp);
+    origin = point[1];
+    sort(point + 2, point + 1 + n, cmp2);
+
+    vector<info> v;
+    v.push_back(point[1]);
+    v.push_back(point[2]);
+    
+    for(int n_node = 3; n_node <= n; n_node++){
+        while(v.size() >= 2){
+            info second = v[v.size() - 1];
+            v.pop_back();
+            info first = v[v.size() - 1];
+            
+            info third = point[n_node];
+            
+            int ccw_result = ccw(first, second, third);
+            if(ccw_result > 0){
+                v.push_back(second);
+                break;
+            }
+        }
+        v.push_back(point[n_node]);
+    }
+    
+    for(int i=1; i<v.size() - 1; i++){
+        result += ccw2(v[0], v[i], v[i+1]);
+    }
+    
+    if(result < 0) result *= -1;
+    result /= 2;
+    
+    printf("%lld\n", result / 50);
+    
 }
