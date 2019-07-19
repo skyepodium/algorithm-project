@@ -1,19 +1,13 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#include <algorithm>
+#define max_int 100001
 using namespace std;
 
-int n, num;
+int n, num, result;
 
 struct cmp{
     bool operator()(const int &a, const int &b){
-        if(abs(a) == abs(b)){
-            return a > b;
-        }
-        else{
-            return abs(a) > abs(b);
-        }
+        return a > b;
     }
 };
 
@@ -24,18 +18,17 @@ int main(){
     
     for(int i=0; i<n; i++){
         scanf("%d", &num);
-        
-        if(num == 0){
-            if(pq.size() == 0){
-                printf("0\n");
-            }
-            else{
-                printf("%d\n", pq.top());
-                pq.pop();
-            }
-        }
-        else{
-            pq.push(num);
-        }
+        pq.push(num);
     }
+    
+    while(pq.size() >= 2){
+        int first = pq.top();
+        pq.pop();
+        int second = pq.top();
+        pq.pop();
+        int ret = first + second;
+        result += ret;
+        pq.push(ret);
+    }
+    printf("%d\n", result);
 }
