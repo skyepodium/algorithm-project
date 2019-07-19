@@ -1,91 +1,60 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#define lld long long int
-#define max_int 11
+#define max_int 1025
 using namespace std;
 
-int n;
+int n, m, a[max_int][max_int], d[max_int][max_int], tree[max_int][max_int], cmd, x, y, value;
+int start_x, start_y, end_x, end_y;
 
-struct info{
-    lld x, y;
-};
-
-info robot[max_int], house[max_int];
-vector<int> v;
-
-int ccw(info r, info p, info q){
-    lld first = (p.x - r.x) * (q.y - r.y);
-    lld second = (p.y - r.y) * (q.x - r.x);
-    lld result = first - second;
-    
-    if(result > 0) return 1;
-    else if(result == 0) return 0;
-    else return -1;
-}
-
-bool operator > (info a, info b){
-    if(a.y == b.y) return a.x > b.x;
-    else return a.y > b.y;
-}
-
-bool operator <= (info a, info b){
-    if(a.y == b.y) return a.x <= b.x;
-    else return a.y < b.y;
-}
-
-bool intersection(info a, info b, info c, info d){
-    lld first = ccw(a, b, c) * ccw(a, b, d);
-    lld second = ccw(c, d, a) * ccw(c, d, b);
-    
-    if(first == 0 && second == 0){
-        if(a > b) swap(a, b);
-        if(c > d) swap(c, d);
-        
-        return a <= d && c <= b;
-    }
-    else{
-        return first <= 0 && second <= 0;
+void update(int x, int y, int delta){
+    int ty;
+    while(x <= n){
+        ty = y;
+        while(ty <= n){
+            tree[x][ty] += delta;
+            ty += (ty & -ty);
+        }
+        x += (x & -x);
     }
 }
 
+int get_data(int x, int y){
+    int ret = 0;
+    int ty;
+    while(x >= 1){
+        ty = y;
+        while(ty >= 1){
+            ret += tree[x][ty];
+            ty -= (ty & -ty);
+        }
+        x -= (x & -x);
+    }
+    return ret;
+}
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d %d", &n, &m);
     
     for(int i=1; i<=n; i++){
-        scanf("%lld %lld", &robot[i].x, &robot[i].y);
+        for(int j=1; j<=n; j++){
+            scanf("%d", &a[i][j]);
+            update(i, j, a[i][j]);
+        }
     }
     
-    for(int i=1; i<=n; i++){
-        scanf("%lld %lld", &house[i].x, &house[i].y);
-        v.push_back(i);
-    }
-    
-    do{
-        bool flag = true;
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                if(i == j) continue;
-                
-                info a = robot[i];
-                info b = house[v[i-1]];
-                info c = robot[j];
-                info d = house[v[j-1]];
-
-                bool check_cross = intersection(a, b, c, d);
-                if(check_cross){
-                    flag = false;
-                }
-            }
-
-        }
-        if(flag){
-            for(int i=0; i<v.size(); i++){
-                printf("%d\n", v[i]);
-            }
-            return 0;
-        }
+    for(int i=0; i<m; i++){
+        scanf("%d", &cmd);
         
-    }while(next_permutation(v.begin(), v.end()));
+        if(cmd == 0){
+            scanf("%d %d %d", &x, &y, &value);
+            int delta = value - a[x][y];
+            a[x][y] = value;
+            update(x, y, delta);
+        }
+        else{
+            scanf("%d %d %d %d", &start_x, &start_y, &end_x, &end_y);
+            
+            int result = get_data(end_x, end_y) - get_data(start_x - 1, end_y) - get_data(end_x, start_y - 1) + get_data(start_x - 1, start_y - 1);
+            printf("%d\n", result);
+        }
+    }
 }
