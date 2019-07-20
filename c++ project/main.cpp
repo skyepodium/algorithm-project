@@ -1,34 +1,18 @@
 #include <iostream>
-#include <queue>
-#define max_int 100001
+
 using namespace std;
 
-int n, num, result;
-
-struct cmp{
-    bool operator()(const int &a, const int &b){
-        return a > b;
-    }
-};
+int t;
+double d, a, b, f, t_hour;
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d", &t);
     
-    priority_queue<int, vector<int>, cmp> pq;
-    
-    for(int i=0; i<n; i++){
-        scanf("%d", &num);
-        pq.push(num);
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%lf %lf %lf %lf", &d, &a, &b, &f);
+        
+        t_hour = d / (a + b);
+        
+        printf("#%d %lf\n", test_case, t_hour * f);
     }
-    
-    while(pq.size() >= 2){
-        int first = pq.top();
-        pq.pop();
-        int second = pq.top();
-        pq.pop();
-        int ret = first + second;
-        result += ret;
-        pq.push(ret);
-    }
-    printf("%d\n", result);
 }
