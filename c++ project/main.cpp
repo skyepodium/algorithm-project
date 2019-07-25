@@ -1,33 +1,15 @@
 #include <iostream>
-#include <queue>
-#define max_int 5001
+#define max_int 100001
 using namespace std;
 
-int n, a[max_int], check[max_int];
-bool result;
+int n, a[max_int], d[max_int], result = 1;
 
-bool bfs(int start){
-    queue<int> q;
-    check[start] = 0;
-    q.push(start);
-    
-    while(!q.empty()){
-        int node = q.front();
-        q.pop();
-        
-        int next = a[node];
-        if(check[next] == 0){
-            check[next] = check[node] + 1;
-            q.push(next);
-        }
-    }
-    if(check[start] == 3) return true;
-    else return false;
-}
-
-void init(){
-    for(int i=0; i<=n; i++) check[i] = 0;
-}
+/*
+ 시간 복잡도: O(n)
+ 공간 복잡도: O(n)
+ 사용한 알고리즘: DP(bottom-up)
+ 사용한 자료구조: 배열
+ */
 
 int main(){
     scanf("%d", &n);
@@ -36,11 +18,16 @@ int main(){
         scanf("%d", &a[i]);
     }
     
-    for(int i=1; i<=n; i++){
-        init();
-        int check_result = bfs(i);
-        if(check_result) result = true;
+    d[1] = 1;
+    for(int i=2; i<=n; i++){
+        if(a[i] >= a[i-1]){
+            d[i] = d[i-1] + 1;
+        }
+        else{
+            d[i] = 1;
+        }
+        result = max(result, d[i]);
     }
-    if(result) printf("YES\n");
-    else printf("NO\n");
+
+    printf("%d\n", result);
 }
