@@ -1,33 +1,40 @@
 #include <iostream>
-#define max_int 100001
+#include <algorithm>
+#define max_int 101
 using namespace std;
 
-int n, a[max_int], d[max_int], result = 1;
+int n, a[max_int], temp[max_int], result;
 
-/*
- 시간 복잡도: O(n)
- 공간 복잡도: O(n)
- 사용한 알고리즘: DP(bottom-up)
- 사용한 자료구조: 배열
- */
+void cal(int start, int end){
+    int ret = 0;
+    for(int i=1; i<=n; i++){
+        temp[i] = a[i];
+    }
+    for(int i=start; i<=end; i++){
+        if(temp[i] == 0) temp[i] = 1;
+        else temp[i] = 0;
+    }
+    for(int i=1; i<=n; i++){
+        if(temp[i] == 1) ret++;
+    }
+    result = max(result, ret);
+}
 
 int main(){
     scanf("%d", &n);
     
+//    int t = 0;
     for(int i=1; i<=n; i++){
         scanf("%d", &a[i]);
+       // if(a[i] == 1) t++;
+    }
+    //result = max(result, t);
+    
+    for(int i=1; i<=n; i++){
+        for(int j=i; j<=n; j++){
+            cal(i, j);
+        }
     }
     
-    d[1] = 1;
-    for(int i=2; i<=n; i++){
-        if(a[i] >= a[i-1]){
-            d[i] = d[i-1] + 1;
-        }
-        else{
-            d[i] = 1;
-        }
-        result = max(result, d[i]);
-    }
-
     printf("%d\n", result);
 }
