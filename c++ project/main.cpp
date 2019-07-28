@@ -1,83 +1,128 @@
 #include <iostream>
-#include <vector>
 #include <queue>
-#define max_int 100001
-#define max_val 100000000001
+#include <string>
+#define max_int 10001
+#define mod 10000
 using namespace std;
 
-int n, m, a, b, c, p[max_int];
-long long int d[max_int];
+int t, start_node, end_node, p[max_int];
+bool check[max_int];
+char cmd[max_int];
 
-struct info{
-    int cur;
-    long long int cost;
-};
-vector<info> v[max_int];
+int d_operator(int num){
+    num *= 2;
+    if(num > 9999) num %= mod;
+    return num;
+}
 
-struct cmp{
-    bool operator()(const info &a, const info &b){
-        return a.cost > b.cost;
-    }
-};
+int s_operator(int num){
+    num -= 1;
+    if(num == -1) num = 9999;
+    return num;
+}
 
-void dijkstra(){
-    priority_queue<info, vector<info>, cmp> pq;
-    p[1] = 0;
-    d[1] = 0;
-    pq.push({1, d[1]});
+
+
+int l_operator(int num){
+    int ret = 0;
+    int d1 = num / 1000;
+    int d2 = (num - (d1 * 1000)) / 100;
+    int d3 = (num - (d1 * 1000) - (d2 * 100)) / 10;
+    int d4 = (num - (d1 * 1000) - (d2 * 100) - (d3 * 10));
+
+    ret = d2 * 1000 + d3 * 100 + d4 * 10 + d1;
     
-    while(!pq.empty()){
-        info cur = pq.top();
-        pq.pop();
-        int c_node = cur.cur;
+    return ret;
+}
+
+int r_operator(int num){
+    int ret = 0;
+    int d1 = num / 1000;
+    int d2 = (num - (d1 * 1000)) / 100;
+    int d3 = (num - (d1 * 1000) - (d2 * 100)) / 10;
+    int d4 = (num - (d1 * 1000) - (d2 * 100) - (d3 * 10));
+    
+    ret = d4 * 1000 + d1 * 100 + d2 * 10 + d3;
+    
+    return ret;
+}
+
+void bfs(int start){
+    queue<int> q;
+    check[start] = true;
+    q.push(start);
+    
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
         
-        for(int i=0; i<v[c_node].size(); i++){
-            info next = v[c_node][i];
-            int n_node = next.cur;
-            long long int n_cost = next.cost;
-            
-            if(d[n_node] > d[c_node] + n_cost){
-                d[n_node] = d[c_node] + n_cost;
-                p[n_node] = c_node;
-                pq.push({n_node, d[n_node]});
-            }
+        int next;
+        
+        // 1. D
+        next = d_operator(node);
+        if(!check[next]){
+            p[next] = node;
+            cmd[next] = 'D';
+            check[next] = true;
+            q.push(next);
+        }
+        
+        // 2. S
+        next = s_operator(node);
+        if(!check[next]){
+            p[next] = node;
+            cmd[next] = 'S';
+            check[next] = true;
+            q.push(next);
+        }
+
+        // 3. l
+        next = l_operator(node);
+        if(!check[next]){
+            p[next] = node;
+            cmd[next] = 'L';
+            check[next] = true;
+            q.push(next);
+        }
+
+        // 4. r
+        next = r_operator(node);
+        if(!check[next]){
+            p[next] = node;
+            cmd[next] = 'R';
+            check[next] = true;
+            q.push(next);
         }
     }
 }
 
-void init(){
-    for(int i=0; i<=n; i++){
-        d[i] = max_val;
-    }
+void go(int node){
+    if(node == start_node) return;
+    int next = p[node];
+    go(next);
+    printf("%c", cmd[node]);
 }
 
-void go(int c_node){
-    if(c_node == 0) return;
-    else{
-        go(p[c_node]);
-        printf("%d ", c_node);
+void init(){
+    for(int i=0; i<max_int; i++){
+        check[i] = false;
+        p[i] = 0;
+        cmd[i] = 'A';
     }
-        
 }
 
 int main(){
-    scanf("%d %d", &n, &m);
-   
-    init();
+    scanf("%d", &t);
     
-    for(int i=0; i<m; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, (long long int)c});
-        v[b].push_back({a, (long long int)c});
-    }
-    
-    dijkstra();
-    
-    if(d[n] != max_val){
-        go(n);
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d %d", &start_node, &end_node);
+        
+        init();
+        
+        bfs(start_node);
+        
+        go(end_node);
+        
         printf("\n");
-    }
-    else{
-        printf("-1\n");
     }
 }
