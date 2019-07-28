@@ -1,128 +1,85 @@
 #include <iostream>
 #include <queue>
-#include <string>
-#define max_int 10001
-#define mod 10000
+#define max_int 101
 using namespace std;
 
-int t, start_node, end_node, p[max_int];
-bool check[max_int];
-char cmd[max_int];
+int n, m, a[max_int][max_int], check[max_int][max_int][5];
+int start_x, start_y, start_dir, end_x, end_y, end_dir;
+int dx[] = {0, 0, 0, 1, -1};
+int dy[] = {0, 1, -1, 0, 0};
+int first_dir[] = {3, 4}, second_dir[] = {1, 2};
+int turn_dir[] = {1, 2, 3, 4};
 
-int d_operator(int num){
-    num *= 2;
-    if(num > 9999) num %= mod;
-    return num;
-}
+struct info{
+    int x, y, dir;
+};
 
-int s_operator(int num){
-    num -= 1;
-    if(num == -1) num = 9999;
-    return num;
-}
-
-
-
-int l_operator(int num){
-    int ret = 0;
-    int d1 = num / 1000;
-    int d2 = (num - (d1 * 1000)) / 100;
-    int d3 = (num - (d1 * 1000) - (d2 * 100)) / 10;
-    int d4 = (num - (d1 * 1000) - (d2 * 100) - (d3 * 10));
-
-    ret = d2 * 1000 + d3 * 100 + d4 * 10 + d1;
+void bfs(){
+    queue<info> q;
+    check[start_x][start_y][start_dir] = 0;
+    q.push({start_x, start_y, start_dir});
     
-    return ret;
-}
-
-int r_operator(int num){
-    int ret = 0;
-    int d1 = num / 1000;
-    int d2 = (num - (d1 * 1000)) / 100;
-    int d3 = (num - (d1 * 1000) - (d2 * 100)) / 10;
-    int d4 = (num - (d1 * 1000) - (d2 * 100) - (d3 * 10));
-    
-    ret = d4 * 1000 + d1 * 100 + d2 * 10 + d3;
-    
-    return ret;
-}
-
-void bfs(int start){
-    queue<int> q;
-    check[start] = true;
-    q.push(start);
-    
-    while (!q.empty()) {
-        int node = q.front();
+    while(!q.empty()){
+        info cur = q.front();
         q.pop();
         
-        int next;
+        int x = cur.x;
+        int y = cur.y;
+        int dir = cur.dir;
         
-        // 1. D
-        next = d_operator(node);
-        if(!check[next]){
-            p[next] = node;
-            cmd[next] = 'D';
-            check[next] = true;
-            q.push(next);
+        // 1. go k
+        for(int k=1; k<=3; k++){
+            int nx = x + dx[dir] * k;
+            int ny = y + dy[dir] * k;
+            
+            if(nx < 1 || nx > n || ny < 1 || ny > m) continue;
+            if(a[nx][ny] == 1) break;
+            
+            if(check[nx][ny][dir] == -1 && a[nx][ny] == 0){
+                check[nx][ny][dir] = check[x][y][dir] + 1;
+                q.push({nx, ny, dir});
+            }
         }
         
-        // 2. S
-        next = s_operator(node);
-        if(!check[next]){
-            p[next] = node;
-            cmd[next] = 'S';
-            check[next] = true;
-            q.push(next);
-        }
-
-        // 3. l
-        next = l_operator(node);
-        if(!check[next]){
-            p[next] = node;
-            cmd[next] = 'L';
-            check[next] = true;
-            q.push(next);
-        }
-
-        // 4. r
-        next = r_operator(node);
-        if(!check[next]){
-            p[next] = node;
-            cmd[next] = 'R';
-            check[next] = true;
-            q.push(next);
+        // 2. turn
+        int start_idx;
+        if(dir < 3) start_idx = 2;
+        else start_idx = 0;
+        
+        for(int i=start_idx; i<=start_idx + 1; i++){
+            int ndir = turn_dir[i];
+            if(check[x][y][ndir] == -1){
+                check[x][y][ndir] = check[x][y][dir] + 1;
+                q.push({x, y, ndir});
+            }
         }
     }
 }
 
-void go(int node){
-    if(node == start_node) return;
-    int next = p[node];
-    go(next);
-    printf("%c", cmd[node]);
-}
-
 void init(){
-    for(int i=0; i<max_int; i++){
-        check[i] = false;
-        p[i] = 0;
-        cmd[i] = 'A';
+    for(int i=0; i<=n; i++){
+        for(int j=0; j<=m; j++){
+            for(int k=0; k<=4; k++){
+                check[i][j][k] = -1;
+            }
+        }
     }
 }
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d %d", &n, &m);
     
-    for(int test_case=1; test_case<=t; test_case++){
-        scanf("%d %d", &start_node, &end_node);
-        
-        init();
-        
-        bfs(start_node);
-        
-        go(end_node);
-        
-        printf("\n");
+    init();
+    
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            scanf("%d", &a[i][j]);
+        }
     }
+    
+    scanf("%d %d %d %d %d %d", &start_x, &start_y, &start_dir, &end_x, &end_y, &end_dir);
+
+    bfs();
+    
+    printf("%d\n", check[end_x][end_y][end_dir]);
 }
