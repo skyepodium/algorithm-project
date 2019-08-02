@@ -1,32 +1,33 @@
 #include <iostream>
-#define max_int 1001
+#include <cstring>
+#define max_int 101
 using namespace std;
 
-int n, a[max_int], result;
+int len, result;
+char first[max_int], second[max_int];
 
 int main(){
-    scanf("%d", &n);
+    scanf("%s", first);
+    scanf("%s", second);
+    len = (int)strlen(first);
     
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
-    }
-
-    for(int i=2; i<=n; i++){
-        int num = a[i];
-        bool is_min = true;
-        bool is_max = true;
-        for(int j=1; j<i; j++){
-            if(num > a[j]) is_max = false;
-            else if(num < a[j]) is_min = false;
-            else{
-                is_max = false;
-                is_min = false;
-            }
-        }
+    for(int i=0; i<len; i++){
         
-        if(is_min) result++;
-        if(is_max) result++;
-    }
-    printf("%d\n", result);
+        int f = first[i];
+        int s = second[i];
+        
+        if(f >= 97) f -= 32;
+        if(s >= 97) s -= 32;
 
+        if(f > s){
+            result = 1;
+            break;
+        }
+        else if(f < s){
+            result = -1;
+            break;
+        }
+    }
+            
+    printf("%d\n", result);
 }
