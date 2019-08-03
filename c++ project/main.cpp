@@ -1,33 +1,36 @@
 #include <iostream>
-#include <cstring>
-#define max_int 101
+#include <vector>
+#define max_int 10001
 using namespace std;
 
-int len, result;
-char first[max_int], second[max_int];
+int n, m, k, a, b, from[max_int];
+bool check[max_int];
+vector<int> v[max_int];
 
-int main(){
-    scanf("%s", first);
-    scanf("%s", second);
-    len = (int)strlen(first);
-    
-    for(int i=0; i<len; i++){
+void dfs(int node){
+    check[node] = true;
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
         
-        int f = first[i];
-        int s = second[i];
-        
-        if(f >= 97) f -= 32;
-        if(s >= 97) s -= 32;
-
-        if(f > s){
-            result = 1;
-            break;
-        }
-        else if(f < s){
-            result = -1;
-            break;
+        if(!check[next]){
+            from[next] = node;
+            dfs(next);
         }
     }
-            
-    printf("%d\n", result);
+}
+
+int main(){
+    scanf("%d %d %d", &n, &m, &k);
+    
+    for(int i=0; i<m; i++){
+        scanf("%d %d", &a, &b);
+        v[a].push_back(b);
+        v[b].push_back(a);
+    }
+    
+    dfs(k);
+    
+    for(int i=1; i<=n; i++){
+        cout << from[i] << endl;
+    }
 }
