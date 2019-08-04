@@ -10,7 +10,7 @@ char a[max_int][max_int];
 
 int dx[] = {-1, 1, 0, 0};
 int dy[] = {0, 0, -1, 1};
-
+ 
 struct info{
     int x, y, l_cnt, r_cnt;
 };
