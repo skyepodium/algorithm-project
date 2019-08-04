@@ -9,7 +9,7 @@ int n, m, start_x, start_y, left_cnt, right_cnt, result, d[max_int][max_int];
 char a[max_int][max_int];
 
 int dx[] = {-1, 1, 0, 0};
-int dy[] = {0, 0, -1, 1};  
+int dy[] = {0, 0, -1, 1};    
 
 struct info{
     int x, y, l_cnt, r_cnt;
