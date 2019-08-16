@@ -1,27 +1,23 @@
 #include <iostream>
-#include <algorithm>
-#define max_int 300001
+#define max_int 10001
 
 using namespace std;
 
-int n, q, s, e, a[max_int], d[max_int];
+int n, result, bonus;
+char a[max_int];
 
 int main(){
-    scanf("%d %d", &n, &q);
+    scanf("%d", &n);
+    scanf("%s", a);
     
-    for(int i=1; i<=n; i++){
-        scanf("%d", &a[i]);
+    for(int i=0; i<n; i++){
+        if(a[i] == 'O'){
+            result += i + 1 + bonus;
+            bonus++;
+        }
+        else{
+            bonus = 0;
+        }
     }
-    
-    sort(a + 1, a + 1 + n);
-    
-    for(int i=1; i<=n; i++){
-        d[i] = d[i-1] + a[i];
-    }
-    
-    for(int i=1; i<=q; i++){
-        scanf("%d %d", &s, &e);
-        printf("%d\n", d[e] - d[s-1]);
-    }
-    
+    printf("%d\n", result);
 }
