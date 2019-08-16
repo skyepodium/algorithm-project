@@ -1,29 +1,27 @@
 #include <iostream>
+#include <algorithm>
+#define max_int 300001
 
 using namespace std;
 
-int s, k, h, minNum;
-
-int min(int a, int b){
-    return a > b ? b : a;
-}
-
-int min3(int a, int b, int c){
-    return min(a, min(b, c));
-}
+int n, q, s, e, a[max_int], d[max_int];
 
 int main(){
-    scanf("%d %d %d", &s, &k, &h);
-    minNum = min3(s, k, h);
+    scanf("%d %d", &n, &q);
     
-    
-    if(s + k + h >= 100){
-        printf("OK\n");
+    for(int i=1; i<=n; i++){
+        scanf("%d", &a[i]);
     }
-    else{
-        if(minNum == s) printf("Soongsil\n");
-        else if(minNum == k) printf("Korea\n");
-        else if(minNum == h) printf("Hanyang\n");
+    
+    sort(a + 1, a + 1 + n);
+    
+    for(int i=1; i<=n; i++){
+        d[i] = d[i-1] + a[i];
+    }
+    
+    for(int i=1; i<=q; i++){
+        scanf("%d %d", &s, &e);
+        printf("%d\n", d[e] - d[s-1]);
     }
     
 }
