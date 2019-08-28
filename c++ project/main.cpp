@@ -27,7 +27,7 @@ int main(){
                 if(i+k <= n) d[i+k][j] = min(d[i][j] + 1, d[i+k][j]);
                 if(j+k <= m) d[i][j+k] = min(d[i][j] + 1, d[i][j+k]);
 
-            }
+            }  
         }
     }
     
