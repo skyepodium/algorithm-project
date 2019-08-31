@@ -1,35 +1,100 @@
+#include <string>
+#include <vector>
+#include <map>
 #include <iostream>
-#include <algorithm>
-#define max_int 301
-#define max_val 2147483647
+
 using namespace std;
 
-int n, m, a[max_int][max_int], d[max_int][max_int];
+struct info{
+    int type;
+    string userId;
+};
 
+vector<info> event;
+map<string, string> id;
 
-int main(){
-    scanf("%d %d", &n, &m);
+void slice(string word, int type){
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            scanf("%d", &a[i][j]);
-            d[i][j] = max_val;
-         }
+    int startIdx = 0;
+    
+    // change
+    if(type == 1) startIdx = 7;
+    // enter
+    else if(type == 2) startIdx = 6;
+    // leave
+    else startIdx = 6;
+    
+    int size = (int)word.size();
+    
+    string temp = "";
+    string userId = "";
+    string nickName = "";
+    
+    for(int i=startIdx; i<size; i++){
+        if(word[i] == ' '){
+            userId = temp;
+            temp = "";
+        }
+        else{
+            temp += word[i];
+        }
     }
-    
-    d[1][1] = 0;
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=m; j++){
-            int x = a[i][j];
-            
-            for(int k=1; k<=x; k++){
-                
-                if(i+k <= n) d[i+k][j] = min(d[i][j] + 1, d[i+k][j]);
-                if(j+k <= m) d[i][j+k] = min(d[i][j] + 1, d[i][j+k]);
+    if(type == 3) userId = temp;
+    else nickName = temp;
 
-            }  
+    
+    // 1. change
+    if(type == 1){
+        id[userId] = nickName;
+    }
+    // 2. enter
+    else if(type == 2){
+        if(id.find(userId) == id.end()){
+            id.insert(pair<string, string>(userId, nickName));
+        }
+        else{
+            id[userId] = nickName;
+        }
+        event.push_back({type, userId});
+    }
+    // 3. leave
+    else{
+        event.push_back({type, userId});
+    }
+}
+
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    
+    for(int i=0; i<(int)record.size(); i++){
+        string cmd = record[i];
+        
+        // 1. 변경
+        if(cmd[0] == 'C'){
+            slice(cmd, 1);
+        }
+        // 2. 입장
+        else if(cmd[0] == 'E'){
+            slice(cmd, 2);
+        }
+        // 3. 퇴장
+        else{
+            slice(cmd, 3);
         }
     }
     
-    printf("%d\n", d[n][m]);
+    for(int i=0; i<(int)event.size(); i++){
+        int type = event[i].type;
+        string userId = event[i].userId;
+        
+        if(type == 2){
+            answer.push_back(id[userId] + "님이 들어왔습니다.");
+        }
+        else{
+            answer.push_back(id[userId] + "님이 나갔습니다.");
+        }
+    }
+
+    
+    return answer;
 }
