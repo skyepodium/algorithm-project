@@ -29,7 +29,7 @@ vector<int> solution(int N, vector<int> stages) {
     for(int i=0; i<cnt; i++){
         int num = stages[i];
         check[num]++;
-    } 
+    }  
     
     for(int i=1; i<=N; i++){
         double ratio;
