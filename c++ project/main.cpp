@@ -1,51 +1,30 @@
 #include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#define max_int 502
-
+#define max_int 100001
+#define lld long long int
 using namespace std;
 
-int check[max_int];
-int cnt = 0;
+int n;
+lld d[max_int], dist[max_int], price[max_int], min_price;
 
-struct info {
-    int num;
-    double ratio;
-};
-
-vector<info> result;
-
-bool cmp(const info &a, const info &b){
-    if(a.ratio == b.ratio) return a.num < b.num;
-    else return a.ratio > b.ratio;
-}
-
-vector<int> solution(int N, vector<int> stages) {
-    vector<int> answer;
+int main(){
+    scanf("%d", &n);
     
-    cnt = (int)stages.size();
+    for(int i=1; i <= n-1; i++){
+        scanf("%lld", &dist[i]);
+    }
     
-    for(int i=0; i<cnt; i++){
-        int num = stages[i];
-        check[num]++;
-    }  
+    for(int i=1; i<=n; i++){
+        scanf("%lld", &price[i]);
+    }
     
-    for(int i=1; i<=N; i++){
-        double ratio;
-        if(check[i] != 0) ratio = (double)((double)check[i]/(double)cnt);
-        else ratio = 0;
+    min_price = price[1];
+    d[1] = min_price * dist[1];
+    
+    for(int i=2; i<=n-1; i++){
+        if(price[i] < min_price) min_price = price[i];
         
-        result.push_back({i, ratio});
-        cnt -= check[i];
+        d[i] = d[i-1] + min_price * dist[i];
     }
     
-    sort(result.begin(), result.end(), cmp);
-    
-    for(int i=0; i<result.size(); i++){
-        cout << result[i].num << " " << result[i].ratio << endl;
-        answer.push_back(result[i].num);
-    }
-    
-    return answer;
+    printf("%lld\n", d[n-1]);
 }
