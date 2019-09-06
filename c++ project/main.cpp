@@ -11,7 +11,7 @@ int main(){
     
     for(int i=1; i <= n-1; i++){
         scanf("%lld", &dist[i]);
-    }
+    }  
     
     for(int i=1; i<=n; i++){
         scanf("%lld", &price[i]);
