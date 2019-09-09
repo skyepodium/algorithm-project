@@ -1,30 +1,61 @@
 #include <iostream>
-#define max_int 100001
-#define lld long long int
+#include <vector>
+#define max_int 1001
 using namespace std;
 
-int n;
-lld d[max_int], dist[max_int], price[max_int], min_price;
+int t, n, a, b, result, check[max_int], start_node;
+vector<int> v[max_int];
+
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+void dfs(int node, int prev){
+    check[node] = check[prev] + 1;
+
+    for(int i=0; i<v[node].size(); i++){
+        int next = v[node][i];
+        if(check[next] == -1){
+            dfs(next, node);
+        }
+        else if(next == start_node){
+            result = max(result, check[prev] + 1);
+        }
+    }
+}
+
+void clear(){
+    check[0] = 0;
+    for(int i=1; i<=n; i++){
+        check[i] = -1;
+    }
+}
+
+void init(){
+    result = n;
+    for(int i=0; i<=n; i++){
+        v[i].clear();
+    }
+}
 
 int main(){
-    scanf("%d", &n);
+    scanf("%d", &t);
     
-    for(int i=1; i <= n-1; i++){
-        scanf("%lld", &dist[i]);
-    }  
-    
-    for(int i=1; i<=n; i++){
-        scanf("%lld", &price[i]);
-    }
-    
-    min_price = price[1];
-    d[1] = min_price * dist[1];
-    
-    for(int i=2; i<=n-1; i++){
-        if(price[i] < min_price) min_price = price[i];
+    for(int test_case=1; test_case<=t; test_case++){
+        scanf("%d", &n);
         
-        d[i] = d[i-1] + min_price * dist[i];
+        for(int i=1; i<=n; i++){
+            scanf("%d %d", &a, &b);
+            v[a].push_back(b);
+            v[b].push_back(a);
+        }
+        
+        for(int i=1; i<=n; i++){
+            clear();
+            start_node = i;
+            dfs(i, 0);   
+        }
+        
+        printf("#%d %d\n", test_case, result);
     }
-    
-    printf("%lld\n", d[n-1]);
 }
