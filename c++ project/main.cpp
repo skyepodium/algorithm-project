@@ -53,7 +53,7 @@ int main(){
         for(int i=1; i<=n; i++){
             clear();
             start_node = i;
-            dfs(i, 0);   
+            dfs(i, 0);     
         }
         
         printf("#%d %d\n", test_case, result);
