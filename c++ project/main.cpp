@@ -16,7 +16,7 @@ int n, m, a, b, cnt, rcnt, result, baseNum, d[max_int][max_int], r[max_int][max_
  설명: 플로이드 와샬을 통해 시작점에서 도달할 수 있는 모든 구슬을 구한다.
  도달 할 수 있으면 나보다 무겁거나, 가볍다는 의미
  이 때의 무겁거나 가벼운 구슬의 개수가 중간번호(n+1)/2 보다 크면 이 구슬은 중간 구슬이 될 수 없다.
- */
+ */. 
 
 void clear(){
     cnt = 0;
