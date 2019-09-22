@@ -47,7 +47,7 @@ int main(){
                     dfs(i, j);
                 }
             }
-        }
+        }  
         
         printf("%d\n", result);
     }
