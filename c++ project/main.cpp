@@ -41,7 +41,7 @@ bool check_meet(){
     }
     
     info end_node = v[1];
-    return check[end_node.x][end_node.y];
+    return check[end_node.x][end_node.y];  
 }
 
 void clear_check(){
