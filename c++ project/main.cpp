@@ -11,7 +11,7 @@ vector<int> v[max_int];
 void topological_sort(){
     queue<int> q;
     for(int i=1; i<=n; i++){
-        if(ind[i] == 0) {      
+        if(ind[i] == 0) {         
             q.push(i);
             result++;
         }
