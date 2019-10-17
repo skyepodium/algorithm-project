@@ -29,7 +29,7 @@ void bfs(int start){
 
 void go(int idx, int first_cnt, int second_cnt){
     if(idx == n+1){
-        if((int)first.size() != 0 && (int)second.size() != 0){
+        if((int)first.size() != 0 && (int)second.size() != 0) {
 
             for(int i=1; i<=n; i++) check[i] = false;
             
