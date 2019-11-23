@@ -2,7 +2,7 @@
 
 const int kMaxCnt = 17;
 
-int n, a[kMaxCnt][kMaxCnt], d[kMaxCnt][kMaxCnt][3], result;
+int n, a[kMaxCnt][kMaxCnt], d[kMaxCnt][kMaxCnt][3], result;   
 
 int max(int a, int b){
     return a > b ? a : b;
