@@ -7,7 +7,7 @@ int n, a[kMaxCnt][kMaxCnt], d[kMaxCnt][kMaxCnt][3], result;
 int max(int a, int b){
     return a > b ? a : b;
 }      
-    
+         
 int go(int x, int y, int dir){
     // 기저 사례
     if(x == 1 && y == 1 && dir == 2) return 1;
