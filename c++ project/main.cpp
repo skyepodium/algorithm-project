@@ -45,4 +45,4 @@ int main(){
     
     result = go(n-1, n-1, 1) + go(n-1, n, 0) + go(n, n-1, 2);
     printf("%d\n", result);
-}
+}   
