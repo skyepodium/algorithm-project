@@ -1,48 +1,41 @@
 #include <stdio.h>
+#define max_int 10001
 
-const int kMaxCnt = 17;
+int n, d[max_int];
 
-int n, a[kMaxCnt][kMaxCnt], d[kMaxCnt][kMaxCnt][3], result;   
-
-int max(int a, int b){
-    return a > b ? a : b;     
-}           
-         
-int go(int x, int y, int dir){
-    // 기저 사례
-    if(x == 1 && y == 1 && dir == 2) return 1;
-
-    // 메모이제이션
-    if(d[x][y][dir] > 0) return d[x][y][dir];
+int fibo(int i){
+    /*
+    중요2. (언제 끝나야할지를 몰라서)
     
-    if(dir == 0){
-        if(x-1 != 0 && y-1 != 0 && a[x-1][y-1] != 1) d[x][y][dir] += go(x-1, y-1, 1);
-        if(x-1 != 0 && a[x-1][y] != 1) d[x][y][dir] += go(x-1, y, 0);
+    i가 2보다 작거나 같을때 점화식을 만족하지 않기 때문에
+    재귀함수를 더 이상 호출하지 않습니다.
+    */
+    if(i <= 2){
+        return 1;
     }
-    else if(dir == 1){
-        if(x-1 != 0 && y-1 != 0 && a[x-1][y-1] != 1) d[x][y][dir] += go(x-1, y-1, 1);
-        if(x-1 != 0 && a[x-1][y] != 1) d[x][y][dir] += go(x-1, y, 0);
-        if(y-1 != 0 && a[x][y-1] != 1) d[x][y][dir] += go(x, y-1, 2);
-    }
-    else{
-        if(x-1 != 0 && a[x-1][y] != 1) d[x][y][dir] += go(x-1, y, 0);
-        if(y-1 != 0 && a[x][y-1] != 1) d[x][y][dir] += go(x, y-1, 2);
-    }
+    /*
+    중요2. (언제 끝나야할지를 몰라서)
     
-    printf("%d %d %d %d\n", x, y, dir, d[x][y][dir]);
-
-    return d[x][y][dir];
+    이미 한번 계산했을때 (d[i] 가 0이 아닐때)
+    계산한 값을 반환합니다.
+    */
+    if(d[i] > 0) return d[i];
+    
+    /*
+     중요1. (어떤 값이 반환될지를 몰라서)
+     
+     fibo(i)함수는 반드시 i 번째 피보나치수를 돌려준다고 생각해봐요
+     그러면 fibo(i-1)은 반드시 i-1번째 피보나치수를 돌려주고
+     fibo(i-2)는 반드시 i-2번째 피보나치수를 돌려줘요
+     그 2개를 더한 결과가 반드시, i번째 피보나치수 이에요.
+     */
+    return d[i] = fibo(i-1) + fibo(i-2);
 }
 
 int main(){
-    // 1. 입력
+    // n 입력
     scanf("%d", &n);
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &a[i][j]);
-        }
-    }
     
-    result = go(n-1, n-1, 1) + go(n-1, n, 0) + go(n, n-1, 2);
-    printf("%d\n", result);
-}   
+    // n 번째 피보나치 수 출력
+    printf("%d\n", fibo(n));
+}
