@@ -1,55 +1,27 @@
-#include <stdio.h>
+#include <iostream>
+#define max_int 101
+using namespace std;
 
-/*
- 다음 함수는 오름차순으로 정렬된 배열 array에 대해
- 시작 인덱스: start, 마지막 인덱스: end 일때
- 정수 num의 인덱스를 반드시 찾아줍니다.
- */
-int binary_search(int start, int end, int *array, int num){
-    int mid = (start + end) / 2;
+int n, m, a[max_int], result, sum_result;
 
-    if(start <= end){
-        if(array[mid] < num){
-            /*
-            중요1. (어떤 값이 반환될지를 몰라서)
-            
-            다음 호출 binary_search(mid + 1, end, array, num)은
-            mid + 1 ~ end 구간에서 정수 num의 인덱스 번호를 반드시 찾아줍니다.
-            그래서 바로 return 합니다.
-            */
-            return binary_search(mid + 1, end, array, num);
-        }
-        else if(array[mid] == num){
-            /*
-            중요2. (언제 끝나야할지를 몰라서)
-            
-            정수 num을 찾았을때 종료합니다.
-            */
-            return mid;
-        }
-        else{
-            /*
-            중요1. (어떤 값이 반환될지를 몰라서)
-            
-            다음 호출 binary_search(start, mid - 1, array, num)은
-            start ~ mid - 1 구간에서 정수 num의 인덱스 번호를 반드시 찾아줍니다.
-            그래서 바로 return 합니다.
-            */
-            return binary_search(start, mid - 1, array, num);
-        }
-    }
-    else{
-        /*
-        중요2. (언제 끝나야할지를 몰라서)
-        
-        시작 인덱스 start가 마지막 인덱스 end보다 커졌는데 못찾으면 종료합니다.
-        */
-        return -1;
-    }
+int max(int a, int b){
+    return a > b ? a : b;
 }
 
 int main(){
-    int a[10] = {1, 3, 4, 5, 7, 8, 9, 10, 11, 12};
- 
-    printf("%d\n", binary_search(0, 9, a, 5));
+    scanf("%d %d", &n, &m);
+    
+    for(int i=1; i<=n; i++) scanf("%d", &a[i]);
+    
+    for(int i=1; i<=n-2; i++){
+        for(int j=i+1; j<=n-1; j++){
+            for(int k=j+1; k<=n; k++){
+                sum_result = a[i] + a[j] + a[k];
+                if(sum_result <= m){
+                    result = max(result, sum_result);
+                }
+            }
+        }
+    }
+    printf("%d\n", result);
 }
