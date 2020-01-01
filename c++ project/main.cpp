@@ -1,41 +1,55 @@
 #include <stdio.h>
-#define max_int 10001
 
-int n, d[max_int];
+/*
+ 다음 함수는 오름차순으로 정렬된 배열 array에 대해
+ 시작 인덱스: start, 마지막 인덱스: end 일때
+ 정수 num의 인덱스를 반드시 찾아줍니다.
+ */
+int binary_search(int start, int end, int *array, int num){
+    int mid = (start + end) / 2;
 
-int fibo(int i){
-    /*
-    중요2. (언제 끝나야할지를 몰라서)
-    
-    i가 2보다 작거나 같을때 점화식을 만족하지 않기 때문에
-    재귀함수를 더 이상 호출하지 않습니다.
-    */
-    if(i <= 2){
-        return 1;
+    if(start <= end){
+        if(array[mid] < num){
+            /*
+            중요1. (어떤 값이 반환될지를 몰라서)
+            
+            다음 호출 binary_search(mid + 1, end, array, num)은
+            mid + 1 ~ end 구간에서 정수 num의 인덱스 번호를 반드시 찾아줍니다.
+            그래서 바로 return 합니다.
+            */
+            return binary_search(mid + 1, end, array, num);
+        }
+        else if(array[mid] == num){
+            /*
+            중요2. (언제 끝나야할지를 몰라서)
+            
+            정수 num을 찾았을때 종료합니다.
+            */
+            return mid;
+        }
+        else{
+            /*
+            중요1. (어떤 값이 반환될지를 몰라서)
+            
+            다음 호출 binary_search(start, mid - 1, array, num)은
+            start ~ mid - 1 구간에서 정수 num의 인덱스 번호를 반드시 찾아줍니다.
+            그래서 바로 return 합니다.
+            */
+            return binary_search(start, mid - 1, array, num);
+        }
     }
-    /*
-    중요2. (언제 끝나야할지를 몰라서)
-    
-    이미 한번 계산했을때 (d[i] 가 0이 아닐때)
-    계산한 값을 반환합니다.
-    */
-    if(d[i] > 0) return d[i];
-    
-    /*
-     중요1. (어떤 값이 반환될지를 몰라서)
-     
-     fibo(i)함수는 반드시 i 번째 피보나치수를 돌려준다고 생각해봐요
-     그러면 fibo(i-1)은 반드시 i-1번째 피보나치수를 돌려주고
-     fibo(i-2)는 반드시 i-2번째 피보나치수를 돌려줘요
-     그 2개를 더한 결과가 반드시, i번째 피보나치수 이에요.
-     */
-    return d[i] = fibo(i-1) + fibo(i-2);
+    else{
+        /*
+        중요2. (언제 끝나야할지를 몰라서)
+        
+        시작 인덱스 start가 마지막 인덱스 end보다 커졌는데 못찾으면 종료합니다.
+        */
+        return -1;
+    }
 }
 
 int main(){
-    // n 입력
-    scanf("%d", &n);
-    
-    // n 번째 피보나치 수 출력
-    printf("%d\n", fibo(n));
+    int a[10] = {1, 3, 4, 5, 7, 8, 9, 10, 11, 12};
+ 
+    printf("%d\n", binary_search(0, 9, a, 5));
 }
