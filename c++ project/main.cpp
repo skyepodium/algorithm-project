@@ -1,11 +1,15 @@
-#include <iostream>
-#define max_int 1001
-using namespace std;
+#include <stdio.h>
 
-char a[max_int];
+int sum_result(int num) {
+      
+    if(num == 1) {
+      return 1;
+    }
+  
+    return num + sum_result(num-1);    
+}
 
 int main(){
-    scanf("%s", a);
-    if(a[0] >= 97) a[0] -= 32;
-    printf("%s\n", a);   
+    printf("%d\n", sum_result(100));
 }
+
