@@ -6,7 +6,7 @@ int sum_result(int num) {
       return 1;
     }
   
-    return num + sum_result(num-1);    
+    return num + sum_result(num-1);       
 }
 
 int main(){
