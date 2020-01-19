@@ -4,7 +4,7 @@ int sum_result(int num) {
       
     if(num == 1) {
       return 1;
-    }    
+    }         
   
     return num + sum_result(num-1);       
 }
