@@ -1,101 +1,45 @@
-#include <iostream>
+#include <string>
 #include <vector>
-#include <algorithm>
-#define max_int 11
-#define max_val 1001
+#define max_int 501
+
 using namespace std;
+/*
+    시간 복잡도: O(n^2)
+    공간 복잡도: O(n^2)
+    사용한 알고리즘: DP(bottom-up)
+    사용한 자료구조: 2차원 배열
+*/
 
-int n, m, k, d[max_int][max_int], a[max_int][max_int], dead[max_int][max_int], x, y, z, result;
-int dx[] = {0, 0, 1, -1, -1, -1, 1, 1}, dy[] = {-1, 1, 0, 0, -1, 1, 1, -1};
+int max(int a, int b){
+    return a > b ? a : b;
+}
 
+int answer, height, d[max_int][max_int];
 
-vector<int> v[max_int][max_int];
-
-int main(){
-    scanf("%d %d %d", &n, &m, &k);
+int solution(vector<vector<int>> triangle) {
+    // 예외 사례, 초기값을 설정해준다.
+    answer = d[0][0] = triangle[0][0];
+    // 삼각형의 높이를 계산한다.
+    height = (int)triangle.size();
     
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            scanf("%d", &a[i][j]);
-            d[i][j] = 5;
+    for(int i=1; i<height; i++){
+        for(int j=0; j<=i; j++){
+            // 1) 삼각형 제일 왼쪽 끝인 경우
+            if(j == 0){
+                d[i][j] = d[i-1][j] + triangle[i][j];
+            // 2) 삼각형 제일 오른쪽 끝인 경우
+            }else if(j == i){
+                d[i][j] = d[i-1][j-1] + triangle[i][j];
+            }
+            // 3) 삼각형 왼쪽, 오른쪽 끝인 아닌 내부인 경우
+            else{
+                d[i][j] = max(d[i-1][j-1], d[i-1][j]) + triangle[i][j];
+            }
+            
+            // 최대갑 갱신
+            answer = max(answer, d[i][j]);
         }
     }
-    
-    for(int i=1; i<=m; i++){
-        scanf("%d %d %d", &x, &y, &z);
-        v[x][y].push_back(z);
-    }
-    
-    for(int year=1; year<=k; year++){
         
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                sort(v[i][j].begin(), v[i][j].end());
-                d[i][j] += dead[i][j];
-                dead[i][j] = 0;
-            }
-        }
-        
-        // 봄, 여름
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                for(int k=0; k<(int)v[i][j].size(); k++){
-                    // 남은 양분이 나이보다 클때
-                    if(d[i][j] >= v[i][j][k]){
-                        d[i][j] -= v[i][j][k];
-                        v[i][j][k] += 1;
-                    }
-                    // 남은 양분이 나이보다 작을때
-                    else{
-                        
-                        int idx = k;
-                        int size = (int)v[i][j].size();
-                        
-                        for(int l=size-1; l>=idx; l--){
-                            dead[i][j]+= (v[i][j][l] / 2);
-                            v[i][j].pop_back();
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        
-        
-        // 가을
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                for(int s=0; s<v[i][j].size(); s++){
-                    int tree = v[i][j][s];
-                    if(tree % 5 != 0) continue;
-                    
-                    for(int k=0; k<8; k++){
-                        int nx = i + dx[k];
-                        int ny = j + dy[k];
-                        
-                        if(nx > n || nx < 1 || ny > n || ny < 1) continue;
-                        
-                        v[nx][ny].push_back(1);
-                    }
-                }
-            }
-        }
-        
-        // 겨울
-        for(int i=1; i<=n; i++){
-            for(int j=1; j<=n; j++){
-                d[i][j] += a[i][j];
-            }
-        }
-    }
-    
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=n; j++){
-            for(int s=0; s<v[i][j].size(); s++){
-                if(v[i][j][s] < max_val) result++;
-            }
-        }
-    }
-    
-    printf("%d\n", result);
+    return answer;
 }
