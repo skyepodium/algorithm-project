@@ -26,7 +26,7 @@ int go(int i, int j){
     if(d[i][j] > 0) return d[i][j];
     
     for(int j=0; j<=i; j++){
-        // 1) 삼각형 제일 왼쪽 끝인 경우
+        // 1) 삼각형 제일 왼쪽 끝인 경우       
         if(j == 0){
             d[i][j] = go(i-1, j) + a[i][j];
         // 2) 삼각형 제일 오른쪽 끝인 경우
