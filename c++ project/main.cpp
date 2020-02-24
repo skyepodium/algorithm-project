@@ -15,10 +15,10 @@ int answer, height, a[max_int][max_int], d[max_int][max_int];
 
 int max(int a, int b){
     return a > b ? a : b;
-}
+}   
 
 int go(int i, int j){      
-           
+                
     // 예외 사례 (0, 0)일 경우 현재의 값을 반환한다.
     if(i == 0 && j == 0) return d[i][j];
     
