@@ -15,7 +15,7 @@ int answer, height, a[max_int][max_int], d[max_int][max_int];
 
 int max(int a, int b){
     return a > b ? a : b;
-}   
+}
 
 int go(int i, int j){      
                 
@@ -42,7 +42,7 @@ int go(int i, int j){
 }
 
 int solution(vector<vector<int>> triangle) {
-    // 예외 사례, 초기값을 설정해준다.
+    // 예외 사례, 초기값을 설정해준다.     
     d[0][0] = triangle[0][0];
     // 삼각형의 높이를 계산한다.
     height = (int)triangle.size();
