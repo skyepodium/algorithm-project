@@ -41,7 +41,7 @@ int go(int i, int j){
     return d[i][j];
 }
 
-int solution(vector<vector<int>> triangle) {
+int solution(vector<vector<int>> triangle) {        
     // 예외 사례, 초기값을 설정해준다.     
     d[0][0] = triangle[0][0];
     // 삼각형의 높이를 계산한다.
