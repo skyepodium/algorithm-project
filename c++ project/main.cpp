@@ -46,8 +46,8 @@ int solution(vector<vector<int>> triangle) {
     d[0][0] = triangle[0][0];
     // 삼각형의 높이를 계산한다.
     height = (int)triangle.size();
-    
-    /*
+            
+    /*. 
      최대 500 * 500인 벡터를 재귀호출때 마다 인자값으로 넣어주면 시간초과 걸린다.
      전역변수에 넣어주었다.
      */
