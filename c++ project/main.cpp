@@ -1,15 +1,14 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
-
+#define max_int 101
 using namespace std;
 
 //시간 복잡도: O(n*2^g + xy)
-//공간 복잡도: O(xy)
+//공간 복잡도: O(xy + n)
 //사용한 알고리즘: 반복문
-//사용한 자료구조: 스택(1차원 벡터), 2차원 배열, 1차원 배열
+//사용한 자료구조: 스택(벡터), 2차원 배열
 
-bool map[102][102];
+bool map[max_int][max_int];
 
 //끝점의 정보
 int end_x = 0;
@@ -91,8 +90,8 @@ int main(){
     //인접한 4칸이 모두 true이면, 4칸이 모두 드래곤 커브의 일부인것
     //갯수를 1증가시킨다.
     int result = 0;
-    for(int i=0; i<=100; i++){
-        for(int j=0; j<=100; j++){
+    for(int i=0; i<=max_int-2; i++){
+        for(int j=0; j<=max_int-2; j++){
             
             //인접한 4칸의 정사각형이 모두 드래곤의 일부이면
             if(map[i][j] == true && map[i][j+1] == true && map[i+1][j] == true && map[i+1][j+1] == true){
