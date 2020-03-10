@@ -8,16 +8,15 @@ using namespace std;
 //사용한 알고리즘: 반복문
 //사용한 자료구조: 스택(벡터), 2차원 배열
 
-bool map[max_int][max_int];
+int n, x, y, d, g, result;
 
 //끝점의 정보
-int end_x = 0;
-int end_y = 0;
+int end_x, end_y;
 
+bool map[max_int][max_int];
 
 //왼쪽, 위쪽, 오른쪽, 아래쪽
-int dx[] = {0, -1, 0, 1};
-int dy[] = {1, 0, -1, 0};
+int dx[] = {0, -1, 0, 1}, dy[] = {1, 0, -1, 0};
 
 
 //이전 세대의 방향정보를 저장하는 스택
@@ -25,7 +24,7 @@ int dy[] = {1, 0, -1, 0};
 vector<int> dragon;
 
 //스택을 조사하면서 드래곤 커브를 만드는 함수
-void make_generation(vector<int> &dragon){
+void make_generation(vector<int> &dragon){         
     
     //현재 스택의 크기를 먼저 계산해 놓는다.
     int size = (int)dragon.size();
@@ -49,8 +48,7 @@ void make_generation(vector<int> &dragon){
 
 int main(){
     
-    int n;
-    cin >> n;
+    scanf("%d", &n);
     
     for(int i=0; i<n; i++){
         //x, y의 순서를 바꿔서 입력받는다.
@@ -60,12 +58,8 @@ int main(){
         //기존 드래곤 커브의 스택을 비워준다.
         dragon.clear();
         
-        //끝점을 갱신한다.
-        end_x = x;
-        end_y = y;
-        
-        //현재 위치에 드래곤 커브가 놓여있으므로 지도에 표시해준다.
-        map[end_x][end_y] = true;
+        //시작점에에 드래곤 커브가 놓여있으므로 지도에 표시해준다.
+        map[x][y] = true;
         
         //0세대는 미리 만들어 놓는다.
         end_x = x + dx[d];
@@ -89,7 +83,6 @@ int main(){
     //100*100 2차원 행렬을 2중 for문 사용한 단순한 탐색
     //인접한 4칸이 모두 true이면, 4칸이 모두 드래곤 커브의 일부인것
     //갯수를 1증가시킨다.
-    int result = 0;
     for(int i=0; i<=max_int-2; i++){
         for(int j=0; j<=max_int-2; j++){
             
