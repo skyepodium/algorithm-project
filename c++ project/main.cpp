@@ -24,7 +24,7 @@ int dx[] = {0, -1, 0, 1}, dy[] = {1, 0, -1, 0};
 vector<int> dragon;
 
 //스택을 조사하면서 드래곤 커브를 만드는 함수
-void make_generation(vector<int> &dragon){         
+void make_generation(vector<int> &dragon){              
     
     //현재 스택의 크기를 먼저 계산해 놓는다.
     int size = (int)dragon.size();
