@@ -24,11 +24,11 @@ int dx[] = {0, -1, 0, 1}, dy[] = {1, 0, -1, 0};
 vector<int> dragon;
 
 //스택을 조사하면서 드래곤 커브를 만드는 함수
-void make_generation(vector<int> &dragon){              
+void make_generation(vector<int> &dragon){
     
     //현재 스택의 크기를 먼저 계산해 놓는다.
     int size = (int)dragon.size();
-    
+        
     //스택의 뒤에서 부터 꺼내면서
     //다음세대의 방향정보를 dir = (dragon[i] + 1)%4; 규칙에 따라 생성한다.
     for(int i=size-1; i>=0; i--){
