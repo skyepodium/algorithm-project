@@ -40,7 +40,7 @@ void make_generation(vector<int> &dragon){
         
         //만들어진 드래곤 커브를 지도에 놓아준다.
         map[end_x][end_y] = true;    
-        
+             
         //다음세대를 위하 스택에 방향정보를 넣어준다.
         dragon.push_back(dir);
     }
