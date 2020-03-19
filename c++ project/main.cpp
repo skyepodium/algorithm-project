@@ -43,7 +43,7 @@ void make_generation(vector<int> &dragon){
              
         //다음세대를 위하 스택에 방향정보를 넣어준다.
         dragon.push_back(dir);
-    }
+    }   
 }
 
 int main(){
