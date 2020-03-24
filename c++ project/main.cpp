@@ -45,7 +45,7 @@ void make_generation(vector<int> &dragon){
         dragon.push_back(dir);
     }        
 }
-
+    
 int main(){
     
     scanf("%d", &n);
