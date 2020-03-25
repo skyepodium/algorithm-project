@@ -66,7 +66,7 @@ int main(){
         end_y = y + dy[d];
         
         //0세대를 만든 이후에도 지도에 표시해준다.
-        map[end_x][end_y] = true;
+        map[end_x][end_y] = true;   
         
         //0세대의 방향정보를 스택에 넣어준다.
         dragon.push_back(d);
