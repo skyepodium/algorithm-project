@@ -59,14 +59,14 @@ int main(){
         dragon.clear();
         
         //시작점에에 드래곤 커브가 놓여있으므로 지도에 표시해준다.
-        map[x][y] = true;
+        map[x][y] = true;    
         
         //0세대는 미리 만들어 놓는다.
         end_x = x + dx[d];
         end_y = y + dy[d];
         
         //0세대를 만든 이후에도 지도에 표시해준다.
-        map[end_x][end_y] = true;   
+        map[end_x][end_y] = true;
         
         //0세대의 방향정보를 스택에 넣어준다.
         dragon.push_back(d);
