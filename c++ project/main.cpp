@@ -49,7 +49,7 @@ void make_generation(vector<int> &dragon){
 int main(){
     
     scanf("%d", &n);
-        
+               
     for(int i=0; i<n; i++){
         //x, y의 순서를 바꿔서 입력받는다.
         int y, x, d, g;
