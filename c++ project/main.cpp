@@ -34,7 +34,7 @@ void make_generation(vector<int> &dragon){
     for(int i=size-1; i>=0; i--){
         int dir = (dragon[i] + 1)%4;
         
-        //다음 세대의 방향정보를 바탕으로 다음 x,y를 찾고 이를 갱신한다.
+        //다음 세대의 방향정보를 바탕으로 다음 x,y를 찾고 이를 갱신한다.    
         end_x = end_x + dx[dir];
         end_y = end_y + dy[dir];
              
