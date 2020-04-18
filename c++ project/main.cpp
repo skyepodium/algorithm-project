@@ -1,6 +1,13 @@
 #include <iostream>
 
 #define max_int 51
+
+/*
+    시간 복잡도: O(tnm)
+    공간 복잡도: O(nm)
+    사용한 알고리즘: 반복문
+    사용한 자료구조: 2차원 배열
+ */
 using namespace std;
 
 
