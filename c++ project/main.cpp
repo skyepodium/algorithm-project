@@ -1,21 +1,14 @@
 #include <iostream>
-#include <vector>
 
 #define max_int 51
 using namespace std;
 
-int n, m, t, head_x = -1, head_y = -1, tail_x = -1, tail_y = -1;
+int n, m, t, head_x = -1, head_y = -1, tail_x = -1, tail_y = -1, result = 0;
 
 int a[max_int][max_int], dust_temp[max_int][max_int];
 
 int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
-
-struct info{
-    int x, y;
-};
-
-vector<info> v;
 
 void dust_move() {
     
@@ -78,10 +71,9 @@ void wind() {
         while(true){
             int nx = x + dx[dir];
             int ny = y + dy[dir];
-//            cout << "type " << type << endl;
-//            cout << nx << " " << ny << " " << dir << endl;
-
-            if(a[nx][ny] == -1) break;
+            
+            if(nx == head_x && ny == head_y) break;
+            if(nx == tail_x && ny == tail_y) break;
             
             // 오른쪽 끝
             if(ny > m) {
@@ -99,9 +91,6 @@ void wind() {
                 dir = 1;
                 continue;
             }
-//            else if(ny < 1){
-//                break;
-//            }
             
             if(type == 0 && nx > head_x && ny == m){
                 dir = 0;
@@ -142,29 +131,20 @@ int main() {
                     tail_x = i;
                     tail_y = j;
                 }
-            }else if(a[i][j] !=0){
-                v.push_back({i, j});
             }
         }
     }
     
     for(int i=1; i<=t; i++){
-        // 확산
         dust_move();
         
         wind();
-        
-        // 바람
     }
     
-//    cout << endl;
-    int result = 0;
     for(int i=1; i<=n; i++){
         for(int j=1; j<=m; j++){
             if(a[i][j] != -1 ) result += a[i][j];
-//            cout << a[i][j] << " " ;
         }
-//        cout << endl;
     }
-    cout << result << endl;
+    printf("%d\n", result);
 }
