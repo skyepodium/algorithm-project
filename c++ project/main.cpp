@@ -26,9 +26,9 @@ int main(){
         for(int i=a; i<n; i++){
             result[i] = idx + 'a';
             if(idx < b-1) idx++;
-            else idx=0;
+            else idx=0;    
         }
      
         printf("%s\n", result);
-    }   
+    }
 }
