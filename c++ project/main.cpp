@@ -1,55 +1,48 @@
 #include <iostream>
 #define max_int 1001
-using namespace std;
+using namespace  std;
 
-int t, n, a[max_int], mulNum, result = -1;
+int n;
+char a[max_int][max_int];
 
-int max(int a, int b){
-    return a > b ? a: b;
-}
+int dx[] = {0, 0, 1, -1, 1, 1, -1, -1};
+int dy[] = {-1, 1, 0, 0, 1, -1, 1, -1};
 
-void check(int base_num) {
-    bool canUse = true;
+void cal_mine(int x, int y){
+    int result = 0;
 
-    int num = base_num;
+    for(int i=0; i<8; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
 
-    int cur = (num % 10) + 1;
-    while(num > 0){
-        int res = num % 10;
-        if(res == cur - 1) {
-            num = num / 10;
-            cur = res;
-        } else{
-            canUse = false;
-            break;
-        }
+        if(nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+        if(a[nx][ny] == '.') continue;
+        result += (a[nx][ny] - '0');
     }
 
-    if(canUse) {
-        result = max(result, base_num);
-    }
+    if(result >= 10) printf("M");
+    else printf("%d", result);
 }
 
 int main(){
-    scanf("%d", &t);
+    scanf("%d", &n);
 
-    for(int test_case=1; test_case<=t; test_case++){
+    for(int i=0; i<n; i++){
+        scanf("%s", a[i]);
+    }
 
-        result = -1;
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
 
-        scanf("%d", &n);
-
-        for(int i=1; i<=n; i++){
-            scanf("%d", &a[i]);
-        }
-
-        for(int i=1; i<=n; i++) {
-            for(int j=i+1; j<=n; j++){
-                mulNum = a[i] * a[j];
-                check(mulNum);
+            if(a[i][j] != '.'){
+                printf("*");
+            }
+            else{
+                cal_mine(i, j);
+            }
+            if(j == n-1){
+                printf("\n");
             }
         }
-
-        printf("#%d %d\n", test_case, result);
     }
 }
