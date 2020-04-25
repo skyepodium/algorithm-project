@@ -1,35 +1,24 @@
 #include <iostream>
-#define max_int 201
-using namespace  std;
 
-int n, a, b, c, v[max_int][4], result[max_int];
+using namespace std;
 
-int main(){
-    scanf("%d", &n);
+int l, a, b, c, d, result, max_num;
 
-    for(int i=1; i<=n; i++){
-        scanf("%d %d %d", &a, &b, &c);
-        v[i][1] = a;
-        v[i][2] = b;
-        v[i][3] = c;
+int max(int a, int b){
+    return a > b ? a : b;
+}
+
+int main() {
+    scanf("%d %d %d %d %d", &l, &a, &b, &c, &d);
+
+    if(a / c > b / d){
+        result = l - a / c;
+        if(a%c > 0) result--;
+    }
+    else{
+        result = l - b / d;
+        if(b%d > 0) result--;
     }
 
-    for(int j=1; j<=3; j++){
-        for(int i=1; i<=n; i++){
-            int cur = v[i][j];
-
-            bool isExist = false;
-            for(int k=1; k<=n; k++){
-                if(i==k) continue;
-
-                if(cur == v[k][j]) isExist = true;
-            }
-
-            if(!isExist) result[i] += cur;
-        }
-    }
-
-    for(int i=1; i<=n; i++){
-        printf("%d\n", result[i]);
-    }
+    printf("%d\n", result);
 }
