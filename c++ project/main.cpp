@@ -1,24 +1,55 @@
 #include <iostream>
-
+#define max_int 1001
 using namespace std;
 
-int l, a, b, c, d, result, max_num;
+int t, n, a[max_int], mulNum, result = -1;
 
 int max(int a, int b){
-    return a > b ? a : b;
+    return a > b ? a: b;
 }
 
-int main() {
-    scanf("%d %d %d %d %d", &l, &a, &b, &c, &d);
+void check(int base_num) {
+    bool canUse = true;
 
-    if(a / c > b / d){
-        result = l - a / c;
-        if(a%c > 0) result--;
-    }
-    else{
-        result = l - b / d;
-        if(b%d > 0) result--;
+    int num = base_num;
+
+    int cur = (num % 10) + 1;
+    while(num > 0){
+        int res = num % 10;
+        if(res == cur - 1) {
+            num = num / 10;
+            cur = res;
+        } else{
+            canUse = false;
+            break;
+        }
     }
 
-    printf("%d\n", result);
+    if(canUse) {
+        result = max(result, base_num);
+    }
+}
+
+int main(){
+    scanf("%d", &t);
+
+    for(int test_case=1; test_case<=t; test_case++){
+
+        result = -1;
+
+        scanf("%d", &n);
+
+        for(int i=1; i<=n; i++){
+            scanf("%d", &a[i]);
+        }
+
+        for(int i=1; i<=n; i++) {
+            for(int j=i+1; j<=n; j++){
+                mulNum = a[i] * a[j];
+                check(mulNum);
+            }
+        }
+
+        printf("#%d %d\n", test_case, result);
+    }
 }
