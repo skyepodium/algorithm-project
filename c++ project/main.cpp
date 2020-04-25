@@ -1,34 +1,35 @@
 #include <iostream>
-#define max_int 2001
-using namespace std;
+#define max_int 201
+using namespace  std;
 
-int t, n, a, b, idx;
-char result[max_int];
-bool check[26];
+int n, a, b, c, v[max_int][4], result[max_int];
 
 int main(){
-    scanf("%d", &t);
-    
-    for(int test_case=1; test_case<=t; test_case++){
-        scanf("%d %d %d", &n, &a, &b);
-        
-        for(int i=0; i<=n; i++) result[i] = 0;
-        
-        idx = 0;
-        
-        for(int i=0; i<a; i++){
-            result[i] = idx + 'a';
-            if(idx < b-1) idx++;
+    scanf("%d", &n);
+
+    for(int i=1; i<=n; i++){
+        scanf("%d %d %d", &a, &b, &c);
+        v[i][1] = a;
+        v[i][2] = b;
+        v[i][3] = c;
+    }
+
+    for(int j=1; j<=3; j++){
+        for(int i=1; i<=n; i++){
+            int cur = v[i][j];
+
+            bool isExist = false;
+            for(int k=1; k<=n; k++){
+                if(i==k) continue;
+
+                if(cur == v[k][j]) isExist = true;
+            }
+
+            if(!isExist) result[i] += cur;
         }
-        
-        idx = 0;
-        
-        for(int i=a; i<n; i++){
-            result[i] = idx + 'a';
-            if(idx < b-1) idx++;
-            else idx=0;    
-        }
-     
-        printf("%s\n", result);
+    }
+
+    for(int i=1; i<=n; i++){
+        printf("%d\n", result[i]);
     }
 }
