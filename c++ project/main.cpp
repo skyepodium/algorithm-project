@@ -1,32 +1,56 @@
 #include <iostream>
-#include <string>
-#define max_int 11
-using namespace std;
+#include <algorithm>
+using namespace  std;
 
-int num;
-bool check[max_int];
-string cmd1, cmd2;
+int n, v[4], cnt[4][4], num, max_idx=0, max_val=0;
+
+int max3(int a, int b, int c){
+    return max(max(a, b), c);
+}
 
 int main(){
-    while(true){
-        scanf("%d", &num);
-        if(num == 0) break;
+    scanf("%d", &n);
 
-        cin >> cmd1 >> cmd2;
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=3; j++){
+            scanf("%d", &num);
 
-        if(cmd2 == "high"){
-            for(int i=num; i<=10; i++) check[i] = true;
-        }
-        else if(cmd2 == "low"){
-            for(int i=num; i>=1; i--) check[i] = true;
-        }else if(cmd2 == "on"){
-            bool isTrue = true;
-            if(check[num]) isTrue = false;
-
-            if(isTrue) cout << "Stan may be honest" << endl;
-            else cout << "Stan is dishonest" << endl;
-
-            for(int i=0; i<=10; i++) check[i] = false;
+            v[j] += num;
+            cnt[j][num]++;
         }
     }
+
+    if(v[1] == v[2] == v[3]){
+        for(int i=1; i<=4; i++){
+            if(i==4) {
+                cout << "Sfd" << endl;
+            }
+            if(cnt[1][i] == cnt[2][i] == cnt[3][i]){
+                continue;
+            }
+            else{
+                max_val = max3(cnt[1][i], cnt[2][i], cnt[3][i]);
+                max_idx = 0;
+
+                for(int i=1; i<=3; i++){
+                    if(max_val == cnt[max_idx][i]){
+                        max_idx = i;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else{
+        max_val = max3(v[1], v[2], v[3]);
+        max_idx = 0;
+
+        for(int i=1; i<=3; i++){
+            if(max_val == v[i]){
+                max_idx = i;
+                break;
+            }
+        }
+    }
+    printf("%d %d\n", max_idx, max_val);
 }
