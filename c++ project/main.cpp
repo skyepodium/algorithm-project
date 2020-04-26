@@ -22,7 +22,7 @@ int main(){
 
     if(v[1] == v[2] == v[3]){
         for(int i=1; i<=4; i++){
-            if(i==4) {
+            if(i==4) {.      
                 cout << "Sfdkkkk" << endl;
             }
             if(cnt[1][i] == cnt[2][i] == cnt[3][i]){

@@ -12,7 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cfed03dd-d33d-4b58-ab1c-d4c605583a19" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/c++ project/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++ project/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.2/CMakeCCompiler.cmake" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.2/CMakeCXXCompiler.cmake" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.2/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
@@ -151,7 +151,7 @@
       <workItem from="1555139686090" duration="5000" />
       <workItem from="1555739152653" duration="637000" />
       <workItem from="1587790162361" duration="655000" />
-      <workItem from="1587803573030" duration="4821000" />
+      <workItem from="1587803573030" duration="5015000" />
     </task>
     <servers />
   </component>
@@ -159,22 +159,22 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="722" height="264" key="GridCell.Tab.0.bottom" timestamp="1587813781880">
+    <state width="722" height="264" key="GridCell.Tab.0.bottom" timestamp="1587880363346">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1587813781880" />
-    <state width="722" height="264" key="GridCell.Tab.0.center" timestamp="1587813781879">
+    <state width="722" height="264" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1587880363346" />
+    <state width="722" height="264" key="GridCell.Tab.0.center" timestamp="1587880363345">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1587813781879" />
-    <state width="722" height="264" key="GridCell.Tab.0.left" timestamp="1587813781879">
+    <state width="722" height="264" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1587880363345" />
+    <state width="722" height="264" key="GridCell.Tab.0.left" timestamp="1587880363345">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1587813781879" />
-    <state width="722" height="264" key="GridCell.Tab.0.right" timestamp="1587813781880">
+    <state width="722" height="264" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1587880363345" />
+    <state width="722" height="264" key="GridCell.Tab.0.right" timestamp="1587880363346">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1587813781880" />
+    <state width="722" height="264" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1587880363346" />
     <state x="963" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1587813401465">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
