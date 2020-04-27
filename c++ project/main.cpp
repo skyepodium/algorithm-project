@@ -35,7 +35,7 @@ int main(){
                 for(int i=1; i<=3; i++){
                     if(max_val == cnt[max_idx][i]){
                         max_idx = i;
-                        break;
+                        break;    
                     }
                 }
             }
