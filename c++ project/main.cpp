@@ -43,7 +43,7 @@ int main(){
     }
     else{
         max_val = max3(v[1], v[2], v[3]);
-        max_idx = 0;
+        max_idx = 0;   
 
         for(int i=1; i<=3; i++){
             if(max_val == v[i]){
