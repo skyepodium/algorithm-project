@@ -47,26 +47,6 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>check</find>
-      <find>size</find>
-      <find>false</find>
-      <find>node</find>
-      <find>do_test4</find>
-      <find>printf</find>
-      <find>ios</find>
-      <find>ios_base</find>
-      <find>do_test</find>
-      <find>f_on</find>
-      <find>one</find>
-      <find>-1</find>
-      <find>temp</find>
-    </findStrings>
-    <replaceStrings>
-      <replace />
-    </replaceStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -155,7 +135,10 @@
       <workItem from="1555739152653" duration="637000" />
       <workItem from="1587790162361" duration="655000" />
       <workItem from="1587803573030" duration="5015000" />
-      <workItem from="1588220779920" duration="8831000" />
+      <workItem from="1588220779920" duration="13318000" />
+      <workItem from="1588324473805" duration="3471000" />
+      <workItem from="1588331166017" duration="2168000" />
+      <workItem from="1588398730027" duration="3000" />
     </task>
     <servers />
   </component>
@@ -163,22 +146,22 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="722" height="264" key="GridCell.Tab.0.bottom" timestamp="1588308512935">
+    <state width="722" height="406" key="GridCell.Tab.0.bottom" timestamp="1588339224680">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1588308512935" />
-    <state width="722" height="264" key="GridCell.Tab.0.center" timestamp="1588308512934">
+    <state width="722" height="406" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1588339224680" />
+    <state width="722" height="406" key="GridCell.Tab.0.center" timestamp="1588339224679">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1588308512934" />
-    <state width="722" height="264" key="GridCell.Tab.0.left" timestamp="1588308512934">
+    <state width="722" height="406" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1588339224679" />
+    <state width="722" height="406" key="GridCell.Tab.0.left" timestamp="1588339224679">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1588308512934" />
-    <state width="722" height="264" key="GridCell.Tab.0.right" timestamp="1588308512935">
+    <state width="722" height="406" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1588339224679" />
+    <state width="722" height="406" key="GridCell.Tab.0.right" timestamp="1588339224680">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="264" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1588308512935" />
+    <state width="722" height="406" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1588339224680" />
     <state x="963" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1588222434608">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
