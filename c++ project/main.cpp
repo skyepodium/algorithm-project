@@ -1,88 +1,92 @@
 #include <string>
-#define max_int 4
+#include <vector>
+#define max_int 31
 using namespace std;
 
 /*
-    시간 복잡도: O(n)
-    공간 복잡도: O(n)
-    사용한 알고리즘: 거듭제곱
-    사용한 자료구조: 배열
- */
+    시간 복잡도: O(nmk) n: 도시의 수, m: 캐시의 크기, k: 도시 이름의 길이
+    공간 복잡도: O(m)
+    사용한 알고리즘: 반복문(LRU 구현에 사용)
+    사용한 자료구조: 배열 (캐시 저장에 사용)
+*/
 
 /*
-   거듭 제곱
-   3제곱 까지 이기 때문에
-   num * num * num 해도 되고
-   반복문 써도 되고
-   분할해서 DP 써도 되고
- */
-int pow(int num, char c){
-    int result = num;
-    int a = 0;
-    if(c == 'S') a = 1;
-    else if(c == 'D') a = 2;
-    else a = 3;
+    대문자를 소문자로 변경하는 함수
+    아스키코드 사용
+*/
+string to_lowercase(string name) {
+    string result = name;
 
-    for(int i=2; i<=a; i++) {
-        result = result * num;
+    int name_size = (int)result.size();
+    for(int i=0; i< name_size; i++){
+        /*
+            만약 아스키 코드 값이 97보다 작으면 대문자 이기 때문에
+            32를 더해서 대문자로 만들어줍니다.
+            a - 97
+            A - 65
+        */
+        if(result[i] < 97) result[i] += 32;
     }
 
     return result;
 }
 
-int solution(string dartResult) {
-    // 1. 입력 및 초기화
+int solution(int cacheSize, vector<string> cities) {
     int answer = 0;
-    int idx = 0, a[max_int] = {0, 0, 0, 0};
-    int size = (int)dartResult.size();
 
-    // 2. 로직 수행
-    for(int i=0; i < size; i++){
-        char cur = dartResult[i];
+    // 도시 이름을 저장할 캐시의 자료구조로 배열 생성
+    string a[max_int];
 
-        // 1) 거듭 제곱 진행합니다.
-        if(cur == 'S' || cur == 'D' || cur == 'T'){
-            a[idx] = pow(a[idx], cur);
+    // 현재 캐시가 어느만큼 차있는지 알기 위한 인덱스
+    int idx = 1;
+
+    int city_size = (int)cities.size();
+    for(int i=0; i < city_size; i++) {
+        /*
+            대소문자 구분하지 않기 때문에
+            도시 이름은 전부 소문자로 변경시켜줍니다.
+        */
+        string city_name = to_lowercase(cities[i]);
+
+        // cache hit, cache miss 여부를 체크하기 위한 변수 is_exist
+        bool is_exist = false;
+        // cache hit인 경우 어떤 캐시가 최근에 사용되었는지 체크하기 위한 인덱스
+        int start_idx = 1;
+        for(int j=1; j<=idx; j++) {
+            if(a[j] == city_name) {
+                is_exist = true;
+                // 가장 최근에 사용된 캐시의 인덱스를 저장해줍니다.
+                start_idx = j;
+                break;
+            }
         }
-        // 2) 2배를 해줍니다.
-        else if(cur == '*'){
+
+        /*
+          cache hit 인 경우 += 1
+          cache miss 인 경우 += 5
+        */
+        if(is_exist) answer += 1;
+        else  answer += 5;
+
+        // 1) 만약 캐시가 꽉 찼다면
+        if(idx == cacheSize) {
             /*
-                첫번째 게임인 경우 - 현재 점수 * 2
-                두번째, 세번째 게임인 경우 - 현재와 바로 전 점수 * 2
-             */
-            int start_idx = idx == 1 ? 1 : idx - 1;
-
-            for(int i=start_idx; i<=idx; i++){
-                a[i] = a[i] * 2;
+                최근에 사용된 캐시 부터 끝까지 한칸씩 앞으로 밀어줍니다.
+                최근에 사용된 인덱스가 없으면 1부터 시작합니다.
+            */
+            for(int i=start_idx; i < idx; i++) {
+                a[i] = a[i+1];
             }
+            // 최근에 사용된 캐시는 제일 뒤에 넣어줍니다.
+            a[idx] = city_name;
         }
-        // 3) 현재 점수를 -1배 합니다.
-        else if(cur == '#'){
-            a[idx] = a[idx] * -1;
-        }
-        // 4) 현재 숫자를 검사합니다.
-        else{
-            // 아스키코드에서 숫자를 추출합니다.
-            int num = cur - '0';
-
-            // 만약 10인경우 (길이 2인 문자열)
-            if(cur == '1'){
-                if(i < size - 1 && dartResult[i + 1] == '0') {
-                    num = 10;
-                }
-            }
-
+            // 2) 아직 캐시가 비어있다면
+        else if(idx < cacheSize){
+            // 인덱스를 1증가시키고 도시 이름을 넣어줍니다.
             idx++;
-            a[idx] =  num;
-            if(num == 10) i += 1;
+            a[idx] = city_name;
         }
     }
 
-    // 3. 결과 합산
-    for(int i=1; i<=3; i++) {
-        answer += a[i];
-    }
-
-    // 4. 출력
     return answer;
 }
