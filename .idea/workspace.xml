@@ -32,11 +32,9 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.4/CompilerIdC/a.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.4/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.13.4/CompilerIdCXX/a.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/algorithm_project.dir/c++_project/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/algorithm_project.dir/c++_project/main.cpp.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.cxx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/algorithm_project" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/algorithm_project" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +136,8 @@
       <workItem from="1588220779920" duration="13318000" />
       <workItem from="1588324473805" duration="3471000" />
       <workItem from="1588331166017" duration="2168000" />
-      <workItem from="1588398730027" duration="2029000" />
+      <workItem from="1588398730027" duration="3042000" />
+      <workItem from="1588480648968" duration="52000" />
     </task>
     <servers />
   </component>
@@ -146,22 +145,22 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="722" height="406" key="GridCell.Tab.0.bottom" timestamp="1588401774316">
+    <state width="722" height="406" key="GridCell.Tab.0.bottom" timestamp="1588404938513">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="406" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1588401774316" />
-    <state width="722" height="406" key="GridCell.Tab.0.center" timestamp="1588401774315">
+    <state width="722" height="406" key="GridCell.Tab.0.bottom/0.23.1680.949@0.23.1680.949" timestamp="1588404938513" />
+    <state width="722" height="406" key="GridCell.Tab.0.center" timestamp="1588404938512">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="406" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1588401774315" />
-    <state width="722" height="406" key="GridCell.Tab.0.left" timestamp="1588401774315">
+    <state width="722" height="406" key="GridCell.Tab.0.center/0.23.1680.949@0.23.1680.949" timestamp="1588404938512" />
+    <state width="722" height="406" key="GridCell.Tab.0.left" timestamp="1588404938512">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="406" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1588401774315" />
-    <state width="722" height="406" key="GridCell.Tab.0.right" timestamp="1588401774316">
+    <state width="722" height="406" key="GridCell.Tab.0.left/0.23.1680.949@0.23.1680.949" timestamp="1588404938512" />
+    <state width="722" height="406" key="GridCell.Tab.0.right" timestamp="1588404938513">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
-    <state width="722" height="406" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1588401774316" />
+    <state width="722" height="406" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1588404938513" />
     <state x="963" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1588222434608">
       <screen x="0" y="23" width="1680" height="949" />
     </state>

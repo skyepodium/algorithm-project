@@ -1,38 +1,58 @@
 #include <string>
-#include <vector>
-
+#define max_int 4
 using namespace std;
 
-/*
-    시간 복잡도: O(n^2)
-    공간 복잡도: O(n)
-    사용한 알고리즘: 쉬프트 연산
-    사용한 자료구조: 배열
-*/
+int pow(int num, char c){
+    int result = num;
+    int a = 0;
+    if(c == 'S') a = 1;
+    else if(c == 'D') a = 2;
+    else a = 3;
 
+    for(int i=2; i<=a; i++) {
+        result = result * num;
+    }
 
-vector<string> solution(int n, vector<int> arr1, vector<int> arr2) {
-    vector<string> answer;
+    return result;
+}
 
-    // n개의 숫자에 대해 n번 반복합니다.
-    for(int i=0; i<n; i++){
-        // 결과를 문자열로 저장할 변수 num
-        string num = "";
+int solution(string dartResult) {
+    int answer = 0;
+    int idx = 0, a[max_int] = {0, 0, 0, 0};
+    int size = (int)dartResult.size();
 
-        // 배열 요소의 최대 크기는 2^n - 1, 최대 n개의 비트를 가지고 있습니다.
-        for(int j=n-1; j>=0; j--){
+    for(int i=0; i < size; i++){
+        char cur = dartResult[i];
 
-            // 1. arr1, arr2의 n 번째 비트가 하나라도 1인 경우
-            if((arr1[i] & (1 << j)) | (arr2[i] & (1 << j))){
-                num += "#";
-            }
-            // 2. arr1, arr2의 n 번째 비트가 모두 0인 경우
-            // (if문의 조건에 0이 들어오면 false로 인식합니다.)
-            else{
-                num += " ";
+        if(cur == 'S' || cur == 'D' || cur == 'T'){
+            a[idx] = pow(a[idx], cur);
+        }
+        else if(cur == '*'){
+            int start_idx = idx == 1 ? 1 : idx - 1;
+
+            for(int i=start_idx; i<=idx; i++){
+                a[i] = a[i] * 2;
             }
         }
-        answer.push_back(num);
+        else if(cur == '#'){
+            a[idx] = a[idx] * -1;
+        }
+        else{
+            int num = cur - '0';
+            if(cur == '1'){
+                if(i < size - 1 && dartResult[i + 1] == '0') {
+                    num = 10;
+                }
+            }
+
+            idx++;
+            a[idx] =  num;
+            if(num == 10) i += 1;
+        }
+    }
+
+    for(int i=1; i<=3; i++) {
+        answer += a[i];
     }
 
     return answer;
