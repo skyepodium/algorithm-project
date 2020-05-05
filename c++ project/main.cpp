@@ -4,9 +4,9 @@
 using namespace std;
 
 /*
-    시간 복잡도: O(nmk) n: 도시의 수, m: 캐시의 크기, k: 도시 이름의 길이
+    시간 복잡도: O(n(m+k)) n: 도시의 수, m: 캐시의 크기, k: 도시 이름의 길이
     공간 복잡도: O(m)
-    사용한 알고리즘: 반복문(LRU 구현에 사용)
+    사용한 알고리즘: 반복문(LRU 구현에 사용)    
     사용한 자료구조: 배열 (캐시 저장에 사용)
 */
 
@@ -52,12 +52,15 @@ int solution(int cacheSize, vector<string> cities) {
         bool is_exist = false;
         // cache hit인 경우 어떤 캐시가 최근에 사용되었는지 체크하기 위한 인덱스
         int start_idx = 1;
-        for(int j=1; j<=idx; j++) {
-            if(a[j] == city_name) {
-                is_exist = true;
-                // 가장 최근에 사용된 캐시의 인덱스를 저장해줍니다.
-                start_idx = j;
-                break;
+        // 캐시 사이즈가 0인 경우 캐시를 검사하지 않는다.
+        if(cacheSize != 0) {
+            for(int j=1; j<=idx; j++) {
+                if(city_name == a[j]) {
+                    is_exist = true;
+                    // 가장 최근에 사용된 캐시의 인덱스를 저장해줍니다.
+                    start_idx = j;
+                    break;
+                }
             }
         }
 
