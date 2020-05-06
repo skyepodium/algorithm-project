@@ -1,12 +1,12 @@
 #include <string>
 #include <vector>
 #define max_int 31
-using namespace std;
+using namespace std;    
 
 /*
     시간 복잡도: O(n(m+k)) n: 도시의 수, m: 캐시의 크기, k: 도시 이름의 길이
     공간 복잡도: O(m)
-    사용한 알고리즘: 반복문(LRU 구현에 사용)    
+    사용한 알고리즘: 반복문(LRU 구현에 사용)
     사용한 자료구조: 배열 (캐시 저장에 사용)
 */
 
