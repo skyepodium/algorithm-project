@@ -15,7 +15,7 @@ using namespace std;
     아스키코드 사용
 */
 string to_lowercase(string name) {
-    string result = name;
+    string result = name;   
 
     int name_size = (int)result.size();
     for(int i=0; i< name_size; i++){
