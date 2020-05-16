@@ -27,7 +27,7 @@ string to_lowercase(string name) {
         */
         if(result[i] < 97) result[i] += 32;
     }    
-
+    
     return result;    
 }
 
