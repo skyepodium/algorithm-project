@@ -58,7 +58,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="cf.first.check.clang-format" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager">
     <configuration name="algorithm_project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="algorithm_project" TARGET_NAME="algorithm_project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="algorithm_project" RUN_TARGET_NAME="algorithm_project">
@@ -144,6 +144,8 @@
       <workItem from="1588776368175" duration="2000" />
       <workItem from="1589010318013" duration="2000" />
       <workItem from="1589099478283" duration="3000" />
+      <workItem from="1589603386358" duration="289000" />
+      <workItem from="1589619751804" duration="1289000" />
     </task>
     <servers />
   </component>
@@ -167,6 +169,10 @@
       <screen x="0" y="23" width="1680" height="949" />
     </state>
     <state width="722" height="406" key="GridCell.Tab.0.right/0.23.1680.949@0.23.1680.949" timestamp="1588655897164" />
+    <state x="391" y="136" key="SettingsEditor" timestamp="1589603398808">
+      <screen x="0" y="23" width="1680" height="949" />
+    </state>
+    <state x="391" y="136" key="SettingsEditor/0.23.1680.949@0.23.1680.949" timestamp="1589603398807" />
     <state x="963" y="231" width="670" height="676" key="search.everywhere.popup" timestamp="1588566533834">
       <screen x="0" y="23" width="1680" height="949" />
     </state>
