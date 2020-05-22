@@ -7,6 +7,6 @@ void go(int a, int b){
     cout << "b " << b << endl;
 }
 
-int main(){
+int main(){   
     go(1, 2);
 }
