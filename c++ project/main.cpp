@@ -10,3 +10,4 @@ void go(int a, int b){
 int main(){   
     go(1, 2);
 }
+    
