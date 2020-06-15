@@ -76,7 +76,7 @@ int solution(string str1, string str2) {
                 // 4) 첫번째 문자에 100을 곱하고 두번째 문자랑 더해서 유니크한 숫자를 만들어줍니다.
                 // 대문자의 아스키코드 범위는 65 ~ 90
                 // 예) AB -> 6566
-                int num = to_uppercase(first_ch) * 100 + to_uppercase(second_ch);
+                int num = first_ch * 100 + second_ch;
                 
                 // 유니크한 숫자의 개수를 1증가시켜줍니다.
                 check[i][num]++;
