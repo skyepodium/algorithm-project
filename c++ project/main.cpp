@@ -10,7 +10,7 @@ using namespace std;
     시간 복잡도: O(n)
     공간 복잡도: O(n)
     사용한 알고리즘: 반복문.  
-    사용한 자료구조: 배열
+    사용한 자료구조: 배열.  
  */
 
 int check[2][max_int + 1];
