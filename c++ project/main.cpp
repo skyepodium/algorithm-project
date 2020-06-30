@@ -4,7 +4,7 @@
 #define min_int 6565
 #define max_int 9090
 #define base_num 65536
-using namespace std; 
+using namespace std;    
 
 /*
     시간 복잡도: O(n)
