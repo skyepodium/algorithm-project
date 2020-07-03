@@ -5,7 +5,7 @@
 #define max_int 9090
 #define base_num 65536
 using namespace std;    
-   
+      
 /*
     시간 복잡도: O(n)
     공간 복잡도: O(n)
