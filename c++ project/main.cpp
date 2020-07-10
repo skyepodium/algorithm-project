@@ -3,7 +3,7 @@
 #include <vector>
 #define min_int 6565  
 #define max_int 9090
-#define base_num 65536
+#define base_num 65536   
 using namespace std;  
          
 /*
