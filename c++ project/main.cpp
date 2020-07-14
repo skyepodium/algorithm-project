@@ -3,7 +3,7 @@
 using namespace std;
 
 int test(int a){
-    static int b = 1;
+    static int b = 1;   
     
     int result = a + b;
     b += 1;
