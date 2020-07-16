@@ -7,7 +7,7 @@ int test(int a){
     
     int result = a + b;
     b += 1;
-       
+         
     printf("static : %d \n", b);
     return result;
 }
