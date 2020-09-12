@@ -1,147 +1,134 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
-
+#include <algorithm>
 using namespace std;
 
-bool checkVal(char a) {
-    bool result = false;
+int cur_num = 0;
+string val = "";
+int val_size = 0;
+
+vector<string> arr;
+
+int val_max[11];
+
+vector<string> v[11];
+
+void go(int idx, string cur){
     
-    if(a>=97 && a <=122) {
-        result = true;
-    } else if(a>=48 && a<=57) {
-        result = true;
-    } else if(a==45){
-        result = true;
-    } else if(a==95) {
-        result = true;
-    } else if(a==46) {
-        result = true;
+    if(idx == val_size) {
+        if(cur.size() == cur_num) {
+            arr.push_back(cur);
+        }
+        return;
     }
     
-    return result;
+    go(idx + 1, cur + val[idx]);
+    
+    go(idx + 1, cur);
 }
 
-string solution(string new_id) {
-    string answer = "";
+vector<string> solution(vector<string> orders, vector<int> course) {
+    vector<string> answer;
     
-    int size = (int)new_id.size();
-    
-    // 1단계
-    string first = "";
-    for(int i=0; i<size; i++) {
-        char a = new_id[i];
+    for(int i=0; i<course.size(); i++) {
+        cur_num = course[i];
         
-        if(a >= 65 && a <=90) {
-            a += 32;
-        }
-        first += a;
-    }
-    
-    cout << "first " << first << endl;
-    // 2단계
-    string second = "";
-    for(int i=0; i<size; i++){
-        if(checkVal(first[i])) {
-            second += first[i];
-        }
-    }
-    cout << "second " << second << endl;
-
-    
-    // 3단계
-    bool isDot = false;
-    string third = "";
-    for(int i=0; i<(int)second.size(); i++){
-        char cur = second[i];
-
-        bool flag = true;
-        if(cur == 46) {
-            if(isDot) {
-                flag = false;
-            } else {
-                isDot = true;
-            }
-        }else{
-            isDot = false;
-        }
-
-        if(flag){
-            third += cur;
-        }
-    }
-    cout << "third " << third << endl;
-    
-    // 4단계
-    string forth = "";
-    for(int i=0; i<third.size(); i++) {
-        bool flag = true;
-        if(i==0 || i== third.size() - 1) {
-            if(third[i] == 46) flag = false;
-        }
-        if(flag) forth += third[i];
-    }
-    cout << "forth " << forth << endl;
-
-    
-    // 5단계
-    string fifth = "";
-    if(forth.size() == 0) {
-        fifth += "a";
-    } else{
-        fifth = forth;
-    }
-    
-    cout << "fifth " << fifth << endl;
-
-    // 6단계
-    string sixth = "";
-    if(fifth.size() >= 16){
-        for(int i=0; i<15; i++){
-            bool flag = true;
-            if(i == 14) {
-                if(fifth[i] == 46) {
-                    flag = false;
-                }
-            }
+        for(int j=0; j<orders.size(); j++){
             
-            if(flag) sixth += fifth[i];
+            sort(orders[j].begin(), orders[j].end());
+            val = orders[j];
+            val_size = (int)val.size();
+            go(0, "");
         }
-    }else{
-        sixth = fifth;
     }
-    cout << "sixth " << sixth << endl;
-
     
-    string seventh = "";
-    if(sixth.size() <= 2) {
+    sort(arr.begin(), arr.end());
+
+    string pre = "";
+    int cnt = 0;
+    for(int i=0; i<arr.size(); i++){
+        string cur = arr[i];
+        int cur_size = (int)cur.size();
+        if(pre != cur) {
+            
+            pre = cur;
+            cnt = 1;
+        }else{
+            cnt++;
+        }
         
-        if(sixth.size() == 1) {
-            seventh = sixth;
-            for(int i=0; i<2; i++){
-                seventh += seventh[0];
+        if(val_max[cur_size] < cnt) {
+            val_max[cur_size] = cnt;
+            v[cur_size].clear();
+            v[cur_size].push_back(cur);
+        } else if(val_max[cur_size] == cnt){
+            v[cur_size].push_back(cur);
+        }
+    }
+    
+    for(int i=0; i<11; i++){
+        for(int j=0; j<v[i].size(); j++){
+            
+//            cout << val_max[i] << endl;
+//            cout << v[i][j] << endl;
+//            cout << endl;
+            
+            if(val_max[i] > 1) {
+                answer.push_back(v[i][j]);
             }
         }
-        else if(sixth.size() == 2) {
-            seventh = sixth;
-            seventh += seventh[1];
-        }
-
-    }else{
-        seventh = sixth;
     }
-    cout << "seventh " << seventh << endl;
-
     
-    answer = seventh;
+    sort(answer.begin(), answer.end());
+
     return answer;
 }
 
-int main (){
-    string result = "";
+
+int main () {
     
-    result = solution("z-+.^.");
+    vector<string> result;
     
-    cout << result << endl;
+    vector<string> orders;
+    vector<int> course;
+    
+//    orders.push_back("ABCFG");
+//    orders.push_back("AC");
+//    orders.push_back("CDE");
+//    orders.push_back("ACDE");
+//    orders.push_back("BCFG");
+//    orders.push_back("ACDEH");
+//
+//    course.push_back(2);
+//    course.push_back(3);
+//    course.push_back(4);
+    
+//    orders.push_back("ABCDE");
+//    orders.push_back("AB");
+//    orders.push_back("CD");
+//    orders.push_back("ADE");
+//    orders.push_back("XYZ");
+//    orders.push_back("XYZ");
+//    orders.push_back("ACD");
+//
+//    course.push_back(2);
+//    course.push_back(3);
+//    course.push_back(5);
+    
+    orders.push_back("XYZ");
+    orders.push_back("XWY");
+    orders.push_back("XWA");
+
+    course.push_back(2);
+    course.push_back(3);
+    course.push_back(4);
+
+    result = solution(orders, course);
+    
+    cout << endl;
+    cout << endl;
+    for(int i=0; i<result.size(); i++) {
+        cout << result[i] << endl;
+    }
 }
