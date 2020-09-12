@@ -1,134 +1,181 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <algorithm>
+#define max_int 100002
 using namespace std;
 
-int cur_num = 0;
-string val = "";
-int val_size = 0;
+int db[4][3][3][3][max_int], first, second, third, fourth, fifth, stage;
 
-vector<string> arr;
+string cur_val = "";
 
-int val_max[11];
-
-vector<string> v[11];
-
-void go(int idx, string cur){
-    
-    if(idx == val_size) {
-        if(cur.size() == cur_num) {
-            arr.push_back(cur);
+void cal_val(){
+    if(stage == 0) {
+        if(cur_val[0] == 'c') {
+            first = 1;
+        } else if(cur_val[0] == 'j') {
+            first = 2;
+        } else if(cur_val[0] == 'p') {
+            first = 3;
         }
-        return;
     }
     
-    go(idx + 1, cur + val[idx]);
-    
-    go(idx + 1, cur);
+    if(stage == 1) {
+        if(cur_val[0] == 'b') {
+            second = 1;
+        } else if(cur_val[0] == 'f') {
+            second = 2;
+        }
+    }
+
+    if(stage == 2) {
+        if(cur_val[0] == 'j') {
+            third = 1;
+        } else if(cur_val[0] == 's') {
+            third = 2;
+        }
+    }
+
+    if(stage == 3) {
+        if(cur_val[0] == 'c') {
+            fourth = 1;
+        } else if(cur_val[0] == 'p') {
+            fourth = 2;
+        }
+    }
+
+    if(stage == 4) {
+        int num = 0;
+        
+        int cur_val_size = (int)cur_val.size();
+        
+        for(int i=0; i<cur_val_size; i++) {
+            num = num * 10 + (cur_val[i] - 48);
+        }
+        fifth = num;
+    }
 }
 
-vector<string> solution(vector<string> orders, vector<int> course) {
-    vector<string> answer;
+vector<int> solution(vector<string> info, vector<string> query) {
+    vector<int> answer;
     
-    for(int i=0; i<course.size(); i++) {
-        cur_num = course[i];
-        
-        for(int j=0; j<orders.size(); j++){
-            
-            sort(orders[j].begin(), orders[j].end());
-            val = orders[j];
-            val_size = (int)val.size();
-            go(0, "");
-        }
-    }
-    
-    sort(arr.begin(), arr.end());
+    int info_size =(int)info.size();
+    for(int i=0; i<info_size; i++) {
 
-    string pre = "";
-    int cnt = 0;
-    for(int i=0; i<arr.size(); i++){
-        string cur = arr[i];
-        int cur_size = (int)cur.size();
-        if(pre != cur) {
-            
-            pre = cur;
-            cnt = 1;
-        }else{
-            cnt++;
-        }
+        cur_val = "";
+        first = 0;
+        second = 0;
+        third = 0;
+        fourth = 0;
+        fifth = 0;
+        stage= 0;
         
-        if(val_max[cur_size] < cnt) {
-            val_max[cur_size] = cnt;
-            v[cur_size].clear();
-            v[cur_size].push_back(cur);
-        } else if(val_max[cur_size] == cnt){
-            v[cur_size].push_back(cur);
-        }
-    }
-    
-    for(int i=0; i<11; i++){
-        for(int j=0; j<v[i].size(); j++){
-            
-//            cout << val_max[i] << endl;
-//            cout << v[i][j] << endl;
-//            cout << endl;
-            
-            if(val_max[i] > 1) {
-                answer.push_back(v[i][j]);
+        int info_val_size = (int)info[i].size();
+        for(int j=0; j<info_val_size; j++) {
+            char cur = info[i][j];
+                
+            if(cur == 32 || j == info_val_size - 1){
+                if(j == info_val_size - 1) {
+                    cur_val += cur;
+                }
+                
+                cal_val();
+                
+                if(j == info_val_size - 1) {
+                    db[first][second][third][fourth][fifth] += 1;
+
+                    db[0][0][0][0][0] += 1;
+                    
+                    db[0][second][third][fourth][fifth] += 1;
+                    db[first][0][third][fourth][fifth] += 1;
+                    db[first][second][0][fourth][fifth] += 1;
+                    db[first][second][third][0][fifth] += 1;
+                    db[first][second][third][fourth][0] += 1;
+
+                    db[0][0][third][fourth][fifth] += 1;
+                    db[0][second][0][fourth][fifth] += 1;
+                    db[0][second][third][0][fifth] += 1;
+                    db[0][second][third][fourth][0] += 1;
+                    db[first][0][0][fourth][fifth] += 1;
+                    db[first][0][third][0][fifth] += 1;
+                    db[first][0][third][fourth][0] += 1;
+                    db[first][second][0][0][fifth] += 1;
+                    db[first][second][0][fourth][0] += 1;
+                    db[first][second][third][0][0] += 1;
+
+                    db[0][0][0][fourth][fifth] += 1;
+                    db[0][0][third][0][fifth] += 1;
+                    db[0][0][third][fourth][0] += 1;
+                    db[0][second][0][0][fifth] += 1;
+                    db[0][second][0][fourth][0] += 1;
+                    db[0][second][third][0][0] += 1;
+                    db[first][0][0][0][fifth] += 1;
+                    db[first][0][0][fourth][0] += 1;
+                    db[first][0][third][0][0] += 1;
+                    db[first][second][0][0][0] += 1;
+                    
+                    db[first][0][0][0][0] += 1;
+                    db[0][second][0][0][0] += 1;
+                    db[0][0][third][0][0] += 1;
+                    db[0][0][0][fourth][0] += 1;
+                    db[0][0][0][0][fifth] += 1;
+                }
+                
+                cur_val = "";
+                stage += 1;
+            }else{
+                cur_val += cur;
             }
         }
     }
     
-    sort(answer.begin(), answer.end());
+    for(int i=0; i<4; i++){
+        for(int j=0; j<3; j++){
+            for(int k=0; k<3; k++){
+                for(int l=0; l<3; l++){
+                    for(int m=100000; m>=1; m--){
+                        db[i][j][k][l][m] += db[i][j][k][l][m+1];
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    int query_size =(int)query.size();
+    for(int i=0; i<query_size; i++) {
+
+        cur_val = "";
+        first = 0;
+        second = 0;
+        third = 0;
+        fourth = 0;
+        fifth = 0;
+        stage= 0;
+        
+        int query_val_size = (int)query[i].size();
+        for(int j=0; j<query_val_size; j++) {
+            char cur = query[i][j];
+                
+            if(cur == 32 || j == query_val_size - 1){
+                if(j == query_val_size - 1) {
+                    cur_val += cur;
+                }
+                cal_val();
+                
+                if(j == query_val_size - 1) {
+                    int result = db[first][second][third][fourth][fifth];
+                    answer.push_back(result);
+                }
+                
+                if(cur_val[0] != 'a') {
+                    stage += 1;
+                }
+                cur_val = "";
+            }else{
+                cur_val += cur;
+            }
+        }
+    }
 
     return answer;
-}
-
-
-int main () {
-    
-    vector<string> result;
-    
-    vector<string> orders;
-    vector<int> course;
-    
-//    orders.push_back("ABCFG");
-//    orders.push_back("AC");
-//    orders.push_back("CDE");
-//    orders.push_back("ACDE");
-//    orders.push_back("BCFG");
-//    orders.push_back("ACDEH");
-//
-//    course.push_back(2);
-//    course.push_back(3);
-//    course.push_back(4);
-    
-//    orders.push_back("ABCDE");
-//    orders.push_back("AB");
-//    orders.push_back("CD");
-//    orders.push_back("ADE");
-//    orders.push_back("XYZ");
-//    orders.push_back("XYZ");
-//    orders.push_back("ACD");
-//
-//    course.push_back(2);
-//    course.push_back(3);
-//    course.push_back(5);
-    
-    orders.push_back("XYZ");
-    orders.push_back("XWY");
-    orders.push_back("XWA");
-
-    course.push_back(2);
-    course.push_back(3);
-    course.push_back(4);
-
-    result = solution(orders, course);
-    
-    cout << endl;
-    cout << endl;
-    for(int i=0; i<result.size(); i++) {
-        cout << result[i] << endl;
-    }
 }
