@@ -1,181 +1,205 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#define max_int 100002
+#include <queue>
+#include <algorithm>
+
+#define max_int 201
+#define max_val 20000001
+#define lld long long int
+
 using namespace std;
 
-int db[4][3][3][3][max_int], first, second, third, fourth, fifth, stage;
+struct info {
+    int cur;
+    int cost;
+};
 
-string cur_val = "";
+vector<info> v[max_int];
+int d2[max_int], d[max_int], n_size = 0, result = max_val;
 
-void cal_val(){
-    if(stage == 0) {
-        if(cur_val[0] == 'c') {
-            first = 1;
-        } else if(cur_val[0] == 'j') {
-            first = 2;
-        } else if(cur_val[0] == 'p') {
-            first = 3;
-        }
+
+struct cmp {
+    bool operator()(const info& a, const info& b) {
+        return a.cost > b.cost;
     }
-    
-    if(stage == 1) {
-        if(cur_val[0] == 'b') {
-            second = 1;
-        } else if(cur_val[0] == 'f') {
-            second = 2;
-        }
-    }
+};
 
-    if(stage == 2) {
-        if(cur_val[0] == 'j') {
-            third = 1;
-        } else if(cur_val[0] == 's') {
-            third = 2;
-        }
-    }
-
-    if(stage == 3) {
-        if(cur_val[0] == 'c') {
-            fourth = 1;
-        } else if(cur_val[0] == 'p') {
-            fourth = 2;
-        }
-    }
-
-    if(stage == 4) {
-        int num = 0;
-        
-        int cur_val_size = (int)cur_val.size();
-        
-        for(int i=0; i<cur_val_size; i++) {
-            num = num * 10 + (cur_val[i] - 48);
-        }
-        fifth = num;
+void init(){
+    for(int i=1; i<=n_size; i++){
+        d[i] = max_val;
     }
 }
 
-vector<int> solution(vector<string> info, vector<string> query) {
-    vector<int> answer;
-    
-    int info_size =(int)info.size();
-    for(int i=0; i<info_size; i++) {
+void dijkstra(int start_node) {
+    priority_queue<info, vector<info>, cmp> pq;
+    d[start_node] = 0;
+    pq.push({ start_node, d[start_node] });
 
-        cur_val = "";
-        first = 0;
-        second = 0;
-        third = 0;
-        fourth = 0;
-        fifth = 0;
-        stage= 0;
+    while (!pq.empty()) {
+        info cur = pq.top();
+        int c_node = cur.cur;
+        pq.pop();
         
-        int info_val_size = (int)info[i].size();
-        for(int j=0; j<info_val_size; j++) {
-            char cur = info[i][j];
-                
-            if(cur == 32 || j == info_val_size - 1){
-                if(j == info_val_size - 1) {
-                    cur_val += cur;
-                }
-                
-                cal_val();
-                
-                if(j == info_val_size - 1) {
-                    db[first][second][third][fourth][fifth] += 1;
+        if(cur.cost > d[c_node]) continue;
 
-                    db[0][0][0][0][0] += 1;
-                    
-                    db[0][second][third][fourth][fifth] += 1;
-                    db[first][0][third][fourth][fifth] += 1;
-                    db[first][second][0][fourth][fifth] += 1;
-                    db[first][second][third][0][fifth] += 1;
-                    db[first][second][third][fourth][0] += 1;
+        for (int i = 0; i < v[c_node].size(); i++) {
+            info next = v[c_node][i];
+            int n_node = next.cur;
+            int n_cost = next.cost;
 
-                    db[0][0][third][fourth][fifth] += 1;
-                    db[0][second][0][fourth][fifth] += 1;
-                    db[0][second][third][0][fifth] += 1;
-                    db[0][second][third][fourth][0] += 1;
-                    db[first][0][0][fourth][fifth] += 1;
-                    db[first][0][third][0][fifth] += 1;
-                    db[first][0][third][fourth][0] += 1;
-                    db[first][second][0][0][fifth] += 1;
-                    db[first][second][0][fourth][0] += 1;
-                    db[first][second][third][0][0] += 1;
-
-                    db[0][0][0][fourth][fifth] += 1;
-                    db[0][0][third][0][fifth] += 1;
-                    db[0][0][third][fourth][0] += 1;
-                    db[0][second][0][0][fifth] += 1;
-                    db[0][second][0][fourth][0] += 1;
-                    db[0][second][third][0][0] += 1;
-                    db[first][0][0][0][fifth] += 1;
-                    db[first][0][0][fourth][0] += 1;
-                    db[first][0][third][0][0] += 1;
-                    db[first][second][0][0][0] += 1;
-                    
-                    db[first][0][0][0][0] += 1;
-                    db[0][second][0][0][0] += 1;
-                    db[0][0][third][0][0] += 1;
-                    db[0][0][0][fourth][0] += 1;
-                    db[0][0][0][0][fifth] += 1;
-                }
-                
-                cur_val = "";
-                stage += 1;
-            }else{
-                cur_val += cur;
+            if (d[n_node] > d[c_node] + n_cost) {
+                d[n_node] = d[c_node] + n_cost;
+                pq.push({ n_node, d[n_node] });
             }
         }
     }
-    
-    for(int i=0; i<4; i++){
-        for(int j=0; j<3; j++){
-            for(int k=0; k<3; k++){
-                for(int l=0; l<3; l++){
-                    for(int m=100000; m>=1; m--){
-                        db[i][j][k][l][m] += db[i][j][k][l][m+1];
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    int query_size =(int)query.size();
-    for(int i=0; i<query_size; i++) {
+}
 
-        cur_val = "";
-        first = 0;
-        second = 0;
-        third = 0;
-        fourth = 0;
-        fifth = 0;
-        stage= 0;
+void init2() {
+    for(int i=0; i<=n_size; i++) {
+        d2[i] = max_val;
+    }
+}
+
+void dijkstra2(int start_node) {
+    priority_queue<info, vector<info>, cmp> pq;
+    d2[start_node] = 0;
+    pq.push({ start_node, d2[start_node] });
+
+    while (!pq.empty()) {
+        info cur = pq.top();
+        int c_node = cur.cur;
+        pq.pop();
+
+        if(cur.cost > d2[c_node]) continue;
+
         
-        int query_val_size = (int)query[i].size();
-        for(int j=0; j<query_val_size; j++) {
-            char cur = query[i][j];
-                
-            if(cur == 32 || j == query_val_size - 1){
-                if(j == query_val_size - 1) {
-                    cur_val += cur;
-                }
-                cal_val();
-                
-                if(j == query_val_size - 1) {
-                    int result = db[first][second][third][fourth][fifth];
-                    answer.push_back(result);
-                }
-                
-                if(cur_val[0] != 'a') {
-                    stage += 1;
-                }
-                cur_val = "";
-            }else{
-                cur_val += cur;
+        for (int i = 0; i < v[c_node].size(); i++) {
+            info next = v[c_node][i];
+            int n_node = next.cur;
+            int n_cost = next.cost;
+
+            if (d2[n_node] > d2[c_node] + n_cost) {
+                d2[n_node] = d2[c_node] + n_cost;
+                pq.push({ n_node, d2[n_node] });
             }
         }
     }
+}
 
+int solution(int n, int s, int a, int b, vector<vector<int>> fares) {
+    int answer = 0;
+    
+    n_size = n;
+    init();
+    
+    for(int i=0; i<fares.size(); i++){
+        int t_start = fares[i][0];
+        int t_end = fares[i][1];
+        int t_cost = fares[i][2];
+        
+        v[t_start].push_back({t_end, t_cost});
+        v[t_end].push_back({t_start, t_cost});
+    }
+
+    dijkstra(s);
+    result = min(result, d[a] + d[b]);
+
+    for(int i=1; i<=n; i++) {
+        if(i!=s){
+            init2();
+            dijkstra2(i);
+            
+            int temp_result = d2[a] + d2[b] + d[i];
+            
+            result = min (result, temp_result);
+        }
+    }
+    
+    
+    answer = result;
+ 
     return answer;
+}
+
+
+int main(){
+    
+    int n = 6;
+    int s = 4;
+    int a = 6;
+    int b = 2;
+    
+    vector<vector<int>> fares;
+    
+    vector<int> temp;
+    
+    temp.push_back(4);
+    temp.push_back(1);
+    temp.push_back(10);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(3);
+    temp.push_back(5);
+    temp.push_back(24);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(5);
+    temp.push_back(6);
+    temp.push_back(2);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(3);
+    temp.push_back(1);
+    temp.push_back(41);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(5);
+    temp.push_back(1);
+    temp.push_back(24);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(4);
+    temp.push_back(6);
+    temp.push_back(50);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(2);
+    temp.push_back(4);
+    temp.push_back(66);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(2);
+    temp.push_back(3);
+    temp.push_back(22);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    temp.push_back(1);
+    temp.push_back(6);
+    temp.push_back(25);
+    
+    fares.push_back(temp);
+    temp.clear();
+
+    int answer = solution(n, s, a, b, fares);
+
+    cout << "answer" << endl;
+    cout << answer << endl;
 }
