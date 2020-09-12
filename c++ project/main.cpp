@@ -1,108 +1,147 @@
+#include <string>
+#include <vector>
 #include <iostream>
+
 
 using namespace std;
 
-int test(int a){
-    static int b = 1;   
+bool checkVal(char a) {
+    bool result = false;
     
-    int result = a + b;
-    b += 1;
-         
-    printf("static : %d \n", b);
+    if(a>=97 && a <=122) {
+        result = true;
+    } else if(a>=48 && a<=57) {
+        result = true;
+    } else if(a==45){
+        result = true;
+    } else if(a==95) {
+        result = true;
+    } else if(a==46) {
+        result = true;
+    }
+    
     return result;
 }
 
-int main(){
-    for(int i=0; i<100; i++){
-        int c = test(i);
-        printf("%d\n", c);
+string solution(string new_id) {
+    string answer = "";
+    
+    int size = (int)new_id.size();
+    
+    // 1단계
+    string first = "";
+    for(int i=0; i<size; i++) {
+        char a = new_id[i];
+        
+        if(a >= 65 && a <=90) {
+            a += 32;
+        }
+        first += a;
     }
+    
+    cout << "first " << first << endl;
+    // 2단계
+    string second = "";
+    for(int i=0; i<size; i++){
+        if(checkVal(first[i])) {
+            second += first[i];
+        }
+    }
+    cout << "second " << second << endl;
+
+    
+    // 3단계
+    bool isDot = false;
+    string third = "";
+    for(int i=0; i<(int)second.size(); i++){
+        char cur = second[i];
+
+        bool flag = true;
+        if(cur == 46) {
+            if(isDot) {
+                flag = false;
+            } else {
+                isDot = true;
+            }
+        }else{
+            isDot = false;
+        }
+
+        if(flag){
+            third += cur;
+        }
+    }
+    cout << "third " << third << endl;
+    
+    // 4단계
+    string forth = "";
+    for(int i=0; i<third.size(); i++) {
+        bool flag = true;
+        if(i==0 || i== third.size() - 1) {
+            if(third[i] == 46) flag = false;
+        }
+        if(flag) forth += third[i];
+    }
+    cout << "forth " << forth << endl;
+
+    
+    // 5단계
+    string fifth = "";
+    if(forth.size() == 0) {
+        fifth += "a";
+    } else{
+        fifth = forth;
+    }
+    
+    cout << "fifth " << fifth << endl;
+
+    // 6단계
+    string sixth = "";
+    if(fifth.size() >= 16){
+        for(int i=0; i<15; i++){
+            bool flag = true;
+            if(i == 14) {
+                if(fifth[i] == 46) {
+                    flag = false;
+                }
+            }
+            
+            if(flag) sixth += fifth[i];
+        }
+    }else{
+        sixth = fifth;
+    }
+    cout << "sixth " << sixth << endl;
+
+    
+    string seventh = "";
+    if(sixth.size() <= 2) {
+        
+        if(sixth.size() == 1) {
+            seventh = sixth;
+            for(int i=0; i<2; i++){
+                seventh += seventh[0];
+            }
+        }
+        else if(sixth.size() == 2) {
+            seventh = sixth;
+            seventh += seventh[1];
+        }
+
+    }else{
+        seventh = sixth;
+    }
+    cout << "seventh " << seventh << endl;
+
+    
+    answer = seventh;
+    return answer;
 }
 
-
-
-
-
-//#include <iostream>
-//#include <queue>
-//#define max_int 100
-//#define max_val 300001
-//using namespace std;
-//
-//
-//int d[max_int][max_int], a[max_int][max_int];
-//int start_x = 0, start_y = 1;
-//int end_x = 3, end_y = 1;
-//
-//int dx[] = {0, 1, 1, 1, 0};
-//int dy[] = {-1, -1, 0, 1, 1};
-//
-//struct info{
-//    int x;
-//    int y;
-//    int cost;
-//};
-//
-//struct cmp{
-//    bool operator()(const info &a, const info &b){
-//        return a.cost > b.cost;
-//    }
-//};
-//
-//void dijkstra() {
-//
-//    d[start_x][start_y] = 0;
-//    priority_queue<info, vector<info>, cmp> pq;
-//    pq.push({start_x, start_y, d[start_x][start_x]});
-//
-//    while(!pq.empty()){
-//        info cur = pq.top();
-//        pq.pop();
-//        int x = cur.x;
-//        int y = cur.y;
-//
-//        for(int i=0; i<5; i++){
-//            int nx = x + dx[i];
-//            int ny = y + dy[i];
-//            if(nx>=0 && nx<max_int && ny>=0 && ny<max_int){
-//
-//                int cost = a[nx][ny];
-//                int dir_cost = 0;
-//                if(i == 0 || i == 4) dir_cost = 5;
-//                else if(i ==1 || i == 3) dir_cost = 1;
-//                else dir_cost = 0;
-//
-//                cost += dir_cost;
-//
-//                if(d[nx][ny] > d[x][y] + cost){
-//                    d[nx][ny] = d[x][y] + cost;
-//                    pq.push({nx, ny, cost});
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//int main() {
-//    for(int i=0; i<max_int; i++){
-//        for(int j=0; j<max_int; j++){
-//            d[i][j] = max_val;
-//            a[i][j] = 0;
-//        }
-//    }
-//
-//    a[2][1] = max_val;
-//
-//    dijkstra();
-//
-//
-//
-//    printf("%d\n", d[end_x][end_y]);
-//
-//    for(int i=0; i<10; i++){
-//        for(int j=0; j<10; j++){
-//            printf("%d ", d[i][j]);
-//        }
-//        printf("\n");
-//    }
-//}
+int main (){
+    string result = "";
+    
+    result = solution("z-+.^.");
+    
+    cout << result << endl;
+}
