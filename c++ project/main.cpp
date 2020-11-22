@@ -1,90 +1,103 @@
 #include <iostream>
 #include <queue>
-
-#define max_int 1001
-#define max_val 1001 * 1001
+#include <algorithm>
+#define max_int 1501
 
 using namespace std;
 
-int n, m, k, check[max_int][max_int][11][2], result = max_val, n_day;
-char a[max_int][max_int];
-int dx[] = {0, 0, 1, -1}, dy[] = {-1, 1, 0, 0};
+int a, b, c, d, nx, ny, nz, result = 0, arr[3];
+bool check[max_int][max_int];
 
-struct info {
-    int x, y, use, day;
+struct info{
+    int x, y, z;
 };
 
-void bfs(int x, int y, int use, int day) {
-    queue<info> q;
-    check[x][y][0][0] = 1;
-    q.push({x, y, 0, 0});
+void sort_val(int &a, int &b, int &c) {
+    arr[0] = a;
+    arr[1] = b;
+    arr[2] = c;
     
-    while (!q.empty()) {
+    sort(arr, arr + 3);
+    
+    a = arr[0];
+    b = arr[1];
+    c = arr[2];
+}
+
+void bfs(int x, int y, int z) {
+    queue<info> q;
+    check[x][y] = true;
+    q.push({x, y, d-(x+y)});
+    
+    while(!q.empty()) {
         info cur = q.front();
         q.pop();
         
         x = cur.x;
         y = cur.y;
-        use = cur.use;
-        day = cur.day;
+        z = cur.z;
         
-        n_day = day == 0 ? 1 : 0;
-        
-        if (check[x][y][use][n_day] == max_val) {
-            check[x][y][use][n_day] = check[x][y][use][day] + 1;
-            q.push({x, y, use, n_day});
+        if(x == y && y == z) {
+            result = 1;
+            break;
         }
         
-        for(int i=0; i<4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+        sort_val(x, y, z);
+        
+        if (y - x > 0) {
+            nx = x * 2;
+            ny = y - x;
+            nz = z;
             
-            if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-            
-            if (a[nx][ny] == '0' && check[nx][ny][use][n_day] > check[x][y][use][day] + 1) {
-                check[nx][ny][use][n_day] = check[x][y][use][day] + 1;
-                q.push({nx, ny, use, n_day});
-            }
-            
-            if (a[nx][ny] == '1' && use < k && day == 0 && check[nx][ny][use][n_day] > check[x][y][use][day] + 1) {
-                check[nx][ny][use + 1][n_day] = check[x][y][use][day] + 1;
-                q.push({nx, ny, use + 1, n_day});
+            if (nx < max_int && ny > 0) {
+                sort_val(nx, ny, nz);
+                
+                if(!check[nx][ny]) {
+                    check[nx][ny] = true;
+                    q.push({nx, ny, nz});
+                }
             }
         }
-    }
-}
+        
+        if (z - x > 0) {
+            nx = x * 2;
+            ny = z - x;
+            nz = y;
 
-void init () {
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<m; j++) {
-            for(int a=0; a<=k; a++) {
-                for(int b=0; b<2; b++) {
-                    check[i][j][a][b] = max_val;
+            if (nx < max_int && ny > 0) {
+                sort_val(nx, ny, nz);
+                
+                if(!check[nx][ny]) {
+                    check[nx][ny] = true;
+                    q.push({nx, ny, nz});
+                }
+            }
+        }
+        
+        if (z - y > 0) {
+            nx = y * 2;
+            ny = z - y;
+            nz = x;
+
+            if (nx < max_int && ny > 0) {
+                sort_val(nx, ny, nz);
+                
+                if(!check[nx][ny]) {
+                    check[nx][ny] = true;
+                    q.push({nx, ny, nz});
                 }
             }
         }
     }
 }
 
-
 int main () {
-    scanf("%d %d %d", &n, &m, &k);
+    scanf("%d %d %d", &a, &b, &c);
+    d = a + b + c;
     
-    init();
+    sort_val(a, b, c);
     
-    for(int i=0; i<n; i++) {
-        scanf("%s", a[i]);
-    }
-    
-    bfs(0, 0, 0, 0);
-    
-    for(int i=0; i<=k; i++) {
-        for(int j=0; j<2; j++) {
-            result = min(result, check[n-1][m-1][i][j]);
-        }
-    }
-    
-    if (result == max_val) result = -1;
+    bfs(a, b, c);
     
     printf("%d\n", result);
 }
