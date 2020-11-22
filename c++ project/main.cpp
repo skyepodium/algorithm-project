@@ -1,37 +1,54 @@
 #include <iostream>
 #include <queue>
-#define max_int 201
+#define max_int 101
+#define max_val 100001
+
 using namespace std;
 
-int n, r1, c1, r2, c2, check[max_int][max_int];
-int dx[] = {-2, -2, 0, 0, 2, 2};
-int dy[] = {-1, 1, -2, 2, -1, 1};
+int n, m, start_point, end_point, ladder[max_int], d[max_int], ladder_node;
 
 struct info {
-    int x;
-    int y;
+    int cur;
+    int cost;
 };
 
-void bfs(int x, int y) {
-    queue<info> q;
-    check[x][y] = 0;
-    q.push({x, y});
+struct cmp {
+    bool operator() (const info &a, const info &b) {
+        return a.cost > b.cost;
+    }
+};
+
+void dijkstra(int start_node) {
+    priority_queue<info, vector<info> , cmp> pq;
+    d[start_node] = 0;
+    pq.push({start_node, d[start_node]});
     
-    while(!q.empty()) {
-        info cur = q.front();
-        q.pop();
+    while(!pq.empty()) {
+        info node = pq.top();
+        pq.pop();
         
-        x = cur.x;
-        y = cur.y;
+        int c_node = node.cur;
         
-        for(int i=0; i<6; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(nx >= 0 and nx < n and ny >= 0 and ny < n) {
-                if(check[nx][ny] == -1) {
-                    check[nx][ny] = check[x][y] + 1;
-                    q.push({nx, ny});
+        // 주사위
+        for(int i=1; i<=6; i++) {
+            int n_node = c_node + i;
+
+            if (n_node <= 100) {
+                // 도착한 칸이 사다리, 뱀이 아닐때
+                ladder_node = ladder[n_node];
+                if(ladder_node == -1) {
+                    if(d[n_node] > d[c_node] + 1) {
+                        d[n_node] = d[c_node] + 1;
+                        pq.push({n_node, d[n_node]});
+                    }
+                }
+                // 도착한 칸이 사다리, 뱀 일때
+                else {
+                    // 사다리 + 뱀
+                    if(d[ladder_node] > d[c_node] + 1) {
+                        d[ladder_node] = d[n_node] = d[c_node] + 1;
+                        pq.push({ladder_node, d[ladder_node]});
+                    }
                 }
             }
         }
@@ -39,21 +56,24 @@ void bfs(int x, int y) {
 }
 
 void init () {
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<n; j++) {
-            check[i][j] = -1;
-        }
+    for(int i=0; i<=100; i++) {
+        d[i] = max_val;
+        ladder[i] = -1;
     }
 }
 
-int main() {
-    scanf("%d", &n);
+int main () {
+    scanf("%d %d", &n, &m);
     
     init();
     
-    scanf("%d %d %d %d", &r1, &c1, &r2, &c2);
+    for(int i=0; i<n+m; i++) {
+        scanf("%d %d", &start_point, &end_point);
+        
+        ladder[start_point] = end_point;
+    }
     
-    bfs(r1, c1);
+    dijkstra(1);
     
-    printf("%d\n", check[r2][c2]);
+    printf("%d\n", d[100]);
 }
