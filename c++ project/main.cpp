@@ -1,79 +1,90 @@
 #include <iostream>
 #include <queue>
-#define max_int 101
-#define max_val 100001
+
+#define max_int 1001
+#define max_val 1001 * 1001
 
 using namespace std;
 
-int n, m, start_point, end_point, ladder[max_int], d[max_int], ladder_node;
+int n, m, k, check[max_int][max_int][11][2], result = max_val, n_day;
+char a[max_int][max_int];
+int dx[] = {0, 0, 1, -1}, dy[] = {-1, 1, 0, 0};
 
 struct info {
-    int cur;
-    int cost;
+    int x, y, use, day;
 };
 
-struct cmp {
-    bool operator() (const info &a, const info &b) {
-        return a.cost > b.cost;
-    }
-};
-
-void dijkstra(int start_node) {
-    priority_queue<info, vector<info> , cmp> pq;
-    d[start_node] = 0;
-    pq.push({start_node, d[start_node]});
+void bfs(int x, int y, int use, int day) {
+    queue<info> q;
+    check[x][y][0][0] = 1;
+    q.push({x, y, 0, 0});
     
-    while(!pq.empty()) {
-        info node = pq.top();
-        pq.pop();
+    while (!q.empty()) {
+        info cur = q.front();
+        q.pop();
         
-        int c_node = node.cur;
+        x = cur.x;
+        y = cur.y;
+        use = cur.use;
+        day = cur.day;
         
-        // 주사위
-        for(int i=1; i<=6; i++) {
-            int n_node = c_node + i;
-
-            if (n_node <= 100) {
-                // 도착한 칸이 사다리, 뱀이 아닐때
-                ladder_node = ladder[n_node];
-                if(ladder_node == -1) {
-                    if(d[n_node] > d[c_node] + 1) {
-                        d[n_node] = d[c_node] + 1;
-                        pq.push({n_node, d[n_node]});
-                    }
-                }
-                // 도착한 칸이 사다리, 뱀 일때
-                else {
-                    // 사다리 + 뱀
-                    if(d[ladder_node] > d[c_node] + 1) {
-                        d[ladder_node] = d[n_node] = d[c_node] + 1;
-                        pq.push({ladder_node, d[ladder_node]});
-                    }
-                }
+        n_day = day == 0 ? 1 : 0;
+        
+        if (check[x][y][use][n_day] == max_val) {
+            check[x][y][use][n_day] = check[x][y][use][day] + 1;
+            q.push({x, y, use, n_day});
+        }
+        
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+            
+            if (a[nx][ny] == '0' && check[nx][ny][use][n_day] > check[x][y][use][day] + 1) {
+                check[nx][ny][use][n_day] = check[x][y][use][day] + 1;
+                q.push({nx, ny, use, n_day});
+            }
+            
+            if (a[nx][ny] == '1' && use < k && day == 0 && check[nx][ny][use][n_day] > check[x][y][use][day] + 1) {
+                check[nx][ny][use + 1][n_day] = check[x][y][use][day] + 1;
+                q.push({nx, ny, use + 1, n_day});
             }
         }
     }
 }
 
 void init () {
-    for(int i=0; i<=100; i++) {
-        d[i] = max_val;
-        ladder[i] = -1;
+    for(int i=0; i<n; i++) {
+        for(int j=0; j<m; j++) {
+            for(int a=0; a<=k; a++) {
+                for(int b=0; b<2; b++) {
+                    check[i][j][a][b] = max_val;
+                }
+            }
+        }
     }
 }
 
+
 int main () {
-    scanf("%d %d", &n, &m);
+    scanf("%d %d %d", &n, &m, &k);
     
     init();
     
-    for(int i=0; i<n+m; i++) {
-        scanf("%d %d", &start_point, &end_point);
-        
-        ladder[start_point] = end_point;
+    for(int i=0; i<n; i++) {
+        scanf("%s", a[i]);
     }
     
-    dijkstra(1);
+    bfs(0, 0, 0, 0);
     
-    printf("%d\n", d[100]);
+    for(int i=0; i<=k; i++) {
+        for(int j=0; j<2; j++) {
+            result = min(result, check[n-1][m-1][i][j]);
+        }
+    }
+    
+    if (result == max_val) result = -1;
+    
+    printf("%d\n", result);
 }
