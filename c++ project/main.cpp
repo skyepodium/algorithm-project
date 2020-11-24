@@ -1,67 +1,59 @@
 #include <iostream>
+#include <queue>
 #include <vector>
-#include <string>
-#define max_int 5
+#define max_int 300001
 using namespace std;
 
-int a[max_int][max_int], result = 0;
-int dx[] = {0, 0, 1, -1}, dy[] = {-1, 1, 0, 0};
-vector<string> number_list;
+int n, m, k, x, check[max_int], start_point, end_point, cnt = 0;
+vector<int> v[max_int];
 
-string number_to_string(int value) {
-    string ret = "";
+void bfs(int start_node) {
+    queue<int> q;
+    check[start_node] = 0;
+    q.push(start_node);
     
-    char string_value = (char)value + 48;
-    
-    return ret + string_value;
-}
-
-
-void go(int x, int y, string s) {
-    
-    if((int)s.size() >= 6) {
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
         
-        bool is_exist = false;
-        
-        for(int i=0; i<(int)number_list.size(); i++) {
-            if(number_list[i] == s) {
-                is_exist = true;
-                break;
+        for(int i=0; i<v[node].size(); i++) {
+            int next = v[node][i];
+            
+            if(check[next] == -1) {
+                check[next] = check[node] + 1;
+                q.push(next);
             }
         }
-        
-        if(!is_exist) {
-            number_list.push_back(s);
-            result++;
-        }
-        
-        return;
     }
-    
-    for(int i=0; i<4; i++) {
-        int nx = x + dx[i];
-        int ny = y + dy[i];
-        
-        if(nx < 0 || nx >= max_int || ny < 0 || ny >= max_int) continue;
-        
-        go(nx, ny, s + number_to_string(a[nx][ny]));
-        
+}
+
+void init () {
+    for(int i=0; i<=n; i++) {
+        check[i] = -1;
     }
 }
 
 
-int main(){
-    for(int i=0; i<max_int; i++) {
-        for(int j=0; j<max_int; j++) {
-            scanf("%d", &a[i][j]);
+int main () {
+    scanf("%d %d %d %d", &n, &m, &k, &x);
+    
+    init();
+    
+    for(int i=0; i<m; i++) {
+        scanf("%d %d", &start_point, &end_point);
+        v[start_point].push_back(end_point);
+    }
+    
+    bfs(x);
+
+    for(int i=1; i<=n; i++) {
+        if(k == check[i]) {
+            printf("%d\n", i);
+            cnt++;
         }
     }
     
-    for(int i=0; i<max_int; i++) {
-        for(int j=0; j<max_int; j++) {
-            go(i, j, number_to_string(a[i][j]));
-        }
+    if(cnt == 0) {
+        printf("-1\n");
     }
-    
-    printf("%d\n", result);
 }
