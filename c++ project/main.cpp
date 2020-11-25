@@ -1,88 +1,86 @@
 #include <iostream>
 #include <queue>
-#include <vector>
-#define max_int 101
-#define max_val 1501
+#define max_int 201
 using namespace std;
 
-int n, m, r, item[max_int], a, b, c, d[max_int], result = 0;
+int n, k, a[max_int][max_int], s, fx, fy, check[max_int][max_int], result = 0;
+int dx[] = { 0, 0, 1, -1 };
+int dy[] = { -1, 1, 0, 0 };
+
 struct info {
-    int cur, cost;
+    int x, y;
 };
+queue<info> q;
 
-vector<info> v[max_int];
+void bfs() {
+    while (!q.empty()) {
+        info cur = q.front();
+        q.pop();
 
-int max(int a, int b) {
-    return a > b ? a : b;
-}
+        int x = cur.x;
+        int y = cur.y;
+        int virus_num = a[x][y];
 
-void cnt_check() {
-    int ret = 0;
-    for(int i=1; i<=n; i++) {
-        if(d[i] <= m) {
-            ret += item[i];
-        }
-    }
-    result = max(result, ret);
-}
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
 
-struct cmp {
-    bool operator()(const info &a, const info &b) {
-        return a.cost > b.cost;
-    }
-};
+            if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
 
-void dijkstra(int start_node) {
-    priority_queue<info, vector<info>, cmp> pq;
-    d[start_node] = 0;
-    pq.push({start_node, d[start_node]});
-    
-    while(!pq.empty()) {
-        info cur = pq.top();
-        pq.pop();
-        
-        int node = cur.cur;
-        
-        for(int i=0; i<v[node].size(); i++) {
-            info next = v[node][i];
-            
-            int n_node = next.cur;
-            int n_cost = next.cost;
-            
-            if(d[n_node] > d[node] + n_cost) {
-                d[n_node] = d[node] + n_cost;
-                pq.push({n_node, d[n_node]});
+            if (check[nx][ny] == -1) {
+                check[nx][ny] = check[x][y] + 1;
+                a[nx][ny] = virus_num;
+                q.push({ nx, ny });
+            }
+            else {
+                if (check[nx][ny] > check[x][y] + 1) {
+                    check[nx][ny] = check[x][y] + 1;
+                    a[nx][ny] = virus_num;
+                    q.push({ nx, ny });
+                }
+                else if (check[nx][ny] == check[x][y] + 1) {
+                    if (a[nx][ny] > virus_num) {
+                        check[nx][ny] = check[x][y] + 1;
+                        a[nx][ny] = virus_num;
+                        q.push({ nx, ny });
+                    }
+                }
             }
         }
     }
 }
 
-void init () {
-    for(int i=1; i<=n; i++) {
-        d[i] = max_val;
+void init() {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            check[i][j] = -1;
+        }
     }
 }
 
-int main () {
-    scanf("%d %d %d", &n, &m, &r);
-    
-    init() ;
-    
-    for(int i=1; i<=n; i++) {
-        scanf("%d", &item[i]);
+int main() {
+    scanf("%d %d", &n, &k);
+
+    init();
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &a[i][j]);
+
+            if (a[i][j] != 0) {
+                check[i][j] = 0;
+                q.push({ i, j });
+            }
+        }
     }
-    
-    for(int i=0; i<r; i++) {
-        scanf("%d %d %d", &a, &b, &c);
-        v[a].push_back({b, c});
-        v[b].push_back({a, c});
+
+    scanf("%d %d %d", &s, &fx, &fy);
+
+    bfs();
+
+    if (check[fx - 1][fy - 1] <= s) {
+        result = a[fx-1][fy-1];
     }
-    
-    for(int i=1; i<=n; i++) {
-        init();
-        dijkstra(i);
-        cnt_check();
-    }
-    
+
     printf("%d\n", result);
 }
