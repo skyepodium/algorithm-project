@@ -1,26 +1,59 @@
 #include <iostream>
-#include <string>
-#define lld long long int
+#include <queue>
+#define max_int 10001
+
 using namespace std;
 
-lld n;
-int num, word_size;
-string result;
+int n, a[max_int], start_point, end_point, check[max_int];
+
+void bfs(int start_node) {
+    queue<int> q;
+    check[start_node] = 0;
+    q.push(start_node);
+    
+    while(!q.empty()) {
+        int node = q.front();
+        q.pop();
+        
+        for(int i=1; node + a[node] * i <= n; i++) {
+            int next_node = node + a[node] * i;
+            
+            if(check[next_node] == -1) {
+                check[next_node] = check[node] + 1;
+                q.push(next_node);
+            }
+        }
+        
+        for(int i=1; node - a[node] * i >= 1; i++) {
+            int next_node = node - a[node] * i;
+            
+            if(next_node <= n && check[next_node] == -1) {
+                check[next_node] = check[node] + 1;
+                q.push(next_node);
+            }
+        }
+    }
+}
+
+void init () {
+    for(int i=0; i<=n; i++) {
+        check[i] = -1;
+    }
+}
 
 int main () {
-    scanf("%lld", &n);
+    scanf("%d", &n);
     
-    while(n>0) {
-        num = n % 2;
-        if(num == 0 ) result += "0";
-        else result += "1";
-        
-        n = n / 2;
+    init();
+    
+    for(int i=1; i<=n; i++) {
+        scanf("%d", &a[i]);
     }
     
-    word_size = (int)result. size();
-    for(int i= word_size - 1; i>=0; i--) {
-        printf("%c", result[i]);
-    }
-    printf("\n");
+    scanf("%d %d", &start_point, &end_point);
+    
+    bfs(start_point);
+    
+    printf("%d\n", check[end_point]);
 }
+
