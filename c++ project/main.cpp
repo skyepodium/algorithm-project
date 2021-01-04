@@ -1,29 +1,62 @@
-#include <string>
-#include <vector>
+#include <iostream>
 #include <algorithm>
-#define max_int 201
+#include <vector>
+
+#define max_int 1000001
+
+/*
+    시간 복잡도: O(nlogn)
+    공간 복잡도: O(n)
+    사용한 알고리즘: 좌표압축, STL SORT
+    사용한 자료구조: 배열
+*/
+
 using namespace std;
 
-vector<int> solution(vector<int> numbers) {
-    vector<int> answer;
-    
-    bool check[max_int];
-    for(int i=0; i<max_int; i++) check[i] = false;
-    
-    for(int i=0; i<numbers.size(); i++) {
-        for(int j=0; j<numbers.size(); j++) {
-            if(i == j) continue;
-            
-            int sum_value = numbers[i] + numbers[j];
-            
-            if(!check[sum_value]) {
-                check[sum_value] = true;
-                answer.push_back(sum_value);
-            }
-        }
+int n, num, origin_idx, new_idx, result[max_int];
+
+struct info {
+    int num, origin_idx;
+};
+vector<info> v;
+
+bool cmp(const info& a, const info& b) {
+    if (a.num == b.num) {
+        return a.origin_idx < b.origin_idx;
     }
-    
-    sort(answer.begin(), answer.end());
-    
-    return answer;
+    else return a.num < b.num;
+}
+
+int main() {
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &num);
+        v.push_back({ num, i });
+    }
+
+    sort(v.begin(), v.end(), cmp);
+
+    new_idx = 0;
+    for (int i = 0; i < v.size(); i++) {
+        info cur = v[i];
+        num = cur.num;
+        origin_idx = cur.origin_idx;
+
+        result[origin_idx] = new_idx;
+
+        while (i < n && num == v[i + 1].num) {
+            i++;
+            info next_num = v[i];
+            origin_idx = next_num.origin_idx;
+            result[origin_idx] = new_idx;
+        }
+        new_idx++;
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("%d ", result[i]);
+    }
+
+    printf("\n");
 }
