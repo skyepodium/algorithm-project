@@ -1,49 +1,52 @@
 #include <iostream>
-#define max_int 101
+#include <cstring>
+#include <stack>
+#define max_int 10001
 using namespace std;
 
-int t, n, a[max_int][max_int], d[max_int][max_int];
-bool is_end;
-
-void go(int x, int y) {
-    
-    if(x >= n || y >= n) return;
-    
-    if(d[x][y] > 0) return;
-    
-    d[x][y] = 1;
-    
-    if(x == n-1 && y == n-1) {
-        return;
-    }
-    
-    int num = a[x][y];
-    
-    go(x + num, y);
-    go(x, y + num);
-}
+int t;
+char a[max_int];
 
 void solve() {
-    is_end = false;
-    scanf("%d", &n);
-    for(int i=0; i<n; i++) {
-        for(int j=0; j<n; j++) {
-            scanf("%d", &a[i][j]);
-            d[i][j] = 0;
+    scanf("%s", a);
+   
+    int size = (int)strlen(a);
+    stack<int> s;
+    char cur, top;
+    bool result = true;
+    
+    for(int i=0; i<size; i++) {
+        cur = a[i];
+        
+        if(cur == '(' || cur == '{' || cur == '[') {
+            s.push(cur);
+        }
+        else {
+            if(s.size() == 0) {
+                result = false;
+                break;
+            }
+            top = s.top();
+            
+            if(cur == ')' && top == '(') {
+                s.pop();
+            }
+            else if(cur == '}' && top == '{') {
+                s.pop();
+            }
+            else if(cur == ']' && top == '[') {
+                s.pop();
+            }
+
         }
     }
+    if(s.size() > 0) result = false;
     
-    go(0, 0);
-    
-    if(d[n-1][n-1]) {
-        printf("YES\n");
-    }
-    else{
-        printf("NO\n");
-    }
+    if(result) printf("YES\n");
+    else printf("NO\n");
 }
 
-int main () {
+int main() {
     scanf("%d", &t);
     
     while(t--) {
