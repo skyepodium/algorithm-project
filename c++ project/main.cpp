@@ -1,49 +1,47 @@
 #include <iostream>
-#include <cstring>
-#include <stack>
-#define max_int 10001
+#include <vector>
+#include <algorithm>
+#include <queue>
+#define llu unsigned long long int
+#define max_int 100001
 using namespace std;
 
-int t;
-char a[max_int];
+int t, n, x, num;
+llu result;
+
+struct info {
+    int num;
+    int val;
+};
 
 void solve() {
-    scanf("%s", a);
-   
-    int size = (int)strlen(a);
-    stack<int> s;
-    char cur, top;
-    bool result = true;
+    scanf("%d %d", &n, &x);
     
-    for(int i=0; i<size; i++) {
-        cur = a[i];
-        
-        if(cur == '(' || cur == '{' || cur == '[') {
-            s.push(cur);
-        }
-        else {
-            if(s.size() == 0) {
-                result = false;
-                break;
-            }
-            top = s.top();
-            
-            if(cur == ')' && top == '(') {
-                s.pop();
-            }
-            else if(cur == '}' && top == '{') {
-                s.pop();
-            }
-            else if(cur == ']' && top == '[') {
-                s.pop();
-            }
+    result = 0;
 
-        }
+    queue<info> q;
+    for(int i=1; i<=n; i++) {
+        scanf("%d", &num);
+        q.push({num, 0});
+        result += num;
     }
-    if(s.size() > 0) result = false;
     
-    if(result) printf("YES\n");
-    else printf("NO\n");
+    while(q.size() > 0) {
+        info cur = q.front();
+        int num = cur.num;
+        int val = cur.val;
+        q.pop();
+        
+        if(num % x != 0) break;
+        
+        int new_num = round(num / x);
+        int new_val = val + 1;
+        
+        result += (llu)((llu)new_num * (llu)pow(x, new_val));
+        q.push({new_num, new_val});
+    }
+    
+    printf("%llu\n", result);
 }
 
 int main() {
