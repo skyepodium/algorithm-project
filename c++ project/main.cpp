@@ -1,53 +1,71 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
-#include <queue>
-#define llu unsigned long long int
-#define max_int 100001
+#define lld long long int
+#define max_int 1000001
 using namespace std;
 
-int t, n, x, num;
-llu result;
+int n, m, k, idx, a, b, c;
+lld tree[max_int *4];
 
-struct info {
-    int num;
-    int val;
-};
+void update_tree(int idx, lld delta) {
+    while (idx > 0) {
+        tree[idx] += delta;
+        idx /= 2;
+    }
+}
+
+lld find_tree(int start, int end) {
+    lld result = 0;
+    while (start <= end) {
+        if(start % 2 == 1) result += tree[start];
+        if(end % 2 == 0) result += tree[end];
+        
+        start = (start + 1) / 2;
+        end = (end - 1) / 2;
+    }
+    return result;
+}
+
+void make_tree() {
+    int num = idx;
+    
+    while (num > 0) {
+        tree[num] = tree[num * 2] + tree[num * 2 + 1];
+        num--;
+    }
+}
 
 void solve() {
-    scanf("%d %d", &n, &x);
+    scanf("%d %d %d", &n, &m, &k);
+//    cin >> n >> m >> k;
     
-    result = 0;
-
-    queue<info> q;
+    for(idx = 1; idx<n; idx *=2);
+    idx--;
+    
     for(int i=1; i<=n; i++) {
-        scanf("%d", &num);
-        q.push({num, 0});
-        result += num;
+        scanf("%lld", &tree[idx + i]);
+//        cin >> tree[idx + i];
     }
     
-    while(q.size() > 0) {
-        info cur = q.front();
-        int num = cur.num;
-        int val = cur.val;
-        q.pop();
-        
-        if(num % x != 0) break;
-        
-        int new_num = round(num / x);
-        int new_val = val + 1;
-        
-        result += (llu)((llu)new_num * (llu)pow(x, new_val));
-        q.push({new_num, new_val});
+    make_tree();
+    
+    for(int i=1; i<=m+k; i++) {
+        scanf("%d %d %d", &a, &b, &c);
+//        cin >> a >> b >> c;
+        // update
+        if(a == 1) {
+            update_tree(b + idx, c - tree[idx + b]);
+        }
+        //print
+        else{
+            printf("%lld\n", find_tree(b + idx, c + idx));
+//            cout << find_tree(b + idx, c + idx) << endl;
+        }
     }
     
-    printf("%llu\n", result);
 }
 
 int main() {
-    scanf("%d", &t);
+//    ios_base::sync_with_stdio(0);
     
-    while(t--) {
-        solve();
-    }
+    solve();
 }
