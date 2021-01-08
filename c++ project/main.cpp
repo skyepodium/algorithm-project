@@ -1,71 +1,67 @@
 #include <iostream>
+#include <algorithm>
+#include <queue>
 #define lld long long int
-#define max_int 1000001
+#define max_int 100001
+#define max_val 1000000001
 using namespace std;
 
-int n, m, k, idx, a, b, c;
-lld tree[max_int *4];
+int t, n, x, num, idx, a[max_int], last_idx;
+lld result, sum_value;
 
-void update_tree(int idx, lld delta) {
-    while (idx > 0) {
-        tree[idx] += delta;
-        idx /= 2;
-    }
-}
-
-lld find_tree(int start, int end) {
-    lld result = 0;
-    while (start <= end) {
-        if(start % 2 == 1) result += tree[start];
-        if(end % 2 == 0) result += tree[end];
-        
-        start = (start + 1) / 2;
-        end = (end - 1) / 2;
-    }
-    return result;
-}
-
-void make_tree() {
-    int num = idx;
+void cal_idx(int num, int id) {
     
-    while (num > 0) {
-        tree[num] = tree[num * 2] + tree[num * 2 + 1];
-        num--;
+    int i=0;
+    while(num > 0) {
+        if(num % x != 0) break;
+        num /= x;
+        i++;
+    }
+    i++;
+    
+    if(idx > i) {
+        idx = i;
+        last_idx = id;
     }
 }
 
 void solve() {
-    scanf("%d %d %d", &n, &m, &k);
-//    cin >> n >> m >> k;
+    cin >> n >> x;
     
-    for(idx = 1; idx<n; idx *=2);
+    sum_value = result = 0;
+    last_idx = n;
+    
+    for(idx = 1; pow(x, idx) <= max_val; idx++);
     idx--;
+
+    for(int i=1; i<=n; i++) {
+        cin >> num;
+        a[i] = num;
+        sum_value += num;
+        cal_idx(num, i);
+    }
+    
+    if(idx != 1) {
+        result = sum_value * idx;
+    }
+    else {
+        result = sum_value;
+    }
     
     for(int i=1; i<=n; i++) {
-        scanf("%lld", &tree[idx + i]);
-//        cin >> tree[idx + i];
+        if(i == last_idx) break;
+        result += a[i];
     }
     
-    make_tree();
-    
-    for(int i=1; i<=m+k; i++) {
-        scanf("%d %d %d", &a, &b, &c);
-//        cin >> a >> b >> c;
-        // update
-        if(a == 1) {
-            update_tree(b + idx, c - tree[idx + b]);
-        }
-        //print
-        else{
-            printf("%lld\n", find_tree(b + idx, c + idx));
-//            cout << find_tree(b + idx, c + idx) << endl;
-        }
-    }
-    
+    cout << result << endl;
 }
 
 int main() {
-//    ios_base::sync_with_stdio(0);
+    ios_base::sync_with_stdio(0);
     
-    solve();
+    cin >> t;
+    
+    while(t--) {
+        solve();
+    }
 }
