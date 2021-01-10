@@ -1,56 +1,60 @@
 #include <iostream>
-#include <algorithm>
+#include <vector>
 #include <queue>
-#define lld long long int
-#define max_int 100001
+#include <algorithm>
 #define max_val 1000000001
+#define max_int 200001
+#define lld long long int
 using namespace std;
 
-int t, n, x, num, idx, a[max_int], last_idx;
-lld result, sum_value;
+int n, m, check[max_int], s_num, c_node, a[max_int], s, e;
+bool idx[max_int];
+vector<int> v[max_int];
 
-void cal_idx(int num, int id) {
-    
-    int i=0;
-    while(num > 0) {
-        if(num % x != 0) break;
-        num /= x;
-        i++;
+lld result;
+
+void init() {
+    for(int i=1; i<=n; i++) {
+        check[i] = 0;
     }
-    i++;
+}
+
+void dfs(int node) {
+    check[node] = 1;
+    if(node != c_node) {
+        result = max(result, (lld)(a[node] - s_num));
+    }
     
-    if(idx > i) {
-        idx = i;
-        last_idx = id;
+    for(int i=0; i<v[node].size(); i++) {
+        int next = v[node][i];
+        if(!check[next]) {
+            dfs(next);
+        }
     }
 }
 
 void solve() {
-    cin >> n >> x;
+    cin >> n >> m;
     
-    sum_value = result = 0;
-    last_idx = n;
+    result = (lld)(max_int * max_val) * -1;
     
-    for(idx = 1; pow(x, idx) <= max_val; idx++);
-    idx--;
-
     for(int i=1; i<=n; i++) {
-        cin >> num;
-        a[i] = num;
-        sum_value += num;
-        cal_idx(num, i);
+        cin >> a[i];
     }
     
-    if(idx != 1) {
-        result = sum_value * idx;
-    }
-    else {
-        result = sum_value;
+    for(int i=1; i<=m; i++) {
+        cin >> s >> e;
+        v[s].push_back(e);
+        idx[s] = true;
     }
     
     for(int i=1; i<=n; i++) {
-        if(i == last_idx) break;
-        result += a[i];
+        if(idx[i]) {
+            init();
+            c_node = i;
+            s_num = a[i];
+            dfs(i);
+        }
     }
     
     cout << result << endl;
@@ -58,10 +62,6 @@ void solve() {
 
 int main() {
     ios_base::sync_with_stdio(0);
-    
-    cin >> t;
-    
-    while(t--) {
-        solve();
-    }
+
+    solve();
 }
