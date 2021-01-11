@@ -12,7 +12,7 @@ bool idx[max_int];
 vector<int> v[max_int];
 
 lld result;
-
+  sss
 void init() {
     for(int i=1; i<=n; i++) {
         check[i] = 0;
