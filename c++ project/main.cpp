@@ -1,67 +1,23 @@
 #include <iostream>
-#include <vector>
 #include <queue>
-#include <algorithm>
-#define max_val 1000000001
-#define max_int 200001
-#define lld long long int
 using namespace std;
 
-int n, m, check[max_int], s_num, c_node, a[max_int], s, e;
-bool idx[max_int];
-vector<int> v[max_int];
+int n, num;
 
-lld result;
-  sss
-void init() {
-    for(int i=1; i<=n; i++) {
-        check[i] = 0;
-    }
-}
-
-void dfs(int node) {
-    check[node] = 1;
-    if(node != c_node) {
-        result = max(result, (lld)(a[node] - s_num));
-    }
+int main () {
+    scanf("%d", &n);
     
-    for(int i=0; i<v[node].size(); i++) {
-        int next = v[node][i];
-        if(!check[next]) {
-            dfs(next);
-        }
-    }
-}
-
-void solve() {
-    cin >> n >> m;
+    priority_queue<int, vector<int>, greater<int>> pq;
     
-    result = (lld)(max_int * max_val) * -1;
-    
-    for(int i=1; i<=n; i++) {
-        cin >> a[i];
-    }
-    
-    for(int i=1; i<=m; i++) {
-        cin >> s >> e;
-        v[s].push_back(e);
-        idx[s] = true;
-    }
-    
-    for(int i=1; i<=n; i++) {
-        if(idx[i]) {
-            init();
-            c_node = i;
-            s_num = a[i];
-            dfs(i);
+    for(int i=1; i<=n*n; i++) {
+        scanf("%d", &num);
+        
+        pq.push(num);
+        
+        while(pq.size() > n) {
+            pq.pop();
         }
     }
     
-    cout << result << endl;
-}
-
-int main() {
-    ios_base::sync_with_stdio(0);
-
-    solve();
+    printf("%d\n", pq.top());
 }
