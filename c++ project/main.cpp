@@ -1,80 +1,39 @@
 #include <iostream>
-#include <string>
-#include <queue>
-
-#define max_int 1001
-#define max_length 31
+#include <algorithm>
+#define max_int 10001
 using namespace std;
 
-int n, k, start_node, end_node, p[max_int];
-bool check[max_int];
-char a[max_int][max_length];
+int n, a[max_int], result, first, second;
 
-void go(int node) {
-    if(node == p[node]) {
-        printf("%d ", node);
-        return;
-    }
-    
-    go(p[node]);
-    
-    printf("%d ", node);
-}
-
-void bfs() {
-    queue<int> q;
-    check[start_node] = true;
-    p[start_node] = start_node;
-    q.push(start_node);
-    
-    while(!q.empty()) {
-        int node = q.front();
-        
-        q.pop();
-        
-        char *cur_num = a[node];
-        
-        for(int i=1; i<=n; i++) {
-            int next_node = i;
-            if(!check[next_node]) {
-                
-                char *next_num = a[next_node];
-                
-                int diff_cnt = 0;
-                for(int idx=0; idx<k; idx++) {
-                    if(cur_num[idx] != next_num[idx]) diff_cnt++;
-                }
-                
-                if(diff_cnt == 1) {
-                    p[next_node] = node;
-                    check[next_node] = true;
-                    q.push(next_node);
-                }
-            }
-        }
-    }
-}
-
-void solve() {
-    scanf("%d %d", &n, &k);
+int main() {
+    scanf("%d", &n);
     
     for(int i=1; i<=n; i++) {
-        scanf("%s", a[i]);
+        scanf("%d", &a[i]);
     }
     
-    scanf("%d %d", &start_node, &end_node);
+    sort(a+1, a+1+n, less<int>());
     
-    bfs();
+    for(int i=1; i<=n; ) {
+        
+        if(i+1 <= n) {
+            first = a[i];
+            second = a[i+1];
+             
+            if(first * second > first + second) {
+                result += (first * second);
+                i = i + 2;
+            }
+            else {
+                result += a[i];
+                i = i + 1;
+            }
+        }
+        else {
+            result += a[i];
+            i++;
+        }
+    }
     
-    if(!check[end_node]) {
-        printf("-1\n");
-    }
-    else {
-        go(end_node);
-        printf("\n");
-    }
-}
-
-int main(){
-    solve();
+    printf("%d\n", result);
 }
