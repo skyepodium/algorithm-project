@@ -1,34 +1,33 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <algorithm>
+using namespace std;
 
-#define max_int 10001
-using namespace  std;
-
-int n, m, k, a, b;
-bool check[max_int];
-vector<int> v[max_int];
-
-void dfs(int node) {
-    check[node] = true;
-    for(auto next: v[node]) {
-        if(!check[next]) {
-            dfs(next);
+void solve() {
+    int n;
+    float m;
+    
+    cin >> n >> m;
+    
+    float cur = 0;
+    int result = -1;
+    for(int i=1; i<=n; i++) {
+        float a, b;
+        cin >> a >> b;
+        float num = (a * b) / 100;
+        cur += num;
+        
+        if(cur > m) {
+            result = i;
+            break;
         }
     }
+    
+    cout << result << endl;
 }
 
 int main() {
-    scanf("%d %d %d", &n, &m, &k);
-    
-    for(int i=0; i<m; i++) {
-        scanf("%d %d", &a, &b);
-        v[a].push_back(b);
-        v[b].push_back(a);
-    }
-    
-    dfs(1);
-    
-    if(check[k]) printf("Yes\n");
-    else printf("No\n");
+    ios_base::sync_with_stdio(0);
+    solve();
 }
