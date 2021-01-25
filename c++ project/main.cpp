@@ -17,7 +17,7 @@ void solve() {
         cin >> a >> b;
         float num = (a * b) / 100;
         cur += num;
-        
+           
         if(cur > m) {
             result = i;
             break;
