@@ -1,6 +1,6 @@
 #include <iostream>
-#define lld unsigned long long int
-using namespace std;
+#define lld long long int
+using namespace std;  
 
 int iVar1;
 lld local_b6;
