@@ -1,13 +1,13 @@
 #include <iostream>
 #define lld long long int
-using namespace std;  
+using namespace std;
 
 int iVar1;
 lld local_b6;
 lld local_b4;
 lld local_ac;
 lld local_aa;
-lld local_a9;
+lld local_a9;   
 lld local_a1;
 lld local_9f;
 lld local_9b;
