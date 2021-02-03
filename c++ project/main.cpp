@@ -1,26 +1,28 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
+#include <thread>
 
-int t;
-double d, l, n, result;
+#pragma warning(disable:4996)
+#pragma section("flag_data", read)
 
-void solve(int t) {
-    scanf("%lf %lf %lf", &d, &l, &n);
+char table[45] = { 102, 124, 124, 107, 78, 117, 17, 87, 100, 69, 114, 2, 80, 106, 65, 80, 6, 66, 103, 91, 6, 125, 4, 66, 125, 99, 2, 112, 76, 110, 103, 1, 98, 91, 106, 6, 18, 106, 115, 91, 69, 5, 113, 0, 76 };
 
-    result = 0;
-    
-    for(int i=0; i<=n-1; i++) {
-        result += d * (1 + i * (l/100));
+char flags[45];
+
+void genFlag(int key1, int key2, int key3) {
+    for(int i = 0; i<45; i++) {. 
+        if (i % 3 == 0)
+            flags[i] = table[i] ^ key1;
+        else if (i % 3 == 1)
+            flags[i] = table[i] ^ key2;
+        else if (i % 3 == 2) {
+            flags[i] = table[i] ^ key3;
+        }
     }
-    
-    printf("#%d %d\n", t, (int)result);
 }
-    
 
 int main() {
-    scanf("%d", &t);
+    genFlag(34, 53, 49);
     
-    for(int test_case=1; test_case<=t; test_case++) {
-        solve(test_case);
-    }
+    printf("%s", flags);
 }
