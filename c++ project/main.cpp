@@ -10,7 +10,7 @@ char table[45] = { 102, 124, 124, 107, 78, 117, 17, 87, 100, 69, 114, 2, 80, 106
 char flags[45];
 
 void genFlag(int key1, int key2, int key3) {
-    for(int i = 0; i<45; i++) {. 
+    for(int i = 0; i<45; i++) {  
         if (i % 3 == 0)
             flags[i] = table[i] ^ key1;
         else if (i % 3 == 1)
