@@ -12,7 +12,7 @@ char flags[45];
 void genFlag(int key1, int key2, int key3) {
     for(int i = 0; i<45; i++) {  
         if (i % 3 == 0)
-            flags[i] = table[i] ^ key1;
+            flags[i] = table[i] ^ key1;   
         else if (i % 3 == 1)
             flags[i] = table[i] ^ key2;
         else if (i % 3 == 2) {
