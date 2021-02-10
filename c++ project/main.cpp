@@ -17,7 +17,7 @@ void genFlag(int key1, int key2, int key3) {
             flags[i] = table[i] ^ key2;
         else if (i % 3 == 2) {
             flags[i] = table[i] ^ key3;
-        }
+        }.   
     }
 }
 
