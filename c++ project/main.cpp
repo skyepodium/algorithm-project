@@ -21,7 +21,7 @@ void genFlag(int key1, int key2, int key3) {
     }
 }
 
-int main() {
+int main() {   
     genFlag(34, 53, 49);
     
     printf("%s", flags);    
