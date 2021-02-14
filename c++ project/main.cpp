@@ -1,28 +1,44 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <thread>
+#include <iostream>
+#define ulonglong unsigned long long
+#define undefined int
+#define undefined4 unsigned long long
+#define uint unsigned long long
+#define code char
+using namespace std;
 
-#pragma warning(disable:4996)
-#pragma section("flag_data", read)
+void entry(void)
 
-char table[45] = { 102, 124, 124, 107, 78, 117, 17, 87, 100, 69, 114, 2, 80, 106, 65, 80, 6, 66, 103, 91, 6, 125, 4, 66, 125, 99, 2, 112, 76, 110, 103, 1, 98, 91, 106, 6, 18, 106, 115, 91, 69, 5, 113, 0, 76 };
-
-char flags[45];
-
-void genFlag(int key1, int key2, int key3) {
-    for(int i = 0; i<45; i++) {  
-        if (i % 3 == 0)
-            flags[i] = table[i] ^ key1;   
-        else if (i % 3 == 1)
-            flags[i] = table[i] ^ key2;
-        else if (i % 3 == 2) {
-            flags[i] = table[i] ^ key3;
-        }.   
-    }
+{
+  int *pcVar1;
+  ulonglong uVar2;
+  undefined *puVar3;
+  int iVar4;  
+  undefined *puVar5;
+  uint uVar6;
+  undefined4 uVar7;
+  
+//  uVar2 = rdtsc();
+  iVar4 = 0;
+  puVar3 = (undefined *)0x00000010;
+  do {
+    puVar5 = puVar3;
+    *(undefined4 *)(puVar5 + -4) = 0x5eadeef;
+    iVar4 = iVar4 + 1;
+    puVar3 = puVar5 + -4;
+  } while (iVar4 <= (int)((uVar2 & 0xffffffff) % 10000));
+  uVar7 = *(undefined4 *)(puVar5 + -4);
+  uVar6 = (uint)puVar5 & 0xfffffff0;
+  *(undefined4 *)(uVar6 - 4) = 0xb16b00b5;
+  *(undefined4 *)(uVar6 - 8) = 0xb16b00b5;
+  *(undefined **)(uVar6 - 0xc) = puVar5;
+  *(undefined4 *)(uVar6 - 0x10) = uVar7;
+  *(undefined4 *)(uVar6 - 0x14) = 0x8048206;
+//  FUN_080481a2();
+//  pcVar1 = (code *)swi(0x80);
+//  (*pcVar1)();
+  return;
 }
 
-int main() {   
-    genFlag(34, 53, 49);
-    
-    printf("%s", flags);    
+int main() {
+    entry();
 }
