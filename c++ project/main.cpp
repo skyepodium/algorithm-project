@@ -7,7 +7,7 @@ void go(int idx, int num) {
         cout << num << endl;
         return;
     }
-    
+        
     go(idx + 1, num + idx);
     
     go(idx + 1, num);
