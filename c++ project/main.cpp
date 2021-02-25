@@ -12,7 +12,7 @@ void go(int idx, int num) {
     
     go(idx + 1, num);
 }
-
+    
 int main() {
     
     go(0, 0);
