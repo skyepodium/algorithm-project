@@ -1,19 +1,20 @@
 #include <iostream>
-
+#include <string>
 using namespace std;
 
-void go(int idx, int num) {
-    if (idx > 4) {
-        cout << num << endl;
+void go(int idx, string result) {
+    if(idx >= 26) {
+        if(result.size() == 3) {
+            cout << result << endl;
+        }
         return;
     }
-        
-    go(idx + 1, num + idx);
     
-    go(idx + 1, num);
+    go(idx + 1, result + char(idx + 97));
+
+    go(idx + 1, result);
 }
-    
+
 int main() {
-    
-    go(0, 0);
+    go(0, "");
 }
