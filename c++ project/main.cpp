@@ -1,156 +1,211 @@
 #include <iostream>
-#include <vector>
 #include <queue>
-
-#define max_int 51
+#define max_int 21
+#define max_val 2147483647
 
 /*
- 시간 복잡도: K * N^2
- 공간 복잡도: N^2
- 사용한 알고리즘: 반복문
- 사용한 자료구조: 큐
-*/
+    시간 복잡도: m * n^2
+    공간 복잡도: n^2
+    사용한 알고리즘: BFS - 모든 간선의 가중치가 1로 같을 때 최단거리를 계산합니다.
+    사용한 자료구조: 구조체, 2차원 배열
+ */
 
 using namespace std;
 
-int N, M, K, r, c, m, s, d, result;
-int dx[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
-int dy[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+int n, m, oil, person_cnt, a[max_int][max_int], start_x, start_y, person_x, person_y, target_x, target_y, check[max_int][max_int], person_dist, target_dist;
 
-// 절대값 함수입니다.
-int abs(int num) {
-    return num < 0 ? num * -1 : num;
+int dx[] = {0, 0, 1, -1};
+int dy[] = {-1, 1, 0, 0};
+
+// 좌표를 저장하기 위한 구조체
+struct info{
+    int x, y, dist;
+};
+
+// 연산자 오버로딩
+// 1) 거리가 작은 순, 2) 행이 작은 순, 3) 열이 작은 순
+bool operator < (const info &a, const info &b) {
+    if (a.dist == b.dist) {
+        if(a.x == b.x) {
+            return a.y < b.y;
+        }
+        else return a.x < b.x;
+    }
+    else return a.dist < b.dist;
 }
 
-// 파이어볼을 구조체로 정의했습니다.
-// 1) 질량, 2) 속도, 3) 방향을 가집니다.
-struct fireball {
-    int m, s, d;
-};
+// 도착지점의 좌표를 2차원 배열로 저장합니다.
+// x, y의 인덱스로 접근하기 위함입니다.
+info target[max_int][max_int];
 
-// N*N 1칸에 여러개의 파이어볼이 있을 수 있기 때문에 큐를 사용했습니다.
-queue<fireball> base[max_int][max_int];
-
-// 현재 1칸의 파이어볼들의 정보를 저장하는 구조체입니다.
-// 1) 개수, 2) 질량의 합, 3) 속도의 합, 3) 방향, 4) 전부 홀수인가? 5) 전부 짝수인가?
-struct info {
-    int cnt, mass, speed, direction;
-    bool is_odd, is_even;
-};
-
-// N*N 칸에 정보를 저장할 수 있도록 2차원 배열로 선언합니다.
-info sum_info[max_int][max_int];
-
-// N*N 한칸에 저장된 파이어 볼들의 정보를 초기화 합니다.
-void clear_sum_info() {
-    for (int i = 0; i <= N; i++) {
-        for (int j = 0; j <= N; j++) {
-            sum_info[i][j] = {0, 0, 0, 0, true, true};
+// bfs를 위한 배열 초기화
+void init() {
+    person_dist = target_dist = max_val;
+    
+    for(int i=1; i<=n; i++) {
+        for(int j=1; j<=n; j++) {
+            check[i][j] = -1;
         }
     }
 }
 
-// 파이어볼 들을 이동시킵니다.
-void move_fire_ball() {
-    for (int i = 1; i <= N; i++) {
-        for (int j = 1; j <= N; j++) {
+// 택시의 위치에서 승객까지의 최단거리를 계산합니다.
+void person_bfs() {
+    
+    queue<info> q;
+    check[start_x][start_y] = 0;
+    q.push({start_x, start_y});
+    
+    // 만약 시작위치에 승객이 있다면, 거리는 0으로 갱신해줍니다.
+    if(a[start_x][start_y] == -1) {
+        person_x = start_x;
+        person_y = start_y;
+        person_dist = check[start_x][start_y];
+    }
+    
+    while(!q.empty()) {
+        info cur = q.front();
+        q.pop();
+        
+        int x = cur.x;
+        int y = cur.y;
+        
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
             
-            // 현재의 큐가 비어있기 전까지 진행합니다.
-            while (!base[i][j].empty()) {
-                fireball cur = base[i][j].front();
-                base[i][j].pop();
-
-                // 방향 * 속력 만큼 이동시킵니다.
-                int nx = i + dx[cur.d] * cur.s;
-                int ny = j + dy[cur.d] * cur.s;
-
-                // 만약 영역을 벗어나면, 자리를 계산하고 넣어줍니다.
-                if (nx < 1 || nx > N || ny < 1 || ny > N) {
-                    if (nx < 1) nx = (abs(nx) % N) * -1 + N;
-                    if (ny < 1) ny = (abs(ny) % N) * -1 + N;
-                    if (nx > N) nx = nx % N == 0 ? N : nx % N;
-                    if (ny > N) ny = ny % N == 0 ? N : ny % N;
-                }
-                    
-                // 정보를 업데이트 해줍니다.
-                sum_info[nx][ny].cnt++;
-                sum_info[nx][ny].mass += cur.m;
-                sum_info[nx][ny].speed += cur.s;
-                sum_info[nx][ny].direction += cur.d;
-
-                if (cur.d % 2 == 0) sum_info[nx][ny].is_odd = false;
-                if (cur.d % 2 == 1) sum_info[nx][ny].is_even = false;
-
-            }
-        }
-    }
-}
-
-// 파이어 볼들을 분리합니다.
-void split_fire_ball() {
-    for (int i = 1; i <= N; i++) {
-        for (int j = 1; j <= N; j++) {
-
-            // 만약 0개이면 진행하지 않습니다.
-            if (sum_info[i][j].cnt <= 0) continue;
-
-            // 1개인 경우 1) 질량의 합에 넣어주고, 2) 큐에 넣어줍니다.
-            if (sum_info[i][j].cnt == 1) {
-                result += sum_info[i][j].mass;
- 
-                base[i][j].push({ sum_info[i][j].mass, sum_info[i][j].speed, sum_info[i][j].direction });
-
-                continue;
-            }
-
-            // 2개 이상인 경우
-            int mass = sum_info[i][j].mass / 5;
-            int speed = sum_info[i][j].speed / sum_info[i][j].cnt;
-
-            // 질량이 0보다 작으면 소멸시킵니다.
-            if (mass <= 0) continue;
-
-            int start_idx = 1;
-
-            // 전부 홀수 또는 짝수 이면 0, 2, 4, 6을 넣어줍니다.
-            if (sum_info[i][j].is_odd || sum_info[i][j].is_even) start_idx = 0;
-
-            for (int idx = start_idx; idx < 8; idx += 2) {
-                base[i][j].push({ mass, speed, idx });
+            if(nx > n || nx < 1 || ny > n || ny < 1) continue;
+            
+            if (a[nx][ny] != 1 && check[nx][ny] == -1) {
+                check[nx][ny] = check[x][y] + 1;
                 
-                result += mass;
+                if(a[nx][ny] == -1) {
+                    info next_info = {nx, ny, check[nx][ny]};
+                    info person_info = {person_x, person_y, person_dist};
+                    
+                    // 제일 가까운 승객을 찾아줍니다.
+                    if(next_info < person_info) {
+                        person_x = nx;
+                        person_y = ny;
+                        person_dist = check[nx][ny];
+                    }
+                }
+                
+                q.push({nx, ny});
+            }
+        }
+    }
+}
+
+// 승객의 위치에서 도착지점까지의 최단거리를 계산합니다.
+void target_bfs() {
+    
+    queue<info> q;
+    check[person_x][person_y] = 0;
+    q.push({person_x, person_y});
+    
+    while(!q.empty()) {
+        info cur = q.front();
+        q.pop();
+        
+        int x = cur.x;
+        int y = cur.y;
+        
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if(nx > n || nx < 1 || ny > n || ny < 1) continue;
+            
+            if (a[nx][ny] != 1 && check[nx][ny] == -1) {
+                check[nx][ny] = check[x][y] + 1;
+                
+                // 만약 nx, ny가 도착지점이라면
+                // 도착지점까지의 거리를 갱신해줍니다.
+                if(nx == target_x && ny == target_y) {
+                    target_dist = check[nx][ny];
+                }
+                
+                q.push({nx, ny});
             }
         }
     }
 }
 
 
-int main() {
-    // 1. 입력
-    scanf("%d %d %d", &N, &M, &K);
-
-    // M개의 파이어볼을 입력받고 N&N으로 구성된 큐에 저장합니다.
-    // N*N 1칸에 여러개의 파이어볼이 있을 수 있기 때문에 큐를 사용했습니다.
-    for (int i = 1; i <= M; i++) {
-        scanf("%d %d %d %d %d", &r, &c, &m, &s, &d);
-        base[r][c].push({ m, s, d });
+int main () {
+    // 1. 입력 받습니다.
+    scanf("%d %d %d", &n, &m, &oil);
+    
+    // 1) n*n에 지도의 정보를 입력합니다.
+    for(int i=1; i<=n; i++) {
+        for(int j=1; j<=n; j++) {
+            scanf("%d", &a[i][j]);
+        }
     }
-
-    // 2. K번 반복합니다.
-    while (K--) {
-        // 현재의 질량의 합을 전부 초기화 합니다.
-        result = 0;
-
-        // N*N 한칸에 저장된 파이어 볼들의 정보를 초기화 합니다.
-        clear_sum_info();
-
-        // 파이어볼을 이동시킵니다.
-        move_fire_ball();
-
-        // 2개 이상의 파이어볼이 1칸에 있으면 분리합니다.
-        split_fire_ball();
+    
+    // 2) 출발지점의 x, y를 입력 저장합니다.
+    scanf("%d %d", &start_x, &start_y);
+    
+    // 3) m 명의 승객 정보를 입력받습니다.
+    for(int i=1; i<=m; i++) {
+        scanf("%d %d %d %d", &person_x, &person_y, &target_x, &target_y);
+        
+        // 승객의 위치는 지도에서 -1로 표시합니다.
+        a[person_x][person_y] = -1;
+        
+        // 승객의 도착지점을 저장합니다.
+        target[person_x][person_y] = {target_x, target_y};
     }
-
-    // 3. 질량의 합을 출력합니다.
-    printf("%d\n", result);
+    
+    person_cnt = m;
+    
+    // 남은 승객의 수 만큼 반복합니다.
+    while(person_cnt > 0) {
+        
+        // bfs를 위한 초기화
+        init();
+        
+        // 1) 택시의 위치에서 가장 가까운 승객을 찾습니다.
+        person_bfs();
+        
+        // 승객 까지 갈 수 없으면 종료합니다.
+        if(oil <= person_dist) break;
+        
+        // 기름을 소모해줍니다.
+        oil -= person_dist;
+        
+        // 승객을 태우면 지도에 표시한 -1을 지워줍니다.
+        a[person_x][person_y] = 0;
+        
+        // 도착 지점의 정보를 갱신합니다.
+        info target_info = target[person_x][person_y];
+        target_x = target_info.x;
+        target_y = target_info.y;
+        
+        // bfs를 위한 초기화
+        init();
+        
+        // 2) 승객의 위치에서 도착지점까지의 최단 거리를 구합니다.
+        target_bfs();
+        
+        // 도착할 수 없으면 종료합니다.
+        if(oil < target_dist) break;
+        
+        // 소비한 만큼 기름을 채워줍니다.
+        oil += target_dist;
+        
+        // 승객 1명을 줄여줍니다.
+        person_cnt--;
+        
+        // 출발지점을 도착지점의 좌표로 갱신합니다.
+        start_x = target_x;
+        start_y = target_y;
+    }
+    
+    // 아직 태우지 못한 승객이 있으면 -1록 갱신합니다.
+    if(person_cnt > 0) oil = -1;
+        
+    // 출력
+    printf("%d\n", oil);
 }
