@@ -1,211 +1,165 @@
 #include <iostream>
-#include <queue>
-#define max_int 21
-#define max_val 2147483647
+#define max_int 501
+using namespace  std;
 
 /*
-    시간 복잡도: m * n^2
-    공간 복잡도: n^2
-    사용한 알고리즘: BFS - 모든 간선의 가중치가 1로 같을 때 최단거리를 계산합니다.
-    사용한 자료구조: 구조체, 2차원 배열
+    시간 복잡도: O(n^2)
+    공간 복잡도: O(n^2)
+    사용한 알고리즘: 백트래킹 (DFS)
+    사용한 자료구조: 2차원 배열
  */
 
-using namespace std;
+// a는 지도 정보를 저장할 2차원 배열
+int n, m, a[max_int][max_int], result;
+bool check[max_int][max_int];
 
-int n, m, oil, person_cnt, a[max_int][max_int], start_x, start_y, person_x, person_y, target_x, target_y, check[max_int][max_int], person_dist, target_dist;
-
+// dx, dy는 인접한 4방향을 나타내는 방향벡터
+// 0, 1, 2, 3 순서대로 왼쪽, 오른쪽, 아래쪽, 위쪽
 int dx[] = {0, 0, 1, -1};
 int dy[] = {-1, 1, 0, 0};
 
-// 좌표를 저장하기 위한 구조체
-struct info{
-    int x, y, dist;
-};
 
-// 연산자 오버로딩
-// 1) 거리가 작은 순, 2) 행이 작은 순, 3) 열이 작은 순
-bool operator < (const info &a, const info &b) {
-    if (a.dist == b.dist) {
-        if(a.x == b.x) {
-            return a.y < b.y;
-        }
-        else return a.x < b.x;
-    }
-    else return a.dist < b.dist;
+/*
+    ex, ey는 ㅜ 모양의 4가지 회전 방향일때 정보를 저장합니다.
+    만약 각각 분리했으면 바로 아래 주석 부분과 같습니다. (ㅜ, ㅏ, ㅗ, ㅓ)
+ */
+int ex[4][4] = {{0, 0, 0, 1}, {0, 1, 2, 1}, {0, 0, 0, -1}, {0, -1, 0, 1}};
+int ey[4][4] = {{0, 1, 2, 1}, {0, 0, 0, 1}, {0, 1, 2, 1}, {0, 1, 1, 1}};
+
+/*
+    // ㅜ
+    int ex_1_x[] = {0, 0, 0, 1}, ex_1_y[] = {0, 1, 2, 1};
+
+    // ㅏ
+    int ex_2_x[] = {0, 1, 2, 1}, ex_2_y[] = {0, 0, 0, 1};
+
+    // ㅗ
+    int ex_3_x[] = {0, 0, 0, -1}, ex_3_y[] = {0, 1, 2, 1};
+
+    // ㅓ
+    int ex_4_x[] = {0, -1, 0, 1}, ex_4_y[] = {0, 1, 1, 1};
+ */
+
+
+int max(int a, int b){
+    return a > b ? a : b;
 }
 
-// 도착지점의 좌표를 2차원 배열로 저장합니다.
-// x, y의 인덱스로 접근하기 위함입니다.
-info target[max_int][max_int];
+// DFS 로 4가지 모양 검사 (ㅜ 제외)
+void dfs(int x, int y, int sum_value, int length){
+    // 길이가 4 이상이면 종료햅줍니다.
+    if(length >= 4){
+        result = max(result, sum_value);
+        return;
+    }
 
-// bfs를 위한 배열 초기화
-void init() {
-    person_dist = target_dist = max_val;
-    
-    for(int i=1; i<=n; i++) {
-        for(int j=1; j<=n; j++) {
-            check[i][j] = -1;
+    for(int i=0; i<4; i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+
+        // 지도 넘어가는 경우 검사
+        if(nx < 1 || nx > n || ny < 1 || ny > m) continue;
+
+        // 방문하지 않은 점이면
+        if(!check[nx][ny]) {
+
+            // 들어가기전 체크해주고
+            check[nx][ny] = true;
+
+            dfs(nx, ny, sum_value + a[nx][ny], length + 1);
+
+            // 나올때 체크를 해제합니다.
+            check[nx][ny] = false;
         }
     }
 }
 
-// 택시의 위치에서 승객까지의 최단거리를 계산합니다.
-void person_bfs() {
-    
-    queue<info> q;
-    check[start_x][start_y] = 0;
-    q.push({start_x, start_y});
-    
-    // 만약 시작위치에 승객이 있다면, 거리는 0으로 갱신해줍니다.
-    if(a[start_x][start_y] == -1) {
-        person_x = start_x;
-        person_y = start_y;
-        person_dist = check[start_x][start_y];
-    }
-    
-    while(!q.empty()) {
-        info cur = q.front();
-        q.pop();
-        
-        int x = cur.x;
-        int y = cur.y;
-        
-        for(int i=0; i<4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(nx > n || nx < 1 || ny > n || ny < 1) continue;
-            
-            if (a[nx][ny] != 1 && check[nx][ny] == -1) {
-                check[nx][ny] = check[x][y] + 1;
-                
-                if(a[nx][ny] == -1) {
-                    info next_info = {nx, ny, check[nx][ny]};
-                    info person_info = {person_x, person_y, person_dist};
-                    
-                    // 제일 가까운 승객을 찾아줍니다.
-                    if(next_info < person_info) {
-                        person_x = nx;
-                        person_y = ny;
-                        person_dist = check[nx][ny];
-                    }
-                }
-                
-                q.push({nx, ny});
+
+// ㅜ 모양 검사
+void check_exshape(int x, int y){
+
+    for(int i=0; i<4; i++){
+
+        bool isOut = false;
+        int sum_value = 0;
+
+        for(int j=0; j<4; j++){
+            int nx = x + ex[i][j];
+            int ny = y + ey[i][j];
+
+            if(nx < 1 || nx > n || ny < 1 || ny > m) {
+                isOut = true;
+                break;
+            }
+            else {
+                sum_value += a[nx][ny];
             }
         }
-    }
-}
-
-// 승객의 위치에서 도착지점까지의 최단거리를 계산합니다.
-void target_bfs() {
-    
-    queue<info> q;
-    check[person_x][person_y] = 0;
-    q.push({person_x, person_y});
-    
-    while(!q.empty()) {
-        info cur = q.front();
-        q.pop();
-        
-        int x = cur.x;
-        int y = cur.y;
-        
-        for(int i=0; i<4; i++) {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
-            
-            if(nx > n || nx < 1 || ny > n || ny < 1) continue;
-            
-            if (a[nx][ny] != 1 && check[nx][ny] == -1) {
-                check[nx][ny] = check[x][y] + 1;
-                
-                // 만약 nx, ny가 도착지점이라면
-                // 도착지점까지의 거리를 갱신해줍니다.
-                if(nx == target_x && ny == target_y) {
-                    target_dist = check[nx][ny];
-                }
-                
-                q.push({nx, ny});
-            }
+        if(!isOut) {
+            result = max(result, sum_value);
         }
     }
+    // 만약 배열로 정보 저장 안해놓았으면 아래처럼 작성할 수 있습니다.
+
+//    int sum_value = 0;
+//    // 1. ㅜ
+//    if(x>=1 && x+1<=n && y>=1 && y+2<=m){
+//        sum_value = a[x][y] + a[x][y+1] + a[x][y+2] + a[x+1][y+1];
+//        result = max(result, sum_value);
+//    }
+//
+//    // 2. ㅏ
+//    if(x >= 1 && x+2 <=n && y>=1 && y+1<=m){
+//        sum_value = a[x][y] + a[x+1][y] + a[x+2][y] + a[x+1][y+1];
+//        result = max(result, sum_value);
+//    }
+//
+//    // 3. ㅗ
+//    if(x-1 >= 1&& x <=n && y >=1 && y+2 <=m){
+//        sum_value = a[x][y] + a[x][y+1] + a[x][y+2] + a[x-1][y+1];
+//        result = max(result, sum_value);
+//    }
+//
+//    // 4. ㅓ
+//    if(x-1 >= 1 && x+1 <=n && y >=1 && y+1 <=m){
+//        sum_value = a[x][y] + a[x][y+1] + a[x-1][y+1] + a[x+1][y+1];
+//        result = max(result, sum_value);
+//    }
 }
 
 
-int main () {
-    // 1. 입력 받습니다.
-    scanf("%d %d %d", &n, &m, &oil);
-    
-    // 1) n*n에 지도의 정보를 입력합니다.
-    for(int i=1; i<=n; i++) {
-        for(int j=1; j<=n; j++) {
+int main(){
+
+    // 1. 입력
+    scanf("%d %d", &n, &m);
+
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
             scanf("%d", &a[i][j]);
         }
     }
-    
-    // 2) 출발지점의 x, y를 입력 저장합니다.
-    scanf("%d %d", &start_x, &start_y);
-    
-    // 3) m 명의 승객 정보를 입력받습니다.
-    for(int i=1; i<=m; i++) {
-        scanf("%d %d %d %d", &person_x, &person_y, &target_x, &target_y);
-        
-        // 승객의 위치는 지도에서 -1로 표시합니다.
-        a[person_x][person_y] = -1;
-        
-        // 승객의 도착지점을 저장합니다.
-        target[person_x][person_y] = {target_x, target_y};
+
+
+    // 2. 2차원 배열 각각의 원소에서 검사를 수행합니다.
+    for(int i=1; i<=n; i++){
+        for(int j=1; j<=m; j++){
+            // 1) DFS 로 검사
+
+            // 방문했던 점을 또 방문해야하기 때문에
+            // 들어가기전 체크를 해주고, 끝났을때 체크를 해제해줍니다.
+            check[i][j] = true;
+            dfs(i, j, a[i][j], 1);
+
+            // 체크를 해제하면 무한루프에 들어가 않을까 걱정할 수 있습니다.
+            // 길이로 재귀를 중단시키기 때문에, 수행횟수는 4 * 3 * 3, 한점에서 최대 36번 수행됩니다.
+            check[i][j] = false;
+
+            // 2) ㅏ 모양 검사
+            check_exshape(i, j);
+        }
     }
-    
-    person_cnt = m;
-    
-    // 남은 승객의 수 만큼 반복합니다.
-    while(person_cnt > 0) {
-        
-        // bfs를 위한 초기화
-        init();
-        
-        // 1) 택시의 위치에서 가장 가까운 승객을 찾습니다.
-        person_bfs();
-        
-        // 승객 까지 갈 수 없으면 종료합니다.
-        if(oil <= person_dist) break;
-        
-        // 기름을 소모해줍니다.
-        oil -= person_dist;
-        
-        // 승객을 태우면 지도에 표시한 -1을 지워줍니다.
-        a[person_x][person_y] = 0;
-        
-        // 도착 지점의 정보를 갱신합니다.
-        info target_info = target[person_x][person_y];
-        target_x = target_info.x;
-        target_y = target_info.y;
-        
-        // bfs를 위한 초기화
-        init();
-        
-        // 2) 승객의 위치에서 도착지점까지의 최단 거리를 구합니다.
-        target_bfs();
-        
-        // 도착할 수 없으면 종료합니다.
-        if(oil < target_dist) break;
-        
-        // 소비한 만큼 기름을 채워줍니다.
-        oil += target_dist;
-        
-        // 승객 1명을 줄여줍니다.
-        person_cnt--;
-        
-        // 출발지점을 도착지점의 좌표로 갱신합니다.
-        start_x = target_x;
-        start_y = target_y;
-    }
-    
-    // 아직 태우지 못한 승객이 있으면 -1록 갱신합니다.
-    if(person_cnt > 0) oil = -1;
-        
-    // 출력
-    printf("%d\n", oil);
+
+
+    // 3. 출력
+    printf("%d\n", result);
 }
