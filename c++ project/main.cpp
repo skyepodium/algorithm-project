@@ -1,3 +1,4 @@
+#include <iostream>
 #include <set>
 #include <string>
 #include <vector>
@@ -8,13 +9,13 @@ class Solution {
    public:
     string reverseVowels(string s) {
         // 1. init
-        vector<char> vowels;
+        vector<int> vowels;
         set<char> vowelSet = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
 
         // 2. find vowels
-        for (auto c : s) {
-            if (vowelSet.find(c) != vowelSet.end()) {
-                vowels.push_back(c);
+        for (int i = 0; i < (int)s.size(); i++) {
+            if (vowelSet.find(s[i]) != vowelSet.end()) {
+                vowels.push_back(i);
             }
         }
 
@@ -22,20 +23,20 @@ class Solution {
         int i = 0;
         int j = vowels.size() - 1;
         while (i < j) {
-            swap(vowels[i], vowels[j]);
+            swap(s[vowels[i]], s[vowels[j]]);
             i++;
             j--;
-        }
-
-        // 4. replace vowels
-        int k = 0;
-        for (int i = 0; i < s.size(); i++) {
-            if (vowelSet.find(s[i]) != vowelSet.end()) {
-                s[i] = vowels[k];
-                k++;
-            }
         }
 
         return s;
     }
 };
+
+int main() {
+    Solution s;
+    string str = "hello";
+    string res = s.reverseVowels(str);
+
+    cout << res << endl;
+    return 0;
+}
