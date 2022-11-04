@@ -1,36 +1,41 @@
-#include <iostream>
+#include <set>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-int n, m, k, x, l, r, res;
+class Solution {
+   public:
+    string reverseVowels(string s) {
+        // 1. init
+        vector<char> vowels;
+        set<char> vowelSet = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
 
-int abs(int x) {
-    return x > 0 ? x : -x;
-}
-
-int main() {
-    scanf("%d %d", &n, &m);
-    scanf("%d", &k);
-
-    l = 1;
-    r = m;
-
-    for (int i = 0; i < k; i++) {
-        scanf("%d", &x);
-
-        int l_delta = abs(x - l);
-        int r_delta = abs(x - r);
-
-        if (x < l) {
-            l -= l_delta;
-            r -= l_delta;
-            res += l_delta;
-        } else if (x > r) {
-            l += r_delta;
-            r += r_delta;
-            res += r_delta;
+        // 2. find vowels
+        for (auto c : s) {
+            if (vowelSet.find(c) != vowelSet.end()) {
+                vowels.push_back(c);
+            }
         }
-    }
 
-    printf("%d\n", res);
-}
+        // 3. reverse vowels
+        int i = 0;
+        int j = vowels.size() - 1;
+        while (i < j) {
+            swap(vowels[i], vowels[j]);
+            i++;
+            j--;
+        }
+
+        // 4. replace vowels
+        int k = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (vowelSet.find(s[i]) != vowelSet.end()) {
+                s[i] = vowels[k];
+                k++;
+            }
+        }
+
+        return s;
+    }
+};
