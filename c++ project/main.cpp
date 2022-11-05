@@ -1,36 +1,51 @@
-#include <algorithm>
 #include <iostream>
-#define MAX_INT 5
-#define MAX_VAL 1000000
+#include <queue>
+
 using namespace std;
 
-int a[MAX_INT], res = MAX_VAL;
+struct cmp {
+    bool operator()(int a, int b) {
+        return a > b;
+    }
+};
 
-int min(int a, int b) {
-    return a < b ? a : b;
-}
-
-int gcd(int a, int b) {
-    return b == 0 ? a : gcd(b, a % b);
-}
+int x, s, res;
+priority_queue<int, vector<int>, cmp> pq;
 
 int main() {
-    for (int i = 0; i < MAX_INT; i++) {
-        scanf("%d", &a[i]);
-    }
+    // 1. input
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-    sort(a, a + MAX_INT);
+    cin >> x;
 
-    for (int i = 0; i < MAX_INT; i++) {
-        for (int j = i + 1; j < MAX_INT; j++) {
-            for (int k = j + 1; k < MAX_INT; k++) {
-                int t = a[j] * a[k] / gcd(a[j], a[k]);
-                int r = a[i] * t / gcd(a[i], t);
+    // 2. loop
+    s = 64;
+    pq.push(s);
 
-                res = min(res, r);
-            }
+    while (!pq.empty() && s > x) {
+        int cur = pq.top();
+        s -= cur;
+        int half = cur / 2;
+        pq.pop();
+
+        if (half == 0) continue;
+
+        if (s + half > x) {
+            pq.push(half);
+            s += half;
+        } else {
+            pq.push(half);
+            pq.push(half);
+            s += cur;
         }
     }
 
-    printf("%d\n", res);
+    while (!pq.empty()) {
+        if (pq.top() != 0) res++;
+        pq.pop();
+    }
+
+    cout << res << endl;
 }
