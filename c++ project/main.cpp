@@ -1,31 +1,28 @@
-#include <string>
+#include <algorithm>
 
 using namespace std;
 
-class Solution {
-   public:
-    string decimalToBase(int num, int base) {
-        string res = "";
-        while (num > 0) {
-            res += to_string(num % base);
-            num /= base;
-        }
-        return res;
+int getNextRoundOrder(int num) {
+    if (num % 2 == 1) num--;
+    return num / 2;
+}
+
+int solution(int n, int a, int b) {
+    // 1. init
+    int res = 0;
+    a--;
+    b--;
+
+    // 2. swap
+    if (a > b) swap(a, b);
+
+    while (a >= 0 && b >= 0) {
+        res++;
+        if (a % 2 == 0 && a + 1 == b) break;
+
+        a = getNextRoundOrder(a);
+        b = getNextRoundOrder(b);
     }
 
-    bool isStrictlyPalindromic(int n) {
-        for (int i = 2; i <= n - 2; i++) {
-            // 1. base convertor
-            string s = decimalToBase(n, i);
-
-            // 2. two pointer
-            int l = 0, r = s.size() - 1;
-            while (l < r) {
-                if (s[l] != s[r]) return false;
-                l++;
-                r--;
-            }
-        }
-        return true;
-    }
-};
+    return res;
+}
