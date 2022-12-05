@@ -1,28 +1,22 @@
-#include <algorithm>
+struct ListNode {
+    int val;
+    ListNode* next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
 
-using namespace std;
+class Solution {
+   public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
 
-int getNextRoundOrder(int num) {
-    if (num % 2 == 1) num--;
-    return num / 2;
-}
+        while (fast->next != nullptr && fast->next->next != nullptr) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
 
-int solution(int n, int a, int b) {
-    // 1. init
-    int res = 0;
-    a--;
-    b--;
-
-    // 2. swap
-    if (a > b) swap(a, b);
-
-    while (a >= 0 && b >= 0) {
-        res++;
-        if (a % 2 == 0 && a + 1 == b) break;
-
-        a = getNextRoundOrder(a);
-        b = getNextRoundOrder(b);
+        return fast->next != nullptr ? slow->next : slow;
     }
-
-    return res;
-}
+};
