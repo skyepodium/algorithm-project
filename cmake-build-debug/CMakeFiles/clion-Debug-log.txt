@@ -1,0 +1,60 @@
+"/Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /Users/skyepodium/dev/c++/algorithm-project -B /Users/skyepodium/dev/c++/algorithm-project/cmake-build-debug
+CMake Deprecation Warning:
+  Support for "Extra Generators" like
+
+    CodeBlocks
+
+  is deprecated and will be removed from a future version of CMake.  IDEs may
+  use the cmake-file-api(7) to view CMake-generated project build trees.
+
+
+CMake Warning at /Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/share/cmake-3.27/Modules/Platform/Darwin-Initialize.cmake:306 (message):
+  Ignoring CMAKE_OSX_SYSROOT value:
+
+   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk
+
+  because the directory does not exist.
+Call Stack (most recent call first):
+  /Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/share/cmake-3.27/Modules/CMakeSystemSpecificInitialize.cmake:34 (include)
+  CMakeLists.txt:2 (project)
+
+
+-- The C compiler identification is AppleClang 14.0.3.14030022
+-- The CXX compiler identification is AppleClang 14.0.3.14030022
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc - broken
+CMake Error at /Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/share/cmake-3.27/Modules/CMakeTestCCompiler.cmake:67 (message):
+  The C compiler
+
+    "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: '/Users/skyepodium/dev/c++/algorithm-project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-MeLsdr'
+    
+    Run Build Command(s): "/Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/bin/cmake" -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_bfa93/fast
+    /Applications/Xcode.app/Contents/Developer/usr/bin/make  -f CMakeFiles/cmTC_bfa93.dir/build.make CMakeFiles/cmTC_bfa93.dir/build
+    Building C object CMakeFiles/cmTC_bfa93.dir/testCCompiler.c.o
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -fcolor-diagnostics -MD -MT CMakeFiles/cmTC_bfa93.dir/testCCompiler.c.o -MF CMakeFiles/cmTC_bfa93.dir/testCCompiler.c.o.d -o CMakeFiles/cmTC_bfa93.dir/testCCompiler.c.o -c /Users/skyepodium/dev/c++/algorithm-project/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-MeLsdr/testCCompiler.c
+    Linking C executable cmTC_bfa93
+    "/Users/skyepodium/Library/Application Support/JetBrains/Toolbox/apps/CLion-Nova/ch-0/233.11868/CLion 2023.3 EAP.app/Contents/bin/cmake/mac/x64/bin/cmake" -E cmake_link_script CMakeFiles/cmTC_bfa93.dir/link.txt --verbose=1
+    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_bfa93.dir/testCCompiler.c.o -o cmTC_bfa93 
+    ld: library not found for -lSystem
+    clang: error: linker command failed with exit code 1 (use -v to see invocation)
+    make[1]: *** [cmTC_bfa93] Error 1
+    make: *** [cmTC_bfa93/fast] Error 2
+    
+    
+
+  
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:2 (project)
+
+
+-- Configuring incomplete, errors occurred!

@@ -1,22 +1,20 @@
-struct ListNode {
-    int val;
-    ListNode* next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode* next) : val(x), next(next) {}
-};
+#include <vector>
+
+using namespace std;
 
 class Solution {
-   public:
-    ListNode* middleNode(ListNode* head) {
-        ListNode* fast = head;
-        ListNode* slow = head;
-
-        while (fast->next != nullptr && fast->next->next != nullptr) {
-            fast = fast->next->next;
-            slow = slow->next;
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        vector<int> result;
+        for(int i=0; i<nums.size(); i++) {
+            for(int j=i+1; j<nums.size(); j++) {
+                if(nums[i] + nums[j] == target) {
+                    result.push_back(i);
+                    result.push_back(j);
+                    return result;
+                }
+            }
         }
-
-        return fast->next != nullptr ? slow->next : slow;
+        return result;
     }
 };
